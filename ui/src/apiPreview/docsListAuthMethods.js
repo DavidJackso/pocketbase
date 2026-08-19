@@ -1,4 +1,5 @@
 import { fieldsInfo } from "./fieldsInfo";
+import { i18n } from "../i18n.js";
 
 export function docsListAuthMethods(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -49,7 +50,7 @@ export function docsListAuthMethods(collection) {
             },
         },
         // description
-        t.p(null, `Returns a public list with all allowed ${collection.name} authentication methods.`),
+        t.p(null, i18n.t("api_preview.list_auth_methods_desc", { name: collection.name })),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
             historyKey: "pbLastSDK",
@@ -72,7 +73,7 @@ export function docsListAuthMethods(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -94,7 +95,7 @@ export function docsListAuthMethods(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -108,7 +109,7 @@ export function docsListAuthMethods(collection) {
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert info api-preview-alert" },
             t.span({ className: "label method" }, "GET"),
@@ -120,9 +121,9 @@ export function docsListAuthMethods(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "?query params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.query_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -130,13 +131,13 @@ export function docsListAuthMethods(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "fields"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, fieldsInfo()),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: () => data.responses,
         }),

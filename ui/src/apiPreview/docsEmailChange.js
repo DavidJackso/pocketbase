@@ -1,9 +1,11 @@
+import { i18n } from "../i18n.js";
+
 export function docsEmailChange(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
     const actionTabs = [
-        { title: "Request email change", content: request },
-        { title: "Confirm email change", content: confirm },
+        { title: () => i18n.t("api_preview.request_email_change"), content: request },
+        { title: () => i18n.t("auth.confirm_email_change"), content: confirm },
     ];
 
     const data = store({
@@ -16,10 +18,10 @@ export function docsEmailChange(collection) {
             className: "content",
         },
         // description
-        t.p(null, `Sends ${collection.name} email change request.`),
+        t.p(null, i18n.t("api_preview.email_change_desc1", { name: collection.name })),
         t.p(
             null,
-            "On successful email change all previously issued auth tokens for the specific record will be invalidated (and the user will be marked as verified if not already).",
+            i18n.t("api_preview.email_change_desc2"),
         ),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
@@ -59,7 +61,7 @@ export function docsEmailChange(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -97,7 +99,7 @@ export function docsEmailChange(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -131,7 +133,7 @@ export function docsEmailChange(collection) {
                     return t.button({
                         type: "button",
                         className: () => `btn sm expanded ${data.activeActionIndex == i ? "active" : "secondary"}`,
-                        textContent: () => tab.title,
+                        textContent: () => tab.title(),
                         onclick: () => data.activeActionIndex = i,
                     });
                 });
@@ -186,12 +188,12 @@ function request(collection) {
 
     return [
         // api
-        t.div({ className: "block" }, t.strong(null, "API details")),
+        t.div({ className: "block" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
             t.span({ className: "path" }, `/api/collections/${collection.name}/request-email-change`),
-            t.small({ className: "extra" }, "Requires", t.br(), "Authorization:TOKEN header"),
+            t.small({ className: "extra" }, i18n.t("api_preview.requires"), t.br(), "Authorization:TOKEN header"),
         ),
         t.table(
             { className: "api-preview-table body-params" },
@@ -199,23 +201,23 @@ function request(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "newEmail ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The new email address to send the change email request."),
+                    t.td({ className: "min-width" }, "newEmail ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.new_email_send_request_desc")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),
@@ -247,7 +249,7 @@ function confirm(collection) {
 
     return [
         // api
-        t.div({ className: "block" }, t.strong(null, "API details")),
+        t.div({ className: "block" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -259,29 +261,29 @@ function confirm(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "token ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The token from the change email request email."),
+                    t.td({ className: "min-width" }, "token ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.token_from_email_change_email")),
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The account password to confirm the email change."),
+                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.account_password_confirm_email_change")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),
