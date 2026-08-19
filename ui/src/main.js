@@ -1,5 +1,6 @@
 import "./css/_main.css";
 
+import "./i18n";
 import "./utils";
 import "./mimeTypes";
 import "./store";
