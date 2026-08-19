@@ -2,5 +2,12 @@
     "app.logo_alt": "Логотип приложения",
     "common.settings": "Настройки",
     "common.save": "Сохранить",
-    "common.cancel": "Отмена"
+    "common.cancel": "Отмена",
+    "header.language_picker_title": "Язык",
+    "header.color_scheme_title": "Цветовая схема",
+    "header.color_scheme_light": "Светлая",
+    "header.color_scheme_dark": "Тёмная",
+    "header.color_scheme_auto": "Авто",
+    "header.manage_superusers": "Управление суперюзерами",
+    "header.logout": "Выйти"
 }
