@@ -21,7 +21,7 @@ window.app.store = store({
 
     page: t.div({ className: "page" }, () => {
         if (!app.store._ready) {
-            return t.span({ className: "loader lg m-auto", title: "Loading plugins..." });
+            return t.span({ className: "loader lg m-auto", title: i18n.t("common.loading_plugins") });
         }
     }),
 

@@ -12,7 +12,7 @@ export function view(props) {
             const value = props.record[props.field.name] || "";
 
             if (!value) {
-                return t.span({ className: "missing-value" });
+                return t.span({ className: "missing-value", "html-data-missing-label": i18n.t("common.na") });
             }
 
             return t.a({
