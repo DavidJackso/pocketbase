@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -27,7 +29,7 @@ window.app.components.sortable = function(propsArg = {}) {
         className: "",
         data: [],
         dataItem: function(item, i, parent) {
-            return t.span(null, "Item " + i);
+            return t.span(null, i18n.t("sortable.item", { index: i }));
         },
         onchange: function(sortedList, fromIndex, toIndex) {},
         handle: "", // specific handle selector (if not set attached to the entire list item)

@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -43,8 +45,8 @@ window.app.components.copyButton = function(textOrFunc, ...children) {
             tabIndex: -1,
             type: "button",
             className: () => `copy-to-clipboard ${data.active ? "active" : ""}`,
-            title: "Copy",
-            ariaDescription: app.attrs.tooltip(() => data.active ? "Copied" : null),
+            title: i18n.t("common.copy"),
+            ariaDescription: app.attrs.tooltip(() => data.active ? i18n.t("common.copied") : null),
             onclick: (e) => {
                 e.preventDefault();
                 e.stopPropagation();

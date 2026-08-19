@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -23,7 +25,7 @@ window.app.components.searchbar = function(propsArg = {}) {
         inert: undefined,
         value: "",
         className: "",
-        placeholder: "Search...",
+        placeholder: i18n.t("common.search_placeholder"),
         disabled: false,
         historyKey: "",
         autocomplete: undefined, // Array<string|Object> | function(word): Array<string|Object>,
@@ -111,7 +113,7 @@ window.app.components.searchbar = function(propsArg = {}) {
                             className: "btn sm pill warning",
                             hidden: () => props.value == local.value,
                         },
-                        "Search",
+                        i18n.t("common.search"),
                     ),
                     t.button(
                         {
@@ -119,7 +121,7 @@ window.app.components.searchbar = function(propsArg = {}) {
                             className: "btn sm pill secondary transparent",
                             onclick: () => clear(),
                         },
-                        "Clear",
+                        i18n.t("common.clear"),
                     ),
                 );
             }
