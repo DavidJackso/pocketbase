@@ -1,6 +1,6 @@
-import en from "./locales/en.json" with { type: "json" };
+import { locales } from "./locales/index.js";
 
-const dictionaries = { en };
+const dictionaries = { ...locales };
 
 const FALLBACK_LOCALE = "en";
 const STORAGE_KEY = "pb_admin_locale";
