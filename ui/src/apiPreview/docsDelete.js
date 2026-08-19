@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function docsDelete(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
@@ -45,7 +47,7 @@ export function docsDelete(collection) {
     return t.div(
         { pbEvent: "apiPreviewDelete", className: "content" },
         // description
-        t.p(null, `Delete a single ${collection.name} record.`),
+        t.p(null, i18n.t("api_preview.delete_single_record", { name: collection.name })),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
             historyKey: "pbLastSDK",
@@ -68,7 +70,7 @@ export function docsDelete(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -90,7 +92,7 @@ export function docsDelete(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -106,14 +108,14 @@ export function docsDelete(collection) {
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert danger api-preview-alert" },
             t.span({ className: "label method" }, "DELETE"),
             t.span({ className: "path" }, `/api/collections/${collection.name}/records/`, t.strong(null, ":id")),
             () => {
                 if (isSuperusersOnly) {
-                    return t.small({ className: "extra" }, "Requires superuser Authorization:TOKEN header");
+                    return t.small({ className: "extra" }, i18n.t("api_preview.requires_superuser_auth"));
                 }
             },
         ),
@@ -123,9 +125,9 @@ export function docsDelete(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Path params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.path_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -133,13 +135,13 @@ export function docsDelete(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "id"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "ID of the record to delete."),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.id_of_record_to_delete")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

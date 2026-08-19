@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function filterSyntax() {
     const data = store({
         show: false,
@@ -14,13 +16,13 @@ export function filterSyntax() {
             () => {
                 if (data.show) {
                     return [
-                        t.span({ className: "txt" }, "Hide details"),
+                        t.span({ className: "txt" }, i18n.t("api_preview.hide_details")),
                         t.i({ className: "ri-arrow-up-s-line", ariaHidden: true }),
                     ];
                 }
 
                 return [
-                    t.span({ className: "txt" }, "Show details"),
+                    t.span({ className: "txt" }, i18n.t("api_preview.show_details")),
                     t.i({ className: "ri-arrow-down-s-line", ariaHidden: true }),
                 ];
             },

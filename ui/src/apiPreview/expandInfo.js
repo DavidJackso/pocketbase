@@ -1,25 +1,27 @@
+import { i18n } from "../i18n.js";
+
 export function expandInfo() {
     return t.div(
         { className: "api-expand-info" },
-        t.p(null, "Auto expand record relations. For example:"),
+        t.p(null, i18n.t("api_preview.expand_info_intro")),
         app.components.codeBlock({
             value: `?expand=relField1,relField2.subRelField`,
         }),
         t.p(
             null,
-            "Supports up to 6-levels depth nested relations expansion.",
+            i18n.t("api_preview.expand_info_depth"),
             t.br(),
-            "The expanded relations will be appended to each individual record under the ",
+            i18n.t("api_preview.expand_info_appended") + " ",
             t.code(null, "expand"),
-            " property (eg. ",
+            " " + i18n.t("api_preview.expand_info_property_eg") + " ",
             t.code(null, `"expand": {"relField1": {...}, ...}`),
             ").",
         ),
         t.p(
             null,
-            "Only the relations to which the request user has permissions to ",
-            t.strong(null, "view"),
-            " will be expanded.",
+            i18n.t("api_preview.expand_info_only") + " ",
+            t.strong(null, i18n.t("api_preview.expand_info_view")),
+            " " + i18n.t("api_preview.expand_info_will_be_expanded"),
         ),
     );
 }

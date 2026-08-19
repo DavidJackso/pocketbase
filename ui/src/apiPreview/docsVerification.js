@@ -1,9 +1,11 @@
+import { i18n } from "../i18n.js";
+
 export function docsVerification(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
     const actionTabs = [
-        { title: "Request verification", content: request },
-        { title: "Confirm verification", content: confirm },
+        { title: () => i18n.t("api_preview.request_verification"), content: request },
+        { title: () => i18n.t("api_preview.confirm_verification_title"), content: confirm },
     ];
 
     const data = store({
@@ -16,7 +18,7 @@ export function docsVerification(collection) {
             className: "content",
         },
         // description
-        t.p(null, `Sends ${collection.name} account verification request.`),
+        t.p(null, i18n.t("api_preview.verification_desc", { name: collection.name })),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
             historyKey: "pbLastSDK",
@@ -45,7 +47,7 @@ export function docsVerification(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -73,7 +75,7 @@ export function docsVerification(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -103,7 +105,7 @@ export function docsVerification(collection) {
                     return t.button({
                         type: "button",
                         className: () => `btn sm expanded ${data.activeActionIndex == i ? "active" : "secondary"}`,
-                        textContent: () => tab.title,
+                        textContent: () => tab.title(),
                         onclick: () => data.activeActionIndex = i,
                     });
                 });
@@ -138,7 +140,7 @@ function request(collection) {
 
     return [
         // api
-        t.div({ className: "block" }, t.strong(null, "API details")),
+        t.div({ className: "block" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -150,23 +152,23 @@ function request(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "email ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The auth record email address to send the verification request (if exists)."),
+                    t.td({ className: "min-width" }, "email ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.email_send_verification_desc")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),
@@ -198,7 +200,7 @@ function confirm(collection) {
 
     return [
         // api
-        t.div({ className: "block" }, t.strong(null, "API details")),
+        t.div({ className: "block" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -210,23 +212,23 @@ function confirm(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "token ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The token from the verification request email."),
+                    t.td({ className: "min-width" }, "token ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.token_from_verification_email")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

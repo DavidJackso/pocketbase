@@ -1,6 +1,7 @@
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
 import { filterSyntax } from "./filterSyntax";
+import { i18n } from "../i18n.js";
 
 export function docsList(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -57,7 +58,7 @@ export function docsList(collection) {
     return t.div(
         { pbEvent: "apiPreviewList", className: "content" },
         // description
-        t.p(null, `Fetch a paginated ${collection.name} records list, supporting sorting and filtering.`),
+        t.p(null, i18n.t("api_preview.fetch_paginated_records_list", { name: collection.name })),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
             historyKey: "pbLastSDK",
@@ -94,7 +95,7 @@ export function docsList(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -132,7 +133,7 @@ export function docsList(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -148,14 +149,14 @@ export function docsList(collection) {
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert info api-preview-alert" },
             t.span({ className: "label method" }, "GET"),
             t.span({ className: "path" }, `/api/collections/${collection.name}/records`),
             () => {
                 if (isSuperusersOnly) {
-                    return t.small({ className: "extra" }, "Requires superuser Authorization:TOKEN header");
+                    return t.small({ className: "extra" }, i18n.t("api_preview.requires_superuser_auth"));
                 }
             },
         ),
@@ -165,9 +166,9 @@ export function docsList(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "?query params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.query_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -175,37 +176,37 @@ export function docsList(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "page"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "Number")),
-                    t.td(null, "The page (aka. offset) of the paginated list (default to 1)."),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.number"))),
+                    t.td(null, i18n.t("api_preview.page_param_desc")),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "perPage"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "Number")),
-                    t.td(null, "Specify the max returned records per page (default to 30)."),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.number"))),
+                    t.td(null, i18n.t("api_preview.per_page_param_desc")),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "sort"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(
                         null,
                         t.p(
                             null,
-                            "Specify the records order attribute(s).",
+                            i18n.t("api_preview.sort_param_desc1"),
                             t.br(),
-                            "Add -/+ (default) in front of the attribute for DESC / ASC order.",
+                            i18n.t("api_preview.sort_param_desc2"),
                         ),
                         t.p(
                             null,
-                            "For example:",
+                            i18n.t("api_preview.for_example") + ":",
                             app.components.codeBlock({
                                 value: `// DESC by created and ASC by id\n?sort=-created,id`,
                             }),
                         ),
                         t.p(
                             null,
-                            "In addition to the collection non-hidden fields, the following special sort fields could be also used: ",
+                            i18n.t("api_preview.sort_param_desc3") + " ",
                             t.code(null, "@random"),
                             " ",
                             t.code({ hidden: () => collection.type == "view" }, "@rowid"),
@@ -216,13 +217,13 @@ export function docsList(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "filter"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(
                         null,
-                        t.p(null, "Filter the returned records. For example:"),
+                        t.p(null, i18n.t("api_preview.filter_param_desc")),
                         app.components.codeBlock({
                             value: `?filter=(id='abc' && created>'2022-01-01')`,
-                            footnote: "All query params must be properly URL encoded (the SDKs do this automatically).",
+                            footnote: i18n.t("api_preview.url_encoded_footnote"),
                         }),
                         filterSyntax(),
                     ),
@@ -230,46 +231,46 @@ export function docsList(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "expand"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, expandInfo()),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "fields"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, fieldsInfo()),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "skipTotal"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "Boolean")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.boolean"))),
                     t.td(
                         null,
                         t.p(
                             null,
-                            "If set to ",
+                            i18n.t("api_preview.skip_total_desc1_pre") + " ",
                             t.code(null, "1/true"),
-                            " the total counts query will be skipped and the response fields ",
+                            " " + i18n.t("api_preview.skip_total_desc1_mid") + " ",
                             t.code(null, "totalItems"),
-                            " and ",
+                            " " + i18n.t("common.and") + " ",
                             t.code(null, "totalPages"),
-                            " will have -1 value.",
+                            " " + i18n.t("api_preview.skip_total_desc1_post"),
                         ),
                         t.p(
                             null,
-                            "This could drastically speed up the search queries when the total counters are not needed or cursor based pagination is used.",
-                            " For optimization purposes, it is set by default in the ",
+                            i18n.t("api_preview.skip_total_desc2"),
+                            " " + i18n.t("api_preview.skip_total_desc2b") + " ",
                             t.code(null, "getFirstListItem()"),
-                            " and ",
+                            " " + i18n.t("common.and") + " ",
                             t.code(null, "getFullList()"),
-                            " SDKs methods.",
+                            " " + i18n.t("api_preview.skip_total_desc2c"),
                         ),
                     ),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

@@ -1,5 +1,29 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
+
+const tabLabels = {
+    "List/Search": () => i18n.t("api_preview.tab_list_search"),
+    "View": () => i18n.t("api_preview.tab_view"),
+    "Create": () => i18n.t("api_preview.tab_create"),
+    "Update": () => i18n.t("api_preview.tab_update"),
+    "Delete": () => i18n.t("api_preview.tab_delete"),
+    "Realtime": () => i18n.t("api_preview.tab_realtime"),
+    "Batch": () => i18n.t("api_preview.tab_batch"),
+    "List auth methods": () => i18n.t("api_preview.tab_list_auth_methods"),
+    "Auth with password": () => i18n.t("api_preview.tab_auth_with_password"),
+    "Auth with OAuth2": () => i18n.t("api_preview.tab_auth_with_oauth2"),
+    "Auth with OTP": () => i18n.t("api_preview.tab_auth_with_otp"),
+    "Auth refresh": () => i18n.t("api_preview.tab_auth_refresh"),
+    "Verification": () => i18n.t("api_preview.tab_verification"),
+    "Password reset": () => i18n.t("api_preview.tab_password_reset"),
+    "Email change": () => i18n.t("api_preview.tab_email_change"),
+};
+
+function tabLabel(tabName) {
+    return tabLabels[tabName]?.() || tabName;
+}
 
 window.app.modals.openApiPreview = function(collection, settings = {
     onbeforeopen: null,
@@ -179,7 +203,7 @@ function apiPreviewModal(collection, settings) {
                                         className: () => `nav-item ${data.activeTab == title ? "active" : ""}`,
                                         disabled: isDisabled,
                                         ariaDescription: app.attrs.tooltip(
-                                            () => isDisabled ? "Not enabled for the collection" : "",
+                                            () => isDisabled ? i18n.t("api_preview.not_enabled_for_collection") : "",
                                             "left",
                                         ),
                                         onclick: () => {
@@ -188,7 +212,7 @@ function apiPreviewModal(collection, settings) {
                                             }
                                         },
                                     },
-                                    title,
+                                    tabLabel(title),
                                 ),
                             );
                         }
@@ -205,7 +229,7 @@ function apiPreviewModal(collection, settings) {
                 },
                 t.header(
                     { className: "api-preview-content-header" },
-                    t.h6(null, () => data.activeTab + ` (${collection.name})`),
+                    t.h6(null, () => tabLabel(data.activeTab) + ` (${collection.name})`),
                     t.button(
                         {
                             type: "button",
@@ -213,7 +237,7 @@ function apiPreviewModal(collection, settings) {
                                 `btn sm circle transparent secondary m-l-auto preview-close-btn ${
                                     data.isLoading ? "loading" : ""
                                 }`,
-                            title: "Close",
+                            title: i18n.t("common.close"),
                             onclick: () => app.modals.close(modal),
                         },
                         t.i({ className: "ri-close-line", ariaHidden: true }),
