@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function appHeader() {
     return () => {
         if (!app.store._ready || !app.store.showHeader || !app.store.superuser?.id) {
@@ -56,6 +58,7 @@ export function appHeader() {
                 },
             ),
             t.div({ className: "flex-fill app-header-separator" }),
+            localeButton(),
             colorSchemeButton(),
             t.button(
                 {
@@ -97,6 +100,44 @@ export function appHeader() {
             ),
         );
     };
+}
+
+function localeButton() {
+    return [
+        t.button(
+            {
+                type: "button",
+                className: "header-link locale-picker",
+                "html-popovertarget": "locale-dropdown",
+                title: "Language",
+            },
+            t.i({ className: "ri-translate-2", ariaHidden: true }),
+        ),
+        t.div(
+            {
+                pbEvent: "localeDropdown",
+                id: "locale-dropdown",
+                className: "dropdown sm nowrap locale-dropdown",
+                popover: "auto",
+            },
+            () => {
+                return i18n.available.map((code) => {
+                    return t.button(
+                        {
+                            type: "button",
+                            className: () => `dropdown-item ${app.store.locale == code ? "active" : ""}`,
+                            onclick: (e) => {
+                                e.target.closest(".dropdown").hidePopover();
+                                i18n.setLocale(code);
+                                window.location.reload();
+                            },
+                        },
+                        t.span({ className: "txt" }, code.toUpperCase()),
+                    );
+                });
+            },
+        ),
+    ];
 }
 
 function colorSchemeButton() {

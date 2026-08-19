@@ -1,3 +1,5 @@
+import { i18n } from "./i18n.js";
+
 const notifyChannel = new BroadcastChannel("tabsSync");
 
 const SETTINGS_STORAGE_KEY = "pbSettings";
@@ -13,6 +15,9 @@ window.app.store = store({
 
     // used to force hiding the header even when authenticated
     showHeader: true,
+
+    // the active admin UI interface language (see ui/src/i18n.js for persistence)
+    locale: i18n.locale,
 
     page: t.div({ className: "page" }, () => {
         if (!app.store._ready) {
