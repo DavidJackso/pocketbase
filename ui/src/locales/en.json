@@ -2,5 +2,12 @@
     "app.logo_alt": "App logo",
     "common.settings": "Settings",
     "common.save": "Save",
-    "common.cancel": "Cancel"
+    "common.cancel": "Cancel",
+    "header.language_picker_title": "Language",
+    "header.color_scheme_title": "Color scheme",
+    "header.color_scheme_light": "Light",
+    "header.color_scheme_dark": "Dark",
+    "header.color_scheme_auto": "Auto",
+    "header.manage_superusers": "Manage superusers",
+    "header.logout": "Logout"
 }
