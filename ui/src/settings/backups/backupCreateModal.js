@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function openBackupCreateModal(settings = {
     oncreated: null,
 }) {
@@ -44,7 +46,7 @@ function backupCreateModal(settings) {
                 settings.oncreated(data.name);
             }
 
-            app.toasts.success("Successfully generated new backup.");
+            app.toasts.success(i18n.t("backups.created_success"));
 
             app.modals.close(modal);
         } catch (err) {
@@ -62,9 +64,7 @@ function backupCreateModal(settings) {
             className: "modal popup backup-create-modal",
             onbeforeclose: () => {
                 if (data.isSubmitting) {
-                    app.toasts.info(
-                        "The backup was started but may take a while to complete. You can come back later.",
-                    );
+                    app.toasts.info(i18n.t("backups.started_note"));
                 }
             },
             onafterclose: (el) => {
@@ -74,7 +74,7 @@ function backupCreateModal(settings) {
         },
         t.header(
             { className: "modal-header" },
-            t.h5({ className: "m-auto txt-center" }, "Initialize new backup"),
+            t.h5({ className: "m-auto txt-center" }, i18n.t("backups.initialize_new")),
         ),
         t.form(
             {
@@ -96,11 +96,11 @@ function backupCreateModal(settings) {
                             { className: "content" },
                             t.p(
                                 null,
-                                `Please note that during the backup other concurrent write requests may fail since the database will be temporary "locked" (this usually happens only during the ZIP generation).`,
+                                i18n.t("backups.concurrent_write_warning"),
                             ),
                             t.p(
                                 { className: "txt-bold" },
-                                `If you are using S3 storage for the collections file upload, you'll have to backup them separately since they are not locally stored and they will not be included in the generated backup!`,
+                                i18n.t("backups.s3_warning"),
                             ),
                         ),
                     ),
@@ -109,18 +109,18 @@ function backupCreateModal(settings) {
                     { className: "col-lg-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + "_name" }, "Backup name"),
+                        t.label({ htmlFor: uniqueId + "_name" }, i18n.t("backups.backup_name")),
                         t.input({
                             id: uniqueId + "_name",
                             name: "name",
                             type: "text",
                             pattern: "^[a-z0-9_-]+\.zip$",
-                            placeholder: "Leave empty to autogenerate",
+                            placeholder: i18n.t("backups.leave_empty_autogenerate"),
                             value: () => data.name,
                             oninput: (e) => (data.name = e.target.value),
                         }),
                     ),
-                    t.div({ className: "field-help" }, "Must be in the format [a-z0-9_-].zip"),
+                    t.div({ className: "field-help" }, i18n.t("backups.name_format_help")),
                 ),
             ),
         ),
@@ -133,7 +133,7 @@ function backupCreateModal(settings) {
                     disabled: () => data.isSubmitting,
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Cancel"),
+                t.span({ className: "txt" }, i18n.t("common.cancel")),
             ),
             t.button(
                 {
@@ -142,7 +142,7 @@ function backupCreateModal(settings) {
                     className: () => `btn ${data.isSubmitting ? "loading" : ""}`,
                     disabled: () => data.isSubmitting,
                 },
-                t.span({ className: "txt" }, "Start backup"),
+                t.span({ className: "txt" }, i18n.t("backups.start_backup")),
             ),
         ),
     );

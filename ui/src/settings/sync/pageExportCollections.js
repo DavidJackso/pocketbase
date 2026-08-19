@@ -1,7 +1,8 @@
 import { settingsSidebar } from "../settingsSidebar";
+import { i18n } from "../../i18n.js";
 
 export function pageExportCollections(route) {
-    app.store.title = "Export collections";
+    app.store.title = i18n.t("sync.export_title");
 
     const uniqueId = "export_" + app.utils.randomString();
 
@@ -90,7 +91,7 @@ export function pageExportCollections(route) {
                 { className: "page-header" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div({ className: "breadcrumb-item" }, "Settings"),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("common.settings")),
                     t.div({ className: "breadcrumb-item" }, () => app.store.title),
                 ),
             ),
@@ -105,7 +106,7 @@ export function pageExportCollections(route) {
                         { className: "col-lg-12" },
                         t.div(
                             { className: "txt-lg" },
-                            "Below you'll find your current collections configuration that you could import in another PocketBase environment.",
+                            i18n.t("sync.export_intro"),
                         ),
                     ),
                     t.div(
@@ -124,7 +125,7 @@ export function pageExportCollections(route) {
                                             checked: () => data.areAllSelected,
                                             onchange: () => toggleSelectAll(),
                                         }),
-                                        t.label({ htmlFor: uniqueId + ".select_all" }, "Select all"),
+                                        t.label({ htmlFor: uniqueId + ".select_all" }, i18n.t("sync.select_all")),
                                     ),
                                 ),
                                 () => {
@@ -202,7 +203,7 @@ export function pageExportCollections(route) {
                         t.button(
                             { className: "btn", onclick: download },
                             t.i({ className: "ri-download-line", ariaHidden: true }),
-                            t.span({ className: "txt" }, "Download as JSON"),
+                            t.span({ className: "txt" }, i18n.t("sync.download_as_json")),
                         ),
                     ),
                 );

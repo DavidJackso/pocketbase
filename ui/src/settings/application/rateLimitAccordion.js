@@ -1,4 +1,5 @@
 import { basePredefinedTags, openRateLimitInfoModal } from "./rateLimitInfoModal";
+import { i18n } from "../../i18n.js";
 
 // sort the specified rules list in place
 export function sortRules(rules) {
@@ -73,9 +74,9 @@ export function sortRules(rules) {
 
 export function rateLimitAccordion(pageData) {
     const audienceOptions = [
-        { value: "", label: "All" },
-        { value: "@guest", label: "Guest only" },
-        { value: "@auth", label: "Auth only" },
+        { value: "", label: i18n.t("rate_limit.audience_all") },
+        { value: "@guest", label: i18n.t("rate_limit.audience_guest") },
+        { value: "@auth", label: i18n.t("rate_limit.audience_auth") },
     ];
 
     const accordionData = store({
@@ -242,19 +243,19 @@ export function rateLimitAccordion(pageData) {
         t.summary(
             null,
             t.i({ className: "ri-pulse-fill", ariaHidden: true }),
-            t.span({ className: "txt" }, "Rate limiting"),
+            t.span({ className: "txt" }, i18n.t("rate_limit.title")),
             t.div({ className: "flex-fill" }),
             () => {
                 if (pageData.formSettings.rateLimits.enabled) {
-                    return t.span({ className: "label success" }, "Enabled");
+                    return t.span({ className: "label success" }, i18n.t("common.enabled"));
                 }
-                return t.span({ className: "label" }, "Disabled");
+                return t.span({ className: "label" }, i18n.t("common.disabled"));
             },
             () => {
                 if (pageData.formSettingsHash && !app.utils.isEmpty(app.store.errors?.rateLimits)) {
                     return t.i({
                         className: "ri-error-warning-fill txt-danger",
-                        ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                        ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                     });
                 }
             },
@@ -279,7 +280,7 @@ export function rateLimitAccordion(pageData) {
                             { htmlFor: "rateLimits.enabled" },
                             t.span(
                                 { className: () => `txt ${accordionData.enableWarn ? "txt-warning" : ""}` },
-                                "Enable",
+                                i18n.t("common.enable"),
                             ),
                         ),
                     ),
@@ -289,7 +290,7 @@ export function rateLimitAccordion(pageData) {
                             className: "link-hint txt-sm m-l-auto",
                             onclick: () => openRateLimitInfoModal(),
                         },
-                        t.em(null, "Learn more about the rate limit rules"),
+                        t.em(null, i18n.t("rate_limit.learn_more")),
                     ),
                 ),
             ),
@@ -305,20 +306,20 @@ export function rateLimitAccordion(pageData) {
                             },
                             t.tr(
                                 null,
-                                t.th({ className: "col-label" }, "Rate limit label"),
+                                t.th({ className: "col-label" }, i18n.t("rate_limit.label")),
                                 t.th(
                                     { className: "col-requests" },
-                                    "Max requests",
+                                    i18n.t("rate_limit.max_requests"),
                                     t.br(),
-                                    t.small(null, "(per IP)"),
+                                    t.small(null, i18n.t("rate_limit.per_ip")),
                                 ),
                                 t.th(
                                     { className: "col-duration" },
-                                    "Interval",
+                                    i18n.t("rate_limit.interval"),
                                     t.br(),
-                                    t.small(null, "(in seconds)"),
+                                    t.small(null, i18n.t("common.duration_seconds_paren")),
                                 ),
-                                t.th({ className: "col-audience" }, "Targeted users"),
+                                t.th({ className: "col-audience" }, i18n.t("rate_limit.targeted_users")),
                                 t.th({ className: "col-action" }),
                             ),
                         ),
@@ -344,7 +345,7 @@ export function rateLimitAccordion(pageData) {
                                                         className: "inline-error",
                                                         id: "rateLimits.rules." + i + ".label",
                                                         name: "rateLimits.rules." + i + ".label",
-                                                        placeholder: "tag (users:create) or path (/api/)",
+                                                        placeholder: i18n.t("rate_limit.label_placeholder"),
                                                         "html-list": "rateLimits.rules." + i + ".label_list",
                                                         value: () => rule.label,
                                                         oninput: (e) => (rule.label = e.target.value),
@@ -368,7 +369,7 @@ export function rateLimitAccordion(pageData) {
                                                     t.input({
                                                         type: "number",
                                                         required: true,
-                                                        placeholder: "Max requests*",
+                                                        placeholder: i18n.t("rate_limit.max_requests_required"),
                                                         className: "inline-error",
                                                         min: 1,
                                                         step: 1,
@@ -385,7 +386,7 @@ export function rateLimitAccordion(pageData) {
                                                     t.input({
                                                         type: "number",
                                                         required: true,
-                                                        placeholder: "Interval*",
+                                                        placeholder: i18n.t("rate_limit.interval_required"),
                                                         className: "inline-error",
                                                         min: 1,
                                                         step: 1,
@@ -416,7 +417,7 @@ export function rateLimitAccordion(pageData) {
                                                 t.button(
                                                     {
                                                         type: "button",
-                                                        araiaDescription: app.attrs.tooltip("Remove rule"),
+                                                        araiaDescription: app.attrs.tooltip(i18n.t("rate_limit.remove_rule")),
                                                         className: "btn sm secondary transparent circle",
                                                         onclick: () => removeRule(i),
                                                     },
@@ -440,7 +441,7 @@ export function rateLimitAccordion(pageData) {
                                             onclick: () => newRule(),
                                         },
                                         t.i({ className: "ri-add-line", ariaHidden: true }),
-                                        t.span({ className: "txt" }, "Add rate limit rule"),
+                                        t.span({ className: "txt" }, i18n.t("rate_limit.add_rule")),
                                     ),
                                 ),
                             ),
@@ -456,7 +457,7 @@ export function rateLimitAccordion(pageData) {
                         className: () => `btn secondary sm ${!accordionData.showMoreOptions ? "transparent" : ""}`,
                         onclick: () => accordionData.showMoreOptions = !accordionData.showMoreOptions,
                     },
-                    t.span({ className: "txt" }, "More options"),
+                    t.span({ className: "txt" }, i18n.t("field_settings.more_options")),
                     t.i({
                         ariaHidden: true,
                         className: () => accordionData.showMoreOptions ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line",
@@ -472,7 +473,7 @@ export function rateLimitAccordion(pageData) {
                                 { className: "field" },
                                 t.label(
                                     { htmlFor: "excludedIPs" },
-                                    t.span({ className: "txt" }, "Excluded IPs and subnets"),
+                                    t.span({ className: "txt" }, i18n.t("rate_limit.excluded_ips")),
                                 ),
                                 t.input({
                                     id: "excludedIPs",
@@ -512,16 +513,16 @@ export function rateLimitAccordion(pageData) {
                                             }
                                         },
                                     },
-                                    t.span({ className: "txt" }, "Clear"),
+                                    t.span({ className: "txt" }, i18n.t("common.clear")),
                                 ),
                             ),
                         ),
                         t.div(
                             { className: "field-help" },
-                            t.p(null, "Comma separated list of IPs and CIDR subnets to exclude from the rate limiter."),
+                            t.p(null, i18n.t("rate_limit.excluded_ips_help")),
                             t.p(
                                 null,
-                                "Superusers are always excluded and they can send as many requests as they want.",
+                                i18n.t("rate_limit.superusers_always_excluded"),
                             ),
                         ),
                     ),

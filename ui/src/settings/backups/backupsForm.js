@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function backupsForm(propsArg = {}) {
     const props = store({
         onsave: null,
@@ -6,10 +8,10 @@ export function backupsForm(propsArg = {}) {
     const watchers = app.utils.extendStore(props, propsArg);
 
     const presets = [
-        { cron: "0 0 * * *", label: "Every day at 00:00h" },
-        { cron: "0 0 * * 0", label: "Every sunday at 00:00h" },
-        { cron: "0 0 * * 1,3", label: "Every Mon and Wed at 00:00h" },
-        { cron: "0 0 1 * *", label: "Every first day of the month at 00:00h" },
+        { cron: "0 0 * * *", get label() { return i18n.t("backups.preset_daily"); } },
+        { cron: "0 0 * * 0", get label() { return i18n.t("backups.preset_weekly_sunday"); } },
+        { cron: "0 0 * * 1,3", get label() { return i18n.t("backups.preset_mon_wed"); } },
+        { cron: "0 0 1 * *", get label() { return i18n.t("backups.preset_monthly"); } },
     ];
 
     const data = store({
@@ -55,7 +57,7 @@ export function backupsForm(propsArg = {}) {
 
             init(settings);
 
-            app.toasts.success("Successfully saved backups settings.");
+            app.toasts.success(i18n.t("backups.saved_settings_success"));
         } catch (err) {
             app.checkApiError(err);
         }
@@ -105,7 +107,7 @@ export function backupsForm(propsArg = {}) {
                 disabled: () => data.isLoading || data.hasChanges,
                 onclick: () => (data.showForm = !data.showForm),
             },
-            t.span({ className: "txt" }, "Backup options"),
+            t.span({ className: "txt" }, i18n.t("backups.options")),
             t.i({
                 className: () => (data.showForm ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line"),
                 ariaHidden: true,
@@ -145,7 +147,7 @@ export function backupsForm(propsArg = {}) {
                                         }
                                     },
                                 }),
-                                t.label({ htmlFor: "enableAutoBackupsToggle" }, "Enable auto backups"),
+                                t.label({ htmlFor: "enableAutoBackupsToggle" }, i18n.t("backups.enable_auto")),
                             ),
                             app.components.slide(
                                 () => data.enableAutoBackups,
@@ -157,13 +159,14 @@ export function backupsForm(propsArg = {}) {
                                             { className: "fields" },
                                             t.div(
                                                 { className: "field" },
-                                                t.label({ htmlFor: "backups.cron" }, "Cron expression"),
+                                                t.label({ htmlFor: "backups.cron" }, i18n.t("backups.cron_expression")),
                                                 t.input({
                                                     id: "backups.cron",
                                                     name: "backups.cron",
                                                     className: "txt-code",
                                                     type: "text",
                                                     placeholder: "e.g. 0 0 * * *",
+
                                                     required: () => data.enableAutoBackups,
                                                     value: () => data.formSettings.backups.cron,
                                                     oninput: (e) => (data.formSettings.backups.cron = e.target.value),
@@ -177,7 +180,7 @@ export function backupsForm(propsArg = {}) {
                                                         className: "btn outline sm",
                                                         "html-popovertarget": "cron-presets-dropdown",
                                                     },
-                                                    t.span({ className: "txt" }, "Presets"),
+                                                    t.span({ className: "txt" }, i18n.t("index_upsert.presets")),
                                                     t.i({ className: "ri-arrow-drop-down-line", ariaHidden: true }),
                                                 ),
                                                 t.div(
@@ -209,7 +212,7 @@ export function backupsForm(propsArg = {}) {
                                         ),
                                         t.div(
                                             { className: "field-help" },
-                                            "Supports numeric list, steps, ranges or ",
+                                            () => i18n.t("backups.cron_help_a") + " ",
                                             t.strong(
                                                 {
                                                     className: "link-hint tooltip-bottom",
@@ -217,18 +220,18 @@ export function backupsForm(propsArg = {}) {
                                                         "@yearly\n@annually\n@monthly\n@weekly\n@daily\n@midnight\n@hourly",
                                                     ),
                                                 },
-                                                "macros",
+                                                i18n.t("backups.macros"),
                                             ),
                                             ".",
                                             t.br(),
-                                            "By default the timezone is in UTC.",
+                                            i18n.t("backups.cron_help_b"),
                                         ),
                                     ),
                                     t.div(
                                         { className: "col-lg-6" },
                                         t.div(
                                             { className: "field" },
-                                            t.label({ htmlFor: "backups.cronMaxKeep" }, "Max @auto backups to keep"),
+                                            t.label({ htmlFor: "backups.cronMaxKeep" }, i18n.t("backups.max_auto_backups")),
                                             t.input({
                                                 id: "backups.cronMaxKeep",
                                                 name: "backups.cronMaxKeep",
@@ -251,7 +254,7 @@ export function backupsForm(propsArg = {}) {
                         t.div(
                             { className: "col-lg-12" },
                             app.components.s3ConfigFields({
-                                toggleLabel: "Store backups in S3 storage",
+                                toggleLabel: i18n.t("backups.store_in_s3"),
                                 testFilesystem: "backups",
                                 config: () => data.formSettings.backups.s3,
                             }),
@@ -269,14 +272,14 @@ export function backupsForm(propsArg = {}) {
                                         className: "btn transparent secondary",
                                         onclick: reset,
                                     },
-                                    t.span({ className: "txt" }, "Cancel"),
+                                    t.span({ className: "txt" }, i18n.t("common.cancel")),
                                 ),
                                 t.button(
                                     {
                                         className: () => `btn expanded-lg ${data.isSaving ? "loading" : ""}`,
                                         disabled: () => !data.hasChanges || data.isSaving,
                                     },
-                                    t.span({ className: "txt" }, "Save changes"),
+                                    t.span({ className: "txt" }, i18n.t("record_upsert.save_changes")),
                                 ),
                             ),
                         ),

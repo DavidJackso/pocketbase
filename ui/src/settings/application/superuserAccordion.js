@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function superuserAccordion(pageData) {
     const info = store({
         isLoading: false,
@@ -43,33 +45,33 @@ export function superuserAccordion(pageData) {
         t.summary(
             null,
             t.i({ className: "ri-fingerprint-2-line", ariaHidden: true }),
-            t.span({ className: "txt" }, "Superuser IPs"),
+            t.span({ className: "txt" }, i18n.t("app_settings.superuser_ips")),
             t.div({ className: "flex-fill" }),
             () => {
                 if (pageData.formSettings?.superuserIPs?.length) {
-                    return t.span({ className: "label success" }, "Enabled");
+                    return t.span({ className: "label success" }, i18n.t("common.enabled"));
                 }
-                return t.span({ className: "label" }, "Disabled");
+                return t.span({ className: "label" }, i18n.t("common.disabled"));
             },
             () => {
                 if (!app.utils.isEmpty(app.store.errors?.batch)) {
                     return t.i({
                         className: "ri-error-warning-fill txt-danger",
-                        ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                        ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                     });
                 }
             },
         ),
         t.div(
             { className: "content m-b-sm" },
-            t.p(null, "A comma separated list of superusers allowed IPs and subnets."),
+            t.p(null, i18n.t("app_settings.superuser_ips_intro")),
             t.p(
                 null,
-                "Enabling this option greatly helps hardening the security of your application because even if someone manage to get their hands on a superuser auth token they will not be able to use it.",
+                i18n.t("app_settings.superuser_ips_security_note"),
             ),
             t.p(
                 null,
-                "In case your IP changes, you can always reset the field value with the ",
+                () => i18n.t("app_settings.superuser_ips_reset_a") + " ",
                 t.a(
                     {
                         href: import.meta.env.PB_SUPERUSER_IPS_RESET_DOCS,
@@ -83,7 +85,7 @@ export function superuserAccordion(pageData) {
                         t.i({ ariaHidden: true, className: "ri-arrow-right-up-line txt-sm" }),
                     ),
                 ),
-                " console command.",
+                () => " " + i18n.t("app_settings.superuser_ips_reset_b"),
             ),
         ),
         t.div(
@@ -92,13 +94,13 @@ export function superuserAccordion(pageData) {
                 { className: "field" },
                 t.label(
                     { htmlFor: "superuserIPs" },
-                    t.span({ className: "txt" }, "Superuser IPs and subnets"),
+                    t.span({ className: "txt" }, i18n.t("app_settings.superuser_ips_and_subnets")),
                 ),
                 t.input({
                     id: "superuserIPs",
                     name: "superuserIPs",
                     type: "text",
-                    placeholder: "Leave empty for no restriction",
+                    placeholder: i18n.t("app_settings.leave_empty_no_restriction"),
                     value: () => app.utils.joinNonEmpty(pageData.formSettings.superuserIPs),
                     oninput: (e) => {
                         const newValue = app.utils.splitNonEmpty(e.target.value, ",");
@@ -129,13 +131,13 @@ export function superuserAccordion(pageData) {
                             }
                         },
                     },
-                    t.span({ className: "txt" }, "Clear"),
+                    t.span({ className: "txt" }, i18n.t("common.clear")),
                 ),
             ),
         ),
         t.div(
             { className: "field-help" },
-            "Comma separated list of IPs and subnets such as: ",
+            () => i18n.t("app_settings.comma_separated_ips_example") + " ",
             t.div(
                 { className: "inline-flex gap-5" },
                 t.div({
@@ -150,7 +152,8 @@ export function superuserAccordion(pageData) {
                         app.utils.pushUnique(ips, info.realIP);
                         pageData.formSettings.superuserIPs = ips;
                     },
-                    textContent: () => info.isLoading ? "..." : (info.realIP + " (you)"),
+                    textContent: () =>
+                        info.isLoading ? "..." : (info.realIP + " (" + i18n.t("app_settings.you") + ")"),
                 }),
             ),
         ),

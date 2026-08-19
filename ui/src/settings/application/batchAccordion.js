@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function batchAccordion(pageData) {
     return t.details(
         {
@@ -8,19 +10,19 @@ export function batchAccordion(pageData) {
         t.summary(
             null,
             t.i({ className: "ri-archive-stack-line", ariaHidden: true }),
-            t.span({ className: "txt" }, "Batch Web API"),
+            t.span({ className: "txt" }, i18n.t("app_settings.batch_web_api")),
             t.div({ className: "flex-fill" }),
             () => {
                 if (pageData.formSettings.batch.enabled) {
-                    return t.span({ className: "label success" }, "Enabled");
+                    return t.span({ className: "label success" }, i18n.t("common.enabled"));
                 }
-                return t.span({ className: "label" }, "Disabled");
+                return t.span({ className: "label" }, i18n.t("common.disabled"));
             },
             () => {
                 if (!app.utils.isEmpty(app.store.errors?.batch)) {
                     return t.i({
                         className: "ri-error-warning-fill txt-danger",
-                        ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                        ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                     });
                 }
             },
@@ -41,7 +43,7 @@ export function batchAccordion(pageData) {
                     }),
                     t.label(
                         { htmlFor: "batch.enabled" },
-                        t.span({ className: "txt" }, "Enable"),
+                        t.span({ className: "txt" }, i18n.t("common.enable")),
                         t.small({ className: "txt-hint" }, " (experimental)"),
                     ),
                 ),
@@ -52,13 +54,10 @@ export function batchAccordion(pageData) {
                     { className: "field" },
                     t.label(
                         { htmlFor: "batch.maxRequests" },
-                        t.span({ className: "txt" }, "Max requests in a batch"),
+                        t.span({ className: "txt" }, i18n.t("app_settings.max_batch_requests")),
                         t.i({
                             className: "ri-information-line link-faded",
-                            ariaDescription: app.attrs.tooltip(
-                                "Rate limiting (if enabled) also applies for the batch create/update/upsert/delete requests.",
-                                "right",
-                            ),
+                            ariaDescription: app.attrs.tooltip(i18n.t("app_settings.max_batch_requests_help"), "right"),
                         }),
                     ),
                     t.input({
@@ -80,7 +79,7 @@ export function batchAccordion(pageData) {
                     { className: "field" },
                     t.label(
                         { htmlFor: "batch.timeout" },
-                        t.span({ className: "txt" }, "Max processing time (in seconds)"),
+                        t.span({ className: "txt" }, i18n.t("app_settings.max_processing_time")),
                     ),
                     t.input({
                         id: "batch.timeout",
@@ -101,7 +100,7 @@ export function batchAccordion(pageData) {
                     { className: "field" },
                     t.label(
                         { htmlFor: "batch.maxBodySize" },
-                        t.span({ className: "txt" }, "Max body size (in bytes)"),
+                        t.span({ className: "txt" }, i18n.t("app_settings.max_body_size")),
                     ),
                     t.input({
                         id: "batch.maxBodySize",
@@ -109,7 +108,7 @@ export function batchAccordion(pageData) {
                         type: "number",
                         min: 0,
                         step: 1,
-                        placeholder: "Default to 128MB",
+                        placeholder: i18n.t("app_settings.default_128mb"),
                         disabled: () => !pageData.formSettings.batch.enabled,
                         value: () => pageData.formSettings.batch.maxBodySize || "",
                         oninput: (e) => pageData.formSettings.batch.maxBodySize = parseInt(e.target.value, 10),
