@@ -251,7 +251,7 @@ function initSearch(selectFunc = null) {
                     {
                         type: "button",
                         className: "link-hint",
-                        title: i18n.t("leaflet.clear_search"),
+                        title: i18n.t("common.clear_search"),
                         onclick: () => reset(),
                     },
                     t.i({ className: "ri-close-line", ariaHidden: true }),

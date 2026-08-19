@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -174,14 +176,14 @@ const showRecordSummaryDropdownNoDelay = function(target, record) {
                             e.stopImmediatePropagation();
                         },
                     },
-                    t.span({ className: "txt" }, "Edit relation record"),
+                    t.span({ className: "txt" }, i18n.t("record_summary.edit_relation_record")),
                     t.i({ className: "ri-external-link-line", ariaHidden: true }),
                 ),
                 t.button(
                     {
                         type: "button",
                         className: "link-hint",
-                        title: "Close",
+                        title: i18n.t("common.close"),
                         onclick: () => hideRecordSummaryDropdown(target, 0),
                     },
                     t.i({ className: "ri-close-line", ariaHidden: true }),
