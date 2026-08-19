@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     collection: undefined,
 //     originalRecord: undefined,
@@ -77,7 +79,7 @@ export function input(props) {
                     {
                         hidden: () => isValidStringifiedJSON(local.value.trim()),
                         className: "json-state",
-                        ariaDescription: app.attrs.tooltip("Invalid JSON", "left"),
+                        ariaDescription: app.attrs.tooltip(i18n.t("json_field.invalid_json"), "left"),
                     },
                     t.i({ className: "ri-error-warning-fill txt-danger", ariaHidden: true }),
                 ),
@@ -85,7 +87,7 @@ export function input(props) {
                     {
                         hidden: () => !isValidStringifiedJSON(local.value.trim()),
                         className: "json-state",
-                        ariaDescription: app.attrs.tooltip("Valid JSON", "left"),
+                        ariaDescription: app.attrs.tooltip(i18n.t("json_field.valid_json"), "left"),
                     },
                     t.i({ className: "ri-checkbox-circle-fill txt-success", ariaHidden: true }),
                 ),

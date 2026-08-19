@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -16,7 +18,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -40,11 +42,11 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.small({ className: "txt-hint" }, "(=true)"),
                     t.i({
                         className: "ri-information-line link-hint",
-                        ariaDescription: app.attrs.tooltip("Requires the field value to be true."),
+                        ariaDescription: app.attrs.tooltip(i18n.t("bool_field.required_help")),
                     }),
                 ),
             ),
