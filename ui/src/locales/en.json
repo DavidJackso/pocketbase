@@ -948,5 +948,11 @@
     "settings_sidebar.group_system": "System",
     "settings_sidebar.group_sync": "Sync",
     "settings_sidebar.group_debug": "Debug",
-    "common.something_went_wrong": "Something went wrong!"
+    "common.something_went_wrong": "Something went wrong!",
+    "record_upsert.failed_to_load_record": "Failed to load record.",
+    "record_upsert.record_preview_suffix": "record preview",
+    "common.loading_plugins": "Loading plugins...",
+    "collection_rules.manage_rule_help1a": "This rule is executed in addition to the",
+    "field_settings.help_text": "Help text",
+    "sync.merge_with_existing": "Merge with the existing collections"
 }

@@ -179,7 +179,7 @@
         font-size: var(--smFontSize);
         align-content: center;
         &::before {
-            content: "N/A";
+            content: attr(data-missing-label);
         }
     }
     .delimiter {

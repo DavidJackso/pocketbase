@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 const maxNestedLazyExpand = 10;
 const lazyLoadBatchSize = 500;
 const LAZY_EXPAND_EVENT_NAME = "pb:lazyExpandSummaryRels";
@@ -28,7 +30,7 @@ export function view(props) {
         () => {
             const ids = app.utils.toArray(props.record[props.field.name]);
             if (!ids.length) {
-                return t.span({ className: "missing-value" });
+                return t.span({ className: "missing-value", "html-data-missing-label": i18n.t("common.na") });
             }
 
             // stop at cyclic references

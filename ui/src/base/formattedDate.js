@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -34,7 +36,7 @@ window.app.components.formattedDate = function(propsArg = {}) {
         },
         () => {
             if (!props.value) {
-                return t.span({ className: "missing-value" });
+                return t.span({ className: "missing-value", "html-data-missing-label": i18n.t("common.na") });
             }
 
             if (props.short) {

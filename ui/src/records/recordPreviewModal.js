@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
@@ -50,18 +52,18 @@ function copyJSON(record) {
     }
 
     app.utils.copyToClipboard(JSON.stringify(record, null, 2));
-    app.toasts.success("Record copied to clipboard!");
+    app.toasts.success(i18n.t("record_upsert.copied_to_clipboard"));
 }
 
 function recordPreviewModal(rawRecord, modalSettings) {
     if (!rawRecord?.id) {
-        app.toasts.error("Failed to load record.");
+        app.toasts.error(i18n.t("record_upsert.failed_to_load_record"));
         console.warn("[recordPreviewModal] missing required record id field:", rawRecord);
         return;
     }
 
     if (!rawRecord.collectionId && !rawRecord.collectionName) {
-        app.toasts.error("Failed to load record.");
+        app.toasts.error(i18n.t("record_upsert.failed_to_load_record"));
         console.warn("[recordPreviewModal] missing required collectionId or collectionName field:", rawRecord);
         return;
     }
@@ -140,11 +142,11 @@ function recordPreviewModal(rawRecord, modalSettings) {
             t.h6(
                 null,
                 t.strong(null, () => rawRecord?.collectionName || data.collection?.name),
-                " record preview",
+                " " + i18n.t("record_upsert.record_preview_suffix"),
             ),
             t.button(
                 {
-                    title: "More options",
+                    title: i18n.t("logs.more_options"),
                     className: () => `btn sm circle transparent m-l-auto ${data.isLoading ? "loading" : ""}`,
                     disabled: () => data.isLoading,
                     "html-popovertarget": uniqueId + "preview-dropdown",
@@ -163,7 +165,7 @@ function recordPreviewModal(rawRecord, modalSettings) {
                             },
                         },
                         t.i({ className: "ri-braces-line", ariaHidden: true }),
-                        t.span({ className: "txt" }, "Copy JSON"),
+                        t.span({ className: "txt" }, i18n.t("record_upsert.copy_json")),
                     );
                 },
             ),
@@ -216,7 +218,7 @@ function recordPreviewModal(rawRecord, modalSettings) {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             t.button(
                 {
@@ -226,7 +228,7 @@ function recordPreviewModal(rawRecord, modalSettings) {
                     onclick: () => downloadJSON(data.record),
                 },
                 t.i({ className: "ri-download-line", ariaHidden: true }),
-                t.span({ className: "txt" }, "Download JSON"),
+                t.span({ className: "txt" }, i18n.t("logs.download_json")),
             ),
         ),
     );
