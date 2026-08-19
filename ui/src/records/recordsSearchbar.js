@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -46,7 +48,10 @@ window.app.components.recordsSearchbar = function(propsArg = {}) {
             },
         },
         app.components.searchbar({
-            placeholder: () => (!props.disabled && !props.collection?.id ? "Loading..." : "Search term or filter..."),
+            placeholder: () =>
+                (!props.disabled && !props.collection?.id
+                    ? i18n.t("common.loading")
+                    : i18n.t("records_searchbar.placeholder")),
             historyKey: () => "pbRecordsSearchHistory_" + props.collection?.id,
             disabled: () => props.disabled || !props.collection,
             value: () => props.value,

@@ -1,10 +1,14 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
 const recordsPerPage = 100;
 
 const defaultSettings = {
-    btnText: "Insert",
+    get btnText() {
+        return i18n.t("common.insert");
+    },
     fileTypes: [], // "image", "document", "video", "audio", "archive", "file"
     onselect: function(selectedFile) {},
 };
@@ -247,7 +251,7 @@ function recordFilePickerModal(settings = defaultSettings) {
                 },
                 t.span(
                     { className: "txt-lg collection-name m-r-auto" },
-                    () => data.activeCollection?.name || "Select collection",
+                    () => data.activeCollection?.name || i18n.t("common.select_collection"),
                 ),
                 t.i({ className: "ri-arrow-drop-down-line", ariaHidden: true }),
             ),
@@ -281,7 +285,7 @@ function recordFilePickerModal(settings = defaultSettings) {
                 {
                     type: "button",
                     className: "btn circle transparent",
-                    ariaLabel: app.attrs.tooltip("Add new record"),
+                    ariaLabel: app.attrs.tooltip(i18n.t("common.add_new_record")),
                     onclick: () => app.modals.openRecordUpsert(data.activeCollection),
                 },
                 t.i({ className: "ri-add-line txt-hint", ariaHidden: true }),
@@ -347,7 +351,7 @@ function recordFilePickerModal(settings = defaultSettings) {
                         disabled: () => data.isLoadingRecords,
                         onclick: () => loadRecords(),
                     },
-                    t.span({ className: "txt" }, "Load more"),
+                    t.span({ className: "txt" }, i18n.t("common.load_more")),
                 ),
             ),
             // no files
@@ -358,14 +362,19 @@ function recordFilePickerModal(settings = defaultSettings) {
                 },
                 () => {
                     if (app.utils.isEmpty(settings.fileTypes)) {
-                        return t.p(null, "No records with selectable files found.");
+                        return t.p(null, i18n.t("record_file_picker.no_files_found"));
                     }
-                    return t.p(null, `No "${settings.fileTypes.join("\", \"")}" files found.`);
+                    return t.p(
+                        null,
+                        i18n.t("record_file_picker.no_typed_files_found", {
+                            types: settings.fileTypes.join("\", \""),
+                        }),
+                    );
                 },
                 t.button({
                     type: "button",
                     className: "btn sm secondary",
-                    textContent: "Clear search",
+                    textContent: i18n.t("common.clear_search"),
                     hidden: () => !data.searchTerm?.length,
                     onclick: () => {
                         data.searchTerm = "";
@@ -381,7 +390,7 @@ function recordFilePickerModal(settings = defaultSettings) {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             // image thumb selector
             () => {
@@ -390,8 +399,8 @@ function recordFilePickerModal(settings = defaultSettings) {
                 }
 
                 const options = [
-                    { value: "", label: "Original size" },
-                    { value: "100x100", label: "100x100 thumb" },
+                    { value: "", label: i18n.t("record_file_picker.original_size") },
+                    { value: "100x100", label: i18n.t("record_file_picker.thumb_size", { size: "100x100" }) },
                 ];
 
                 // find the related field and its thumbs
@@ -402,7 +411,7 @@ function recordFilePickerModal(settings = defaultSettings) {
                 for (let thumb of thumbs) {
                     options.push({
                         value: thumb,
-                        label: `${thumb} thumb`,
+                        label: i18n.t("record_file_picker.thumb_size", { size: thumb }),
                     });
                 }
 

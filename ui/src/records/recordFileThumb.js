@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -84,7 +86,8 @@ window.app.components.recordFileThumb = function(propsArg = {}) {
             type: "button",
             draggable: false,
             className: () => `thumb ${props.extraClasses} ${data.isPreviewLoading ? "loading" : ""}`,
-            title: () => (data.hasPreview ? "Preview" : "Download") + " " + props.filename,
+            title: () =>
+                (data.hasPreview ? i18n.t("common.preview") : i18n.t("common.download")) + " " + props.filename,
             onclick: async (e) => {
                 e.stopPropagation();
 
@@ -108,7 +111,7 @@ window.app.components.recordFileThumb = function(propsArg = {}) {
             if (data.fileType == "image") {
                 const img = t.img({
                     draggable: false,
-                    alt: () => "Thumb of " + props.filename,
+                    alt: () => i18n.t("uploaded_file_thumb.alt", { name: props.filename }),
                     src: () => data.previewURL,
                     onerror: (err) => {
                         console.warn("[recordFileThumb] load err:", err);
