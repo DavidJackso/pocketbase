@@ -1,16 +1,17 @@
 import PocketBase, { getTokenPayload } from "pocketbase";
+import { i18n } from "../i18n.js";
 
 export function pageConfirmPasswordReset(route) {
     const token = route.params?.token || "";
     const tokenPayload = getTokenPayload(token);
 
     if (!tokenPayload.email || !tokenPayload.collectionId) {
-        app.toasts.error("Invalid or expired password reset token.");
+        app.toasts.error(i18n.t("auth.invalid_password_reset_token"));
         window.location.hash = "#/";
         return;
     }
 
-    app.store.title = "Confirm password reset";
+    app.store.title = i18n.t("auth.confirm_password_reset");
 
     const data = store({
         newPassword: "",
@@ -51,15 +52,15 @@ export function pageConfirmPasswordReset(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: "App logo" }),
+            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
             t.h5({ className: "m-t-10" }, () => app.store.title),
         ),
         () => {
             if (data.isSuccess) {
                 return t.div(
                     { pbEvent: "confirmPasswordResetAlert", className: "alert success txt-center" },
-                    t.p(null, "The password was successfully changed."),
-                    t.p(null, "You can go back to sign in with your new password."),
+                    t.p(null, i18n.t("auth.password_changed_success")),
+                    t.p(null, i18n.t("auth.go_back_sign_in_new_password")),
                 );
             }
 
@@ -76,7 +77,7 @@ export function pageConfirmPasswordReset(route) {
                     { className: "col-12" },
                     t.div(
                         { className: "content txt-center m-b-sm" },
-                        "Type your new password for ",
+                        i18n.t("auth.type_new_password_for") + " ",
                         t.strong(null, tokenPayload.email),
                         ":",
                     ),
@@ -84,7 +85,7 @@ export function pageConfirmPasswordReset(route) {
                         { className: "fields" },
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: "newPassword" }, "New password"),
+                            t.label({ htmlFor: "newPassword" }, i18n.t("auth.new_password")),
                             t.input({
                                 id: "newPassword",
                                 name: "password",
@@ -104,7 +105,7 @@ export function pageConfirmPasswordReset(route) {
                                     tabIndex: -1,
                                     className: "btn sm transparent secondary circle tooltip-right",
                                     ariaLabel: app.attrs.tooltip(() =>
-                                        data.showNewPassword ? "Hide password" : "Show password"
+                                        data.showNewPassword ? i18n.t("auth.hide_password") : i18n.t("auth.show_password")
                                     ),
                                     onclick: () => (data.showNewPassword = !data.showNewPassword),
                                 },
@@ -122,7 +123,7 @@ export function pageConfirmPasswordReset(route) {
                         { className: "fields" },
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: "newPasswordConfirm" }, "New password confirm"),
+                            t.label({ htmlFor: "newPasswordConfirm" }, i18n.t("auth.new_password_confirm")),
                             t.input({
                                 id: "newPasswordConfirm",
                                 name: "passwordConfirm",
@@ -141,7 +142,7 @@ export function pageConfirmPasswordReset(route) {
                                     tabIndex: -1,
                                     className: "btn sm transparent secondary circle tooltip-right",
                                     ariaLabel: app.attrs.tooltip(() =>
-                                        data.showNewPasswordConfirm ? "Hide password" : "Show password"
+                                        data.showNewPasswordConfirm ? i18n.t("auth.hide_password") : i18n.t("auth.show_password")
                                     ),
                                     onclick: () => (data.showNewPasswordConfirm = !data.showNewPasswordConfirm),
                                 },
@@ -160,7 +161,7 @@ export function pageConfirmPasswordReset(route) {
                             className: () => `btn lg block ${data.isSubmitting ? "loading" : ""}`,
                             disabled: () => data.isSubmitting,
                         },
-                        t.span({ className: "txt" }, "Set new password"),
+                        t.span({ className: "txt" }, i18n.t("auth.set_new_password")),
                     ),
                 ),
             );
