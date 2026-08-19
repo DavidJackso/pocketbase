@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 function getChartHeight() {
     return document.body.clientWidth > 600 && document.body.clientHeight >= 720 ? 150 : 100;
 }
@@ -145,8 +147,8 @@ export function logsChart(logsSettings) {
                     logsSettings.zoom = {};
                 },
             },
-            t.div({ className: "content-primary" }, "Reset zoom"),
-            t.div({ className: "content-secondary" }, "(drag the timeline to pan)"),
+            t.div({ className: "content-primary" }, i18n.t("logs.reset_zoom")),
+            t.div({ className: "content-secondary" }, i18n.t("logs.drag_timeline_to_pan")),
         ),
         t.div(
             {
@@ -449,7 +451,7 @@ function tooltipsPlugin(logsSettings) {
                     },
                     t.div(
                         { className: "content-primary" },
-                        () => `${tooltip.total} ${tooltip.total == 1 ? "request" : "requests"}`,
+                        () => `${tooltip.total} ${tooltip.total == 1 ? i18n.t("logs.request") : i18n.t("logs.requests")}`,
                     ),
                     t.div({ className: "content-secondary" }, () => tooltip.date),
                 );
