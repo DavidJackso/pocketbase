@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -347,7 +349,7 @@ window.app.components.erd = function(propsArg = {}) {
                                             if (field.hidden) {
                                                 return t.span(
                                                     { className: "label danger field-hidden-label" },
-                                                    "Hidden",
+                                                    i18n.t("common.hidden"),
                                                 );
                                             }
                                         },
@@ -379,7 +381,7 @@ window.app.components.erd = function(propsArg = {}) {
                 {
                     type: "button",
                     className: "btn sm circle secondary",
-                    title: "Zoom in",
+                    title: i18n.t("erd.zoom_in"),
                     onclick: () => {
                         props.scale += 0.05;
                     },
@@ -390,7 +392,7 @@ window.app.components.erd = function(propsArg = {}) {
                 {
                     type: "button",
                     className: "btn sm circle secondary",
-                    title: "Zoom out",
+                    title: i18n.t("erd.zoom_out"),
                     onclick: () => {
                         props.scale -= 0.05;
                     },

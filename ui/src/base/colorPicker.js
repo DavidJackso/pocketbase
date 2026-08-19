@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -102,7 +104,7 @@ window.app.components.colorPicker = function(propsArg = {}) {
             {
                 hidden: () => !props.predefinedColors.length,
                 type: "button",
-                title: "Predefined colors",
+                title: i18n.t("color_picker.predefined_colors"),
                 className: "link-hint predefined-colors-btn",
                 "html-popovertarget": uniqueId + "predefined-colors-dropdown",
             },

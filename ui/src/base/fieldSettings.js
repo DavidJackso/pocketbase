@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -100,7 +102,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                     watch(() => {
                         if (data.field.presentable && data.field.hidden) {
                             data.field.presentable = false;
-                            app.toasts.info("The field cannot be presentable if hidden.");
+                            app.toasts.info(i18n.t("field_settings.cannot_be_presentable_if_hidden"));
                         }
                     }),
                 );
@@ -116,7 +118,9 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                             && data.field.required != data.originalField.required
                         ) {
                             data.field.required = data.originalField.required;
-                            app.toasts.info(`The option cannot be changed for field "${data.field.name}".`);
+                            app.toasts.info(
+                                i18n.t("field_settings.option_locked_for_field", { name: data.field.name }),
+                            );
                         }
                     }),
                 );
@@ -132,7 +136,9 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                             && data.field.hidden != data.originalField.hidden
                         ) {
                             data.field.hidden = data.originalField.hidden;
-                            app.toasts.info(`The option cannot be changed for field "${data.field.name}".`);
+                            app.toasts.info(
+                                i18n.t("field_settings.option_locked_for_field", { name: data.field.name }),
+                            );
                         }
                     }),
                 );
@@ -178,7 +184,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                             name: () => `fields.${data.fieldIndex}.name`,
                             required: true,
                             spellcheck: false,
-                            placeholder: "Field name*",
+                            placeholder: i18n.t("field_settings.name_placeholder"),
                             className: "inline-error",
                             disabled: () => data.field[toDeleteProp] || data.field.system,
                             value: () => data.field.name || "",
@@ -205,13 +211,13 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                             const labels = [];
 
                             if (data.field.required) {
-                                labels.push(t.span({ className: "label success" }, "Required"));
+                                labels.push(t.span({ className: "label success" }, i18n.t("common.required")));
                             }
 
                             if (data.field.hidden) {
-                                labels.push(t.span({ className: "label danger" }, "Hidden"));
+                                labels.push(t.span({ className: "label danger" }, i18n.t("common.hidden")));
                             } else if (data.field.presentable) {
-                                labels.push(t.span({ className: "label info" }, "Presentable"));
+                                labels.push(t.span({ className: "label info" }, i18n.t("field_settings.presentable")));
                             }
 
                             return labels;
@@ -234,7 +240,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                         );
                         return `btn sm circle transparent secondary ${hasError ? "txt-danger" : ""}`;
                     },
-                    title: "Field options",
+                    title: i18n.t("field_settings.field_options"),
                     hidden: () => data.field[toDeleteProp],
                     onclick: (e) => {
                         const details = e.target.closest("details");
@@ -251,7 +257,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                     className: "btn sm circle transparent warning",
                     hidden: () => !data.field[toDeleteProp],
                     onclick: () => delete data.field[toDeleteProp],
-                    ariaLabel: app.attrs.tooltip("Restore"),
+                    ariaLabel: app.attrs.tooltip(i18n.t("common.restore")),
                 },
                 t.i({ className: "ri-restart-line", ariaHidden: true }),
             ),
@@ -288,15 +294,14 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                     }),
                     t.label(
                         { htmlFor: uniqueId + ".presentable" },
-                        t.span({ className: "txt" }, "Presentable"),
+                        t.span({ className: "txt" }, i18n.t("field_settings.presentable")),
                         t.i({
                             className: "ri-information-line link-hint",
                             ariaDescription: app.attrs.tooltip(
                                 () => {
-                                    let msg =
-                                        "Whether the field should be preferred in the Superuser UI relation listings (default to auto).";
+                                    let msg = i18n.t("field_settings.presentable_help");
                                     if (data.field.hidden) {
-                                        msg += "\nThe field cannot be presentable if hidden.";
+                                        msg += "\n" + i18n.t("field_settings.cannot_be_presentable_if_hidden");
                                     }
                                     return msg;
                                 },
@@ -322,10 +327,10 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                     }),
                     t.label(
                         { htmlFor: uniqueId + ".hidden" },
-                        t.span({ className: "txt" }, "Hidden"),
+                        t.span({ className: "txt" }, i18n.t("common.hidden")),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip("Hide from the JSON API response and filters."),
+                            ariaDescription: app.attrs.tooltip(i18n.t("field_settings.hidden_help")),
                         }),
                     ),
                 );
@@ -334,7 +339,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                 {
                     hidden: () => !settings.showDuplicate && (!settings.showRemove || data.field.system),
                     type: "button",
-                    title: "More options",
+                    title: i18n.t("field_settings.more_options"),
                     className: "btn sm circle transparent secondary more-btn m-l-auto",
                     "html-popovertarget": uniqueId + "_options_dropdown",
                 },
@@ -355,7 +360,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                         type: "button",
                         className: "dropdown-item",
                         role: "menuitem",
-                        textContent: "Duplicate",
+                        textContent: i18n.t("common.duplicate"),
                         onclick: (e) => {
                             duplicateField();
                             e.target.closest(".dropdown").hidePopover();
@@ -371,7 +376,7 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                         type: "button",
                         className: "dropdown-item",
                         role: "menuitem",
-                        textContent: "Remove",
+                        textContent: i18n.t("common.remove"),
                         onclick: (e) => {
                             removeField();
                             e.target.closest(".dropdown").hidePopover();
