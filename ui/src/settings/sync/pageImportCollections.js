@@ -1,7 +1,8 @@
 import { settingsSidebar } from "../settingsSidebar";
+import { i18n } from "../../i18n.js";
 
 export function pageImportCollections(route) {
-    app.store.title = "Import collections";
+    app.store.title = i18n.t("sync.import_title");
 
     const uniqueId = "import_" + app.utils.randomString();
 
@@ -252,13 +253,13 @@ export function pageImportCollections(route) {
             await new Promise((r) => setTimeout(r, 0));
 
             if (!data.newCollections.length) {
-                app.toasts.error("Invalid collections configuration.");
+                app.toasts.error(i18n.t("sync.invalid_config"));
                 clear();
             }
         };
 
         reader.onerror = (err) => {
-            app.toasts.error("Failed to load the imported JSON.");
+            app.toasts.error(i18n.t("sync.load_json_failed"));
             console.warn(err);
 
             data.isLoadingFile = false;
@@ -297,7 +298,7 @@ export function pageImportCollections(route) {
                 { className: "page-header" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div({ className: "breadcrumb-item" }, "Settings"),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("common.settings")),
                     t.div({ className: "breadcrumb-item" }, () => app.store.title),
                 ),
             ),
@@ -312,35 +313,35 @@ export function pageImportCollections(route) {
                         { className: "col-lg-12" },
                         t.span(
                             { className: "txt-lg m-r-5" },
-                            "Paste below the collections configuration you want to import or",
+                            i18n.t("sync.paste_config_intro"),
                         ),
                         t.label(
                             {
                                 htmlFor: fileInput.id,
                                 className: () => `btn sm outline ${data.isLoadingFile ? "loading" : ""}`,
                             },
-                            t.span({ className: "txt" }, "Load from JSON file"),
+                            t.span({ className: "txt" }, i18n.t("sync.load_from_json")),
                         ),
                         fileInput,
                         t.p(
                             { className: "txt-hint" },
                             t.em(
                                 null,
-                                "You can use the ",
+                                () => i18n.t("sync.migrations_note_a") + " ",
                                 t.a({
                                     href: `${import.meta.env.PB_DOCS_URL}/go-migrations/`,
                                     target: "_blank",
                                     rel: "noopener noreferrer",
                                     textContent: "Go",
                                 }),
-                                " or ",
+                                () => " " + i18n.t("common.or") + " ",
                                 t.a({
                                     href: `${import.meta.env.PB_DOCS_URL}/js-migrations/`,
                                     target: "_blank",
                                     rel: "noopener noreferrer",
                                     textContent: "JS",
                                 }),
-                                " migrations to manage your collections programmatically in more granular and version controlled manner.",
+                                () => " " + i18n.t("sync.migrations_note_b"),
                             ),
                         ),
                     ),
@@ -348,7 +349,7 @@ export function pageImportCollections(route) {
                         { className: "col-lg-12" },
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + "_collections_field" }, "Collections"),
+                            t.label({ htmlFor: uniqueId + "_collections_field" }, i18n.t("collections_sidebar.collections")),
                             t.textarea({
                                 id: uniqueId + "_collections_field",
                                 name: "collections",
@@ -367,7 +368,7 @@ export function pageImportCollections(route) {
                                 className: () =>
                                     `field-help error ${!!data.rawNewCollections && !data.isRawValid ? "" : "hidden"}`,
                             },
-                            "Invalid collections configuration.",
+                            i18n.t("sync.invalid_config"),
                         ),
                     ),
                     t.div(
@@ -381,7 +382,7 @@ export function pageImportCollections(route) {
                                 checked: () => data.mergeWithOldCollections,
                                 onchange: (e) => (data.mergeWithOldCollections = e.target.checked),
                             }),
-                            t.label({ htmlFor: uniqueId + "_merge_checkbox" }, "Merge with the existing collections"),
+                            t.label({ htmlFor: uniqueId + "_merge_checkbox" }, i18n.t("sync.merge_with_existing")),
                         ),
                     ),
                     t.div(
@@ -392,7 +393,7 @@ export function pageImportCollections(route) {
                             { className: "alert info" },
                             t.div(
                                 { className: "content" },
-                                t.p(null, "Your collections configuration is already up-to-date!"),
+                                t.p(null, i18n.t("sync.already_up_to_date")),
                             ),
                         ),
                     ),
@@ -400,7 +401,7 @@ export function pageImportCollections(route) {
                         {
                             className: () => `col-lg-12 ${data.isRawValid && data.hasChanges ? "" : "hidden"}`,
                         },
-                        t.p({ className: "txt-hint txt-bold" }, "Detected changes"),
+                        t.p({ className: "txt-hint txt-bold" }, i18n.t("sync.detected_changes")),
                         t.div(
                             { className: "list" },
                             // to delete
@@ -410,7 +411,7 @@ export function pageImportCollections(route) {
                                         { className: "list-item" },
                                         t.span({
                                             className: "label import-change-label danger",
-                                            textContent: "Deleted",
+                                            textContent: i18n.t("sync.deleted"),
                                         }),
                                         t.div(
                                             { className: "inline-flex gap-5" },
@@ -430,7 +431,7 @@ export function pageImportCollections(route) {
                                         { className: "list-item" },
                                         t.span({
                                             className: "label import-change-label warning",
-                                            textContent: "Changed",
+                                            textContent: i18n.t("sync.changed"),
                                         }),
                                         t.div(
                                             { className: "inline-flex gap-5" },
@@ -466,7 +467,7 @@ export function pageImportCollections(route) {
                                         { className: "list-item" },
                                         t.span({
                                             className: "label import-change-label success",
-                                            textContent: "Added",
+                                            textContent: i18n.t("sync.added"),
                                         }),
                                         t.div(
                                             { className: "inline-flex gap-5" },
@@ -491,15 +492,15 @@ export function pageImportCollections(route) {
                                 { className: "content" },
                                 t.p(
                                     null,
-                                    "Some of the imported collections share the same name and/or fields but are imported with different IDs.",
+                                    i18n.t("sync.duplicate_id_warning"),
                                 ),
                                 t.p(
                                     null,
-                                    "You can replace them in the import if you want to:",
+                                    i18n.t("sync.replace_intro"),
                                     t.button({
                                         type: "button",
                                         className: "btn warning sm m-l-10",
-                                        textContent: "Replace with original IDs",
+                                        textContent: i18n.t("sync.replace_with_original_ids"),
                                         onclick: replaceIds,
                                     }),
                                 ),
@@ -516,7 +517,7 @@ export function pageImportCollections(route) {
                                     className: () => `btn secondary ${!data.rawNewCollections ? "hidden" : ""}`,
                                     onclick: clear,
                                 },
-                                t.span({ className: "txt" }, "Clear"),
+                                t.span({ className: "txt" }, i18n.t("common.clear")),
                             ),
                             t.button(
                                 {
@@ -525,7 +526,7 @@ export function pageImportCollections(route) {
                                     disabled: () => !data.canReview,
                                     onclick: review,
                                 },
-                                t.span({ className: "txt" }, "Review"),
+                                t.span({ className: "txt" }, i18n.t("sync.review")),
                             ),
                         ),
                     ),

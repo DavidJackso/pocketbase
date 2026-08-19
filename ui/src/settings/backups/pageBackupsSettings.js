@@ -2,9 +2,10 @@ import { settingsSidebar } from "../settingsSidebar";
 import { backupsForm } from "./backupsForm";
 import { backupsList } from "./backupsList";
 import { backupUploadButton } from "./backupUploadButton";
+import { i18n } from "../../i18n.js";
 
 export function pageBackupsSettings(route) {
-    app.store.title = "Backups";
+    app.store.title = i18n.t("backups.title");
 
     const data = store({
         resetList: null,
@@ -23,7 +24,7 @@ export function pageBackupsSettings(route) {
                 { className: "page-header" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div({ className: "breadcrumb-item" }, "Settings"),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("common.settings")),
                     t.div({ className: "breadcrumb-item" }, () => app.store.title),
                 ),
             ),
@@ -37,7 +38,7 @@ export function pageBackupsSettings(route) {
                         { className: "col-lg-12" },
                         t.div(
                             { className: "flex gap-10 m-b-sm" },
-                            t.div({ className: "txt-lg" }, "Backup and restore your PocketBase data"),
+                            t.div({ className: "txt-lg" }, i18n.t("backups.backup_and_restore_intro")),
                             app.components.refreshButton({
                                 className: "btn sm transparent secondary circle tooltip-bottom",
                                 onclick: resetBackupsList,
