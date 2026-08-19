@@ -1,5 +1,7 @@
+import { i18n } from "../i18n.js";
+
 export function pageOAuth2RedirectFailure(route) {
-    app.store.title = "OAuth2 auth failed";
+    app.store.title = i18n.t("auth.oauth2_failed_title");
 
     window.close();
 
@@ -9,10 +11,10 @@ export function pageOAuth2RedirectFailure(route) {
             { className: "page-content" },
             t.header(
                 { className: "txt-center p-base" },
-                t.h3({ className: "primary-heading m-b-sm" }, "Auth failed."),
+                t.h3({ className: "primary-heading m-b-sm" }, i18n.t("auth.auth_failed")),
                 t.h6(
                     { className: "secondary-heading" },
-                    "You can close this window and go back to the app to try again.",
+                    i18n.t("auth.close_window_try_again"),
                 ),
             ),
         ),
