@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function collectionRulesTab(upsertData) {
     const local = store({
         showRulesInfo: false,
@@ -6,7 +8,7 @@ export function collectionRulesTab(upsertData) {
 
     const systemRuleTooltip = () =>
         app.attrs.tooltip(
-            upsertData.originalCollection?.system ? "System collection rule cannot be changed." : null,
+            upsertData.originalCollection?.system ? i18n.t("collection_rules.system_rule_locked") : null,
             "top-left",
         );
 
@@ -24,19 +26,22 @@ export function collectionRulesTab(upsertData) {
                     { className: "flex txt-hint txt-sm" },
                     t.span(
                         { className: "txt" },
-                        "All rules follow the ",
+                        () => i18n.t("collection_rules.all_rules_follow") + " ",
                         t.a({
                             target: "_blank",
                             rel: "noopener noreferrer",
                             href: import.meta.env.PB_RULES_SYNTAX_DOCS,
-                            textContent: "PocketBase filter syntax and operators",
+                            textContent: i18n.t("collection_rules.filter_syntax_and_operators"),
                         }),
                         ".",
                     ),
                     t.strong({
                         tabIndex: -1,
                         className: "m-l-auto link-hint",
-                        textContent: () => (local.showRulesInfo ? "Hide available fields" : "Show available fields"),
+                        textContent: () =>
+                            (local.showRulesInfo
+                                ? i18n.t("collection_rules.hide_available_fields")
+                                : i18n.t("collection_rules.show_available_fields")),
                         onclick: () => (local.showRulesInfo = !local.showRulesInfo),
                     }),
                 ),
@@ -46,7 +51,7 @@ export function collectionRulesTab(upsertData) {
                         { className: "alert warning m-t-sm" },
                         t.div(
                             { className: "content" },
-                            t.p(null, "The following record fields are available:"),
+                            t.p(null, i18n.t("collection_rules.available_fields_intro")),
                             t.div({ className: "flex flex-wrap gap-5" }, () => {
                                 const identifiers = app.utils.getAllCollectionIdentifiers(upsertData.collection);
                                 return identifiers.map((f) => {
@@ -56,9 +61,9 @@ export function collectionRulesTab(upsertData) {
                             t.hr({ className: "m-t-10 m-b-10" }),
                             t.p(
                                 null,
-                                "The request fields could be accessed with the special ",
+                                () => i18n.t("collection_rules.request_fields_intro") + " ",
                                 t.strong(null, "@request"),
-                                " fields:",
+                                " " + i18n.t("collection_rules.fields_suffix") + ":",
                             ),
                             t.div(
                                 { className: "flex flex-wrap gap-5" },
@@ -70,16 +75,16 @@ export function collectionRulesTab(upsertData) {
                             t.hr({ className: "m-t-10 m-b-10" }),
                             t.p(
                                 null,
-                                "You could also add constraints and query other collections using the ",
+                                () => i18n.t("collection_rules.collection_field_intro") + " ",
                                 t.strong(null, "@collection"),
-                                " field:",
+                                " " + i18n.t("collection_rules.field_suffix") + ":",
                             ),
                             t.div(
                                 { className: "flex flex-wrap gap-5" },
                                 t.code(null, "@collection.ANY_COLLECTION_NAME.*"),
                             ),
                             t.hr({ className: "m-t-10 m-b-10" }),
-                            t.p(null, "Example rule:"),
+                            t.p(null, i18n.t("collection_rules.example_rule")),
                             () => {
                                 const dateField = upsertData.collection.fields?.find(
                                     (f) => f.type == "date" || f.type == "autodate",
@@ -99,7 +104,7 @@ export function collectionRulesTab(upsertData) {
             t.div(
                 { className: "col-12", ariaDescription: systemRuleTooltip() },
                 app.components.ruleField({
-                    label: "List/Search rule",
+                    label: i18n.t("collections_overview.list_search_rule"),
                     name: "listRule",
                     autocomplete: autocomplete,
                     disabled: () => upsertData.originalCollection?.system,
@@ -110,7 +115,7 @@ export function collectionRulesTab(upsertData) {
             t.div(
                 { className: "col-12", ariaDescription: systemRuleTooltip() },
                 app.components.ruleField({
-                    label: "View rule",
+                    label: i18n.t("collections_overview.view_rule"),
                     name: "viewRule",
                     autocomplete: autocomplete,
                     disabled: () => upsertData.originalCollection?.system,
@@ -129,13 +134,11 @@ export function collectionRulesTab(upsertData) {
                         { className: "col-12", ariaDescription: systemRuleTooltip() },
                         app.components.ruleField({
                             label: [
-                                t.span({ className: "txt", textContent: "Create rule" }),
+                                t.span({ className: "txt", textContent: i18n.t("collections_overview.create_rule") }),
                                 t.i({
                                     hidden: () => upsertData.collection.createRule == null,
                                     className: "ri-information-line link-hint",
-                                    ariaDescription: app.attrs.tooltip(
-                                        "The main record fields hold the values that are going to be inserted in the database.",
-                                    ),
+                                    ariaDescription: app.attrs.tooltip(i18n.t("collection_rules.create_rule_help")),
                                 }),
                             ],
                             name: "createRule",
@@ -149,13 +152,11 @@ export function collectionRulesTab(upsertData) {
                         { className: "col-12", ariaDescription: systemRuleTooltip() },
                         app.components.ruleField({
                             label: [
-                                t.span({ className: "txt", textContent: "Update rule" }),
+                                t.span({ className: "txt", textContent: i18n.t("collections_overview.update_rule") }),
                                 t.i({
                                     hidden: () => upsertData.collection.updateRule == null,
                                     className: "ri-information-line link-hint",
-                                    ariaDescription: app.attrs.tooltip(
-                                        "The main record fields hold the old/existing record field values.\nTo target the newly submitted ones you can use @request.body.*.",
-                                    ),
+                                    ariaDescription: app.attrs.tooltip(i18n.t("collection_rules.update_rule_help")),
                                 }),
                             ],
                             name: "updateRule",
@@ -168,7 +169,7 @@ export function collectionRulesTab(upsertData) {
                     t.div(
                         { className: "col-12", ariaDescription: systemRuleTooltip() },
                         app.components.ruleField({
-                            label: "Delete rule",
+                            label: i18n.t("collections_overview.delete_rule"),
                             name: "deleteRule",
                             autocomplete: autocomplete,
                             disabled: () => upsertData.originalCollection?.system,
@@ -199,7 +200,7 @@ export function collectionRulesTab(upsertData) {
                             local.showAuthRules = !local.showAuthRules;
                         },
                     },
-                    t.span({ className: "txt" }, "Additional auth collection rules"),
+                    t.span({ className: "txt" }, i18n.t("collection_rules.additional_auth_rules")),
                     t.i({
                         ariaHidden: true,
                         className: () => (local.showAuthRules ? "ri-arrow-drop-up-line" : "ri-arrow-drop-down-line"),
@@ -212,7 +213,7 @@ export function collectionRulesTab(upsertData) {
                         t.div(
                             { className: "col-12", ariaDescription: systemRuleTooltip() },
                             app.components.ruleField({
-                                label: "Authentication rule",
+                                label: i18n.t("collection_rules.authentication_rule"),
                                 name: "authRule",
                                 placeholder: "",
                                 autocomplete: autocomplete,
@@ -224,27 +225,24 @@ export function collectionRulesTab(upsertData) {
                                 { className: "field-help" },
                                 t.p(
                                     null,
-                                    "This rule is executed every time ",
-                                    t.strong(null, "before authentication"),
-                                    " allowing you to restrict who can authenticate.",
+                                    () => i18n.t("collection_rules.auth_rule_help1a") + " ",
+                                    t.strong(null, i18n.t("collection_rules.auth_rule_help1b")),
+                                    " " + i18n.t("collection_rules.auth_rule_help1c"),
                                 ),
                                 t.p(
                                     null,
-                                    "For example, to allow only verified users you can set it to ",
+                                    () => i18n.t("collection_rules.auth_rule_help2") + " ",
                                     t.code(null, "verified = true"),
                                     ".",
                                 ),
-                                t.p(null, "Leave it empty to allow anyone with an account to authenticate."),
-                                t.p(
-                                    null,
-                                    `To disable authentication entirely you can change it to "Set superusers only".`,
-                                ),
+                                t.p(null, i18n.t("collection_rules.auth_rule_help3")),
+                                t.p(null, i18n.t("collection_rules.auth_rule_help4")),
                             ),
                         ),
                         t.div(
                             { className: "col-12", ariaDescription: systemRuleTooltip() },
                             app.components.ruleField({
-                                label: "Manage rule",
+                                label: i18n.t("collections_overview.manage_rule"),
                                 name: "manageRule",
                                 autocomplete: autocomplete,
                                 disabled: () => upsertData.originalCollection?.system,
@@ -255,15 +253,15 @@ export function collectionRulesTab(upsertData) {
                                 { className: "field-help" },
                                 t.p(
                                     null,
-                                    "This rule is executed in addition to the ",
-                                    t.strong(null, "create"),
-                                    " and ",
-                                    t.strong(null, "update"),
-                                    " API rules.",
+                                    () => i18n.t("collection_rules.manage_rule_help1a") + " ",
+                                    t.strong(null, i18n.t("collection_rules.create")),
+                                    " " + i18n.t("common.and") + " ",
+                                    t.strong(null, i18n.t("collection_rules.update")),
+                                    " " + i18n.t("collection_rules.manage_rule_help1b"),
                                 ),
                                 t.p(
                                     null,
-                                    "It enables superuser-like permissions to allow fully managing the auth record(s), eg. changing the password without requiring to enter the old one, directly updating the verified state or email, etc.",
+                                    i18n.t("collection_rules.manage_rule_help2"),
                                 ),
                             ),
                         ),

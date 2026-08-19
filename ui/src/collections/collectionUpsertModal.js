@@ -3,6 +3,17 @@ import { collectionAuthOptionsTab } from "./collectionAuthOptionsTab";
 import { collectionFieldsTab } from "./collectionFieldsTab";
 import { collectionRulesTab } from "./collectionRulesTab";
 import { collectionViewQueryTab } from "./collectionViewQueryTab";
+import { i18n } from "../i18n.js";
+
+function tabLabel(tabName) {
+    const map = {
+        "Fields": () => i18n.t("collection_upsert.tab_fields"),
+        "API rules": () => i18n.t("collection_upsert.tab_api_rules"),
+        "Query": () => i18n.t("collection_upsert.tab_query"),
+        "Options": () => i18n.t("collection_upsert.tab_options"),
+    };
+    return map[tabName]?.() || tabName;
+}
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
@@ -86,7 +97,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
             return Object.keys(app.collectionTypes).map((type) => {
                 return {
                     value: type,
-                    label: app.utils.sentenize(type, false) + " collection",
+                    label: app.utils.sentenize(type, false) + " " + i18n.t("collection_upsert.collection_suffix"),
                 };
             });
         },
@@ -195,9 +206,10 @@ function collectionUpsertModal(rawCollection, modalSettings) {
             data.isSaving = false;
 
             app.toasts.success(
-                isNew
-                    ? `Successfully created collection "${data.collection.name}".`
-                    : `Successfully updated collection "${data.collection.name}".`,
+                i18n.t(
+                    isNew ? "collection_upsert.created_success" : "collection_upsert.updated_success",
+                    { name: data.collection.name },
+                ),
                 { key: "collectionSave" },
             );
 
@@ -211,7 +223,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
             if (!err?.isAbort) {
                 data.isSaving = false;
                 app.checkApiError(err, false);
-                app.toasts.error(err.message || "Failed to save collection.", { key: "collectionSave" });
+                app.toasts.error(err.message || i18n.t("collection_upsert.save_failed"), { key: "collectionSave" });
             }
         }
     }
@@ -312,7 +324,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
 
                 return new Promise((r) => {
                     app.modals.confirm(
-                        "You have unsaved changes. Do you really want to discard them?",
+                        i18n.t("record_upsert.confirm_discard_changes"),
                         () => r(modalSettings.onbeforeclose?.(el)),
                         () => r(false),
                     );
@@ -405,7 +417,12 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                     { className: "col-12 flex" },
                     t.h6(
                         { className: "modal-title" },
-                        t.span(null, () => (data.isNew ? "Create " : "Edit ")),
+                        t.span(
+                            null,
+                            () =>
+                                (data.isNew ? i18n.t("record_upsert.create_prefix") : i18n.t("record_upsert.edit_prefix"))
+                                    + " ",
+                        ),
                         t.strong(
                             {
                                 hidden: () => data.isNew,
@@ -413,7 +430,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                             },
                             () => data.originalCollection?.name,
                         ),
-                        t.span(null, " collection"),
+                        t.span(null, () => " " + i18n.t("collection_upsert.collection_suffix")),
                     ),
                     t.div({ className: "flex-fill" }),
                     () => {
@@ -426,7 +443,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 {
                                     type: "button",
                                     className: "btn sm circle transparent",
-                                    title: "More options",
+                                    title: i18n.t("field_settings.more_options"),
                                     "html-popovertarget": uniqueId + "modal-header-dropdown",
                                 },
                                 t.i({ className: "ri-more-line", ariaHidden: true }),
@@ -446,11 +463,11 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                             app.utils.copyToClipboard(
                                                 JSON.stringify(data.originalCollection, null, 2),
                                             );
-                                            app.toasts.success("Collection copied to clipboard!");
+                                            app.toasts.success(i18n.t("collection_upsert.copied_to_clipboard"));
                                         },
                                     },
                                     t.i({ className: "ri-braces-line", ariaHidden: true }),
-                                    t.span({ className: "txt" }, "Copy JSON"),
+                                    t.span({ className: "txt" }, i18n.t("record_upsert.copy_json")),
                                 ),
                                 t.button(
                                     {
@@ -461,10 +478,10 @@ function collectionUpsertModal(rawCollection, modalSettings) {
 
                                             if (data.hasChanges) {
                                                 app.modals.confirm(
-                                                    "You have unsaved changes. Do you really want to discard them?",
+                                                    i18n.t("record_upsert.confirm_discard_changes"),
                                                     duplicate,
                                                     null,
-                                                    { yesButton: "Yes, discard" },
+                                                    { yesButton: i18n.t("record_upsert.yes_discard") },
                                                 );
                                             } else {
                                                 duplicate();
@@ -472,7 +489,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                         },
                                     },
                                     t.i({ className: "ri-file-copy-line", ariaHidden: true }),
-                                    t.span({ className: "txt" }, "Duplicate"),
+                                    t.span({ className: "txt" }, i18n.t("common.duplicate")),
                                 ),
                                 t.hr(),
                                 () => {
@@ -500,7 +517,8 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                             t.label({
                                 htmlFor: uniqueId + "col_name",
                                 textContent: () => {
-                                    return `Name${data.collection?.system ? " (system)" : ""}`;
+                                    return i18n.t("collection_upsert.name_label")
+                                        + (data.collection?.system ? " (" + i18n.t("collection_upsert.system_suffix") + ")" : "");
                                 },
                             }),
                             t.input({
@@ -509,7 +527,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 name: "name",
                                 required: true,
                                 spellcheck: false,
-                                placeholder: "e.g. posts",
+                                placeholder: i18n.t("collection_upsert.name_placeholder"),
                                 autofocus: () => data.isNew,
                                 disabled: () => !data.isNew && data.collection?.system,
                                 value: () => data.collection.name || "",
@@ -538,7 +556,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 },
                                 t.span(
                                     { className: "txt" },
-                                    "Type: ",
+                                    () => i18n.t("collection_upsert.type_prefix") + " ",
                                     () => app.utils.sentenize(data.collection.type, false) || "N/A",
                                 ),
                                 t.i({
@@ -604,7 +622,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                             className: () => `tab-item ${data.activeTab == tabName ? "active" : ""}`,
                                             onclick: () => changeTab(tabName),
                                         },
-                                        t.span({ className: "txt" }, tabName),
+                                        t.span({ className: "txt" }, () => tabLabel(tabName)),
                                         () => {
                                             if (!data.errorTabs[tabName]) {
                                                 return;
@@ -612,7 +630,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
 
                                             return t.i({
                                                 className: "ri-error-warning-fill txt-danger txt-base",
-                                                ariaDescription: app.attrs.tooltip("Has errors"),
+                                                ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors")),
                                             });
                                         },
                                     ),
@@ -656,7 +674,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                     disabled: () => data.isSaving,
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             () => {
                 const rawErrors = JSON.stringify(app.store.errors, null, 2);
@@ -666,7 +684,11 @@ function collectionUpsertModal(rawCollection, modalSettings) {
 
                 return t.i({
                     className: "ri-error-warning-line txt-danger",
-                    ariaDescription: app.attrs.tooltip(() => "Raw errors:\n" + rawErrors, "top", "code"),
+                    ariaDescription: app.attrs.tooltip(
+                        () => i18n.t("collection_upsert.raw_errors") + "\n" + rawErrors,
+                        "top",
+                        "code",
+                    ),
                 });
             },
             t.div(
@@ -678,12 +700,15 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                         disabled: () => !data.canSave,
                         onclick: () => confirmSave(true),
                     },
-                    t.span({ className: "txt" }, () => (data.isNew ? "Create" : "Save changes")),
+                    t.span(
+                        { className: "txt" },
+                        () => (data.isNew ? i18n.t("common.create") : i18n.t("record_upsert.save_changes")),
+                    ),
                 ),
                 t.button(
                     {
                         type: "button",
-                        title: "Save options",
+                        title: i18n.t("record_upsert.save_options"),
                         className: () => `btn p-5`,
                         disabled: () => !data.canSave,
                         "html-popovertarget": uniqueId + "save_options",
@@ -701,7 +726,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 confirmSave(false);
                             },
                         },
-                        t.span({ className: "txt" }, "Save and continue"),
+                        t.span({ className: "txt" }, i18n.t("record_upsert.save_and_continue")),
                         t.small({ className: "txt-hint" }, "(Ctrl+S)"),
                     ),
                     t.hr(),
@@ -714,7 +739,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 resetForm();
                             },
                         },
-                        t.span({ className: "txt" }, "Reset form"),
+                        t.span({ className: "txt" }, i18n.t("record_upsert.reset_form")),
                     ),
                 ),
             ),
@@ -818,7 +843,9 @@ function truncateDropdownItem(data, modalSettings) {
 
             modalSettings.ontruncate?.(JSON.parse(JSON.stringify(data.originalCollection)));
 
-            app.toasts.success(`Successfully truncated collection "${data.originalCollection.name}".`);
+            app.toasts.success(
+                i18n.t("collection_upsert.truncated_success", { name: data.originalCollection.name }),
+            );
 
             local.isSubmitting = false;
 
@@ -843,21 +870,21 @@ function truncateDropdownItem(data, modalSettings) {
                         null,
                         t.h6(
                             { className: "block txt-center" },
-                            "Do you really want to delete all records of the collection?",
+                            i18n.t("collection_upsert.confirm_truncate"),
                         ),
                         t.div(
                             { className: "confirm-collection-label txt-bold m-t-sm m-b-sm" },
-                            "Type the collection name ",
+                            () => i18n.t("collection_upsert.type_name_prefix") + " ",
                             t.div(
                                 { className: "label" },
                                 () => data.originalCollection.name,
                                 app.components.copyButton(() => data.originalCollection?.name),
                             ),
-                            " to confirm:",
+                            () => " " + i18n.t("collection_upsert.type_name_suffix"),
                         ),
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + ".confirm_name" }, "Collection name"),
+                            t.label({ htmlFor: uniqueId + ".confirm_name" }, i18n.t("collection_upsert.collection_name")),
                             t.input({
                                 id: uniqueId + ".confirm_name",
                                 type: "text",
@@ -885,7 +912,7 @@ function truncateDropdownItem(data, modalSettings) {
             },
         },
         t.i({ className: "ri-eraser-line", ariaHidden: true }),
-        t.span({ className: "txt" }, "Truncate"),
+        t.span({ className: "txt" }, i18n.t("collection_upsert.truncate")),
     );
 }
 
@@ -915,7 +942,9 @@ function deleteDropdownItem(data, modalSettings) {
 
             app.utils.removeByKey(app.store.collections, "id", data.originalCollection.id);
 
-            app.toasts.success(`Successfully deleted collection "${data.originalCollection.name}".`);
+            app.toasts.success(
+                i18n.t("collection_upsert.deleted_success", { name: data.originalCollection.name }),
+            );
 
             local.isSubmitting = false;
 
@@ -945,25 +974,25 @@ function deleteDropdownItem(data, modalSettings) {
                             { className: "block txt-center" },
                             () => {
                                 if (data.originalCollection.type == "view") {
-                                    return "Do you really want to delete the selected collection?";
+                                    return i18n.t("collection_upsert.confirm_delete_view");
                                 }
 
-                                return "Do you really want to delete the selected collection and all its records";
+                                return i18n.t("collection_upsert.confirm_delete_with_records");
                             },
                         ),
                         t.div(
                             { className: "confirm-collection-label txt-bold m-t-sm m-b-sm" },
-                            "Type the collection name ",
+                            () => i18n.t("collection_upsert.type_name_prefix") + " ",
                             t.div(
                                 { className: "label" },
                                 () => data.originalCollection.name,
                                 app.components.copyButton(() => data.originalCollection?.name),
                             ),
-                            " to confirm:",
+                            () => " " + i18n.t("collection_upsert.type_name_suffix"),
                         ),
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + ".confirm_name" }, "Collection name"),
+                            t.label({ htmlFor: uniqueId + ".confirm_name" }, i18n.t("collection_upsert.collection_name")),
                             t.input({
                                 id: uniqueId + ".confirm_name",
                                 type: "text",
@@ -991,6 +1020,6 @@ function deleteDropdownItem(data, modalSettings) {
             },
         },
         t.i({ className: "ri-delete-bin-7-line", ariaHidden: true }),
-        t.span({ className: "txt" }, "Delete"),
+        t.span({ className: "txt" }, i18n.t("common.delete")),
     );
 }

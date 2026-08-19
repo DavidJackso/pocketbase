@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 const TEST_REQUEST_KEY = "test_view_query";
 
 export function collectionViewQueryTab(upsertData) {
@@ -54,7 +56,7 @@ export function collectionViewQueryTab(upsertData) {
             local.isTesting = false;
         } catch (err) {
             if (!err.isAbort) {
-                local.testError = err.message || "Invalid query.";
+                local.testError = err.message || i18n.t("collection_view_query.invalid_query");
                 local.isTesting = false;
             }
         }
@@ -91,7 +93,7 @@ export function collectionViewQueryTab(upsertData) {
                             className: "txt-bold link-hint",
                             "html-popovertarget": uniqueId + "caveats_dropdown",
                         },
-                        () => "Query caveats",
+                        () => i18n.t("collection_view_query.caveats_title"),
                     ),
                 ),
                 t.div(
@@ -102,32 +104,32 @@ export function collectionViewQueryTab(upsertData) {
                     },
                     t.ul(
                         null,
-                        t.li(null, "Wildcard columns (*) are not supported."),
+                        t.li(null, i18n.t("collection_view_query.caveat_wildcard")),
                         t.li(
                             null,
-                            "The query must have a unique ",
+                            () => i18n.t("collection_view_query.caveat_unique_id_a") + " ",
                             t.code(null, "id"),
-                            " column.",
+                            " " + i18n.t("collection_view_query.caveat_unique_id_b") + ".",
                             t.br(),
-                            "If your query doesn't have a suitable one, you can use the universal ",
+                            () => i18n.t("collection_view_query.caveat_unique_id_c") + " ",
                             t.code(null, "(ROW_NUMBER() OVER()) as id"),
                             ".",
                         ),
                         t.li(
                             null,
-                            "Expressions must be aliased with a valid formatted field name, e.g. ",
+                            () => i18n.t("collection_view_query.caveat_alias") + " ",
                             t.code(null, "MAX(balance) as maxBalance"),
                             ".",
                         ),
                         t.li(
                             null,
-                            "Combined/multi-spaced expressions must be wrapped in parenthesis, e.g. ",
+                            () => i18n.t("collection_view_query.caveat_parenthesis") + " ",
                             t.code(null, "(MAX(balance) + 1) as maxBalance"),
                             ".",
                         ),
                         t.li(
                             null,
-                            "UNION expressions are supported but the entire query must be wrapped in subquery.",
+                            i18n.t("collection_view_query.caveat_union"),
                         ),
                     ),
                 ),
@@ -135,12 +137,12 @@ export function collectionViewQueryTab(upsertData) {
                     { className: "field" },
                     t.label(
                         { htmlFor: uniqueId + ".viewQuery" },
-                        t.span({ className: "txt" }, "Select query"),
+                        t.span({ className: "txt" }, i18n.t("collection_view_query.select_query")),
                         t.span(
                             {
                                 hidden: () => !local.testError,
                                 className: "query-state",
-                                ariaDescription: app.attrs.tooltip("Invalid query", "left"),
+                                ariaDescription: app.attrs.tooltip(i18n.t("collection_view_query.invalid_query_short"), "left"),
                             },
                             t.i({ className: "ri-error-warning-fill txt-danger", ariaHidden: true }),
                         ),
@@ -148,7 +150,7 @@ export function collectionViewQueryTab(upsertData) {
                             {
                                 hidden: () => !!local.testError,
                                 className: "query-state",
-                                ariaDescription: app.attrs.tooltip("Valid query", "left"),
+                                ariaDescription: app.attrs.tooltip(i18n.t("collection_view_query.valid_query"), "left"),
                             },
                             t.i({ className: "ri-checkbox-circle-fill txt-success", ariaHidden: true }),
                         ),
@@ -171,7 +173,7 @@ export function collectionViewQueryTab(upsertData) {
                 { className: "col-12" },
                 t.p(
                     { className: "txt-sm txt-bold" },
-                    "Sample output:",
+                    i18n.t("collection_view_query.sample_output"),
                 ),
                 t.div(
                     { className: "view-query-sample-wrapper" },

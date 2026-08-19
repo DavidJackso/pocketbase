@@ -1,8 +1,12 @@
+import { i18n } from "../i18n.js";
+
 export function emailTemplateAccordion(collection, key, propsArg = {}) {
     const uniqueId = "emailTemplate" + app.utils.randomString();
 
     const props = store({
-        title: "Email template",
+        get title() {
+            return i18n.t("email_template.title");
+        },
         placeholders: [],
     });
 
@@ -31,7 +35,7 @@ export function emailTemplateAccordion(collection, key, propsArg = {}) {
 
         return t.div(
             { className: "field-help" },
-            t.div({ className: "flex flex-wrap gap-5" }, t.span({ className: "txt" }, "Placeholders:"), () => {
+            t.div({ className: "flex flex-wrap gap-5" }, t.span({ className: "txt" }, i18n.t("email_template.placeholders")), () => {
                 return props.placeholders.map((p) => {
                     return t.span({ className: "label sm" }, app.components.copyButton(p, p));
                 });
@@ -60,7 +64,7 @@ export function emailTemplateAccordion(collection, key, propsArg = {}) {
                 return t.i({
                     ariaHidden: true,
                     className: "ri-error-warning-fill txt-danger m-l-auto",
-                    ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                    ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                 });
             },
         ),
@@ -72,7 +76,7 @@ export function emailTemplateAccordion(collection, key, propsArg = {}) {
                     { className: "field" },
                     t.label({
                         htmlFor: uniqueId + ".subject",
-                        textContent: "Subject",
+                        textContent: i18n.t("email_template.subject"),
                     }),
                     app.components.codeEditor({
                         id: uniqueId + ".subject",
@@ -93,7 +97,7 @@ export function emailTemplateAccordion(collection, key, propsArg = {}) {
                     { className: "field" },
                     t.label({
                         htmlFor: uniqueId + ".body",
-                        textContent: "Body (HTML)",
+                        textContent: i18n.t("email_template.body_html"),
                     }),
                     app.components.codeEditor({
                         id: uniqueId + ".body",

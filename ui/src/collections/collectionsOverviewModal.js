@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
@@ -20,8 +22,12 @@ function collectionsOverviewModal(settings = {}) {
     const uniqueId = "overview_modal_" + app.utils.randomString();
 
     const tabs = {
-        "Fields and relations": erd,
-        "Rules": rules,
+        fields: erd,
+        rules: rules,
+    };
+    const tabLabels = {
+        fields: () => i18n.t("collections_overview.fields_and_relations"),
+        rules: () => i18n.t("collections_overview.rules"),
     };
 
     const data = store({
@@ -62,7 +68,7 @@ function collectionsOverviewModal(settings = {}) {
                     { className: "col-12" },
                     t.div(
                         { className: "flex" },
-                        t.h6({ className: "modal-title" }, "Collections overview"),
+                        t.h6({ className: "modal-title" }, i18n.t("collections_overview.title")),
                         t.div({ className: "flex-fill" }),
                         t.div(
                             { className: "field" },
@@ -73,13 +79,16 @@ function collectionsOverviewModal(settings = {}) {
                                 checked: () => data.showSystemCollections,
                                 onchange: (e) => data.showSystemCollections = e.target.checked,
                             }),
-                            t.label({ htmlFor: uniqueId + ".showSystemCollections" }, "System collections"),
+                            t.label(
+                                { htmlFor: uniqueId + ".showSystemCollections" },
+                                i18n.t("collections_overview.system_collections"),
+                            ),
                         ),
                         t.button(
                             {
                                 type: "button",
                                 className: "btn sm secondary transparent circle modal-close-btn",
-                                title: "Close",
+                                title: i18n.t("common.close"),
                                 onclick: () => app.modals.close(modal),
                             },
                             t.i({ className: "ri-close-line", ariaHidden: true }),
@@ -93,12 +102,12 @@ function collectionsOverviewModal(settings = {}) {
                         () => {
                             const items = [];
 
-                            for (let title in tabs) {
+                            for (let key in tabs) {
                                 items.push(t.button({
                                     type: "button",
-                                    className: () => `tab-item ${data.activeTab == title ? "active" : ""}`,
-                                    onclick: () => data.activeTab = title,
-                                    textContent: title,
+                                    className: () => `tab-item ${data.activeTab == key ? "active" : ""}`,
+                                    onclick: () => data.activeTab = key,
+                                    textContent: () => tabLabels[key](),
                                 }));
                             }
 
@@ -150,17 +159,17 @@ function erd(data) {
 
 function rules(data) {
     const ruleOptions = [
-        { value: "listRule", label: "List/Search rule" },
-        { value: "viewRule", label: "View rule" },
-        { value: "createRule", label: "Create rule", filter: (c) => c.type != "view" },
-        { value: "updateRule", label: "Update rule", filter: (c) => c.type != "view" },
-        { value: "deleteRule", label: "Delete rule", filter: (c) => c.type != "view" },
-        { value: "authRule", label: "Auth rule", filter: (c) => c.type == "auth" },
-        { value: "manageRule", label: "Manage rule", filter: (c) => c.type == "auth" },
+        { value: "listRule", label: i18n.t("collections_overview.list_search_rule") },
+        { value: "viewRule", label: i18n.t("collections_overview.view_rule") },
+        { value: "createRule", label: i18n.t("collections_overview.create_rule"), filter: (c) => c.type != "view" },
+        { value: "updateRule", label: i18n.t("collections_overview.update_rule"), filter: (c) => c.type != "view" },
+        { value: "deleteRule", label: i18n.t("collections_overview.delete_rule"), filter: (c) => c.type != "view" },
+        { value: "authRule", label: i18n.t("collections_overview.auth_rule"), filter: (c) => c.type == "auth" },
+        { value: "manageRule", label: i18n.t("collections_overview.manage_rule"), filter: (c) => c.type == "auth" },
         {
             value: "mfaRule",
-            label: "MFA rule",
-            emptyLabel: t.span({ className: "label info" }, "Enabled for everyone"),
+            label: i18n.t("mfa.rule_label"),
+            emptyLabel: t.span({ className: "label info" }, i18n.t("collections_overview.enabled_for_everyone")),
             rule: (c) => c.mfa?.rule,
             filter: (c) => c.mfa?.enabled && c.type == "auth",
         },
@@ -216,7 +225,7 @@ function rules(data) {
                             null,
                             t.td(
                                 { colSpan: 99, className: "txt-hint" },
-                                t.p(null, "No collections with the selected rule."),
+                                t.p(null, i18n.t("collections_overview.no_collections_with_rule")),
                             ),
                         );
                     }
@@ -257,7 +266,10 @@ function rules(data) {
                                                 return local.activeRuleOption.nullLabel;
                                             }
 
-                                            return t.span({ className: "label success" }, "Superusers only");
+                                            return t.span(
+                                                { className: "label success" },
+                                                i18n.t("collections_overview.superusers_only"),
+                                            );
                                         }
 
                                         if (rule === "") {
@@ -265,7 +277,7 @@ function rules(data) {
                                                 return local.activeRuleOption.emptyLabel;
                                             }
 
-                                            return t.span({ className: "label info" }, "Public");
+                                            return t.span({ className: "label info" }, i18n.t("collections_overview.public"));
                                         }
 
                                         return app.components.codeBlock({

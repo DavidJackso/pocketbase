@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
@@ -90,7 +92,7 @@ function providerSettingsModal(providerConfig, settings) {
                     if (providerInfo.logo) {
                         return t.img({
                             src: "data:image/svg+xml;base64," + btoa(providerInfo.logo),
-                            alt: providerInfo.name + " logo",
+                            alt: i18n.t("record_upsert.provider_logo_alt", { provider: providerInfo.name }),
                         });
                     }
 
@@ -121,7 +123,7 @@ function providerSettingsModal(providerConfig, settings) {
                         { className: "field" },
                         t.label({
                             htmlFor: uniqueId + ".clientId",
-                            textContent: "Client ID",
+                            textContent: i18n.t("provider_settings.client_id"),
                         }),
                         t.input({
                             type: "text",
@@ -140,7 +142,7 @@ function providerSettingsModal(providerConfig, settings) {
                         { className: "field" },
                         t.label({
                             htmlFor: uniqueId + ".clientSecret",
-                            textContent: "Client secret",
+                            textContent: i18n.t("provider_settings.client_secret"),
                         }),
                         t.input({
                             type: "password",
@@ -182,7 +184,7 @@ function providerSettingsModal(providerConfig, settings) {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             t.button(
                 {
@@ -191,7 +193,7 @@ function providerSettingsModal(providerConfig, settings) {
                     className: "btn",
                     disabled: () => !data.hasChanges,
                 },
-                t.span({ className: "txt" }, "Set provider config"),
+                t.span({ className: "txt" }, i18n.t("provider_settings.set_config")),
             ),
         ),
     );
