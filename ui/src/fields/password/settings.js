@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -20,10 +22,10 @@ export function settings(props) {
                     { className: "field" },
                     t.label(
                         { htmlFor: uniqueId + ".min" },
-                        t.span({ className: "txt" }, "Min length"),
+                        t.span({ className: "txt" }, i18n.t("field_settings.min_length")),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip("Clear the field or set it to 0 for no limit."),
+                            ariaDescription: app.attrs.tooltip(i18n.t("field_settings.clear_for_no_limit")),
                         }),
                     ),
                     t.input({
@@ -33,7 +35,7 @@ export function settings(props) {
                         step: 1,
                         min: 0,
                         max: 71,
-                        placeholder: "No min limit",
+                        placeholder: i18n.t("field_settings.no_min_limit"),
                         value: () => props.field.min || "",
                         oninput: (e) => {
                             // temp skip invalid numbers with leading 0 while typing to avoid reseting the entire input
@@ -57,12 +59,10 @@ export function settings(props) {
                     { className: "field" },
                     t.label(
                         { htmlFor: uniqueId + ".max" },
-                        t.span({ className: "txt" }, "Max length"),
+                        t.span({ className: "txt" }, i18n.t("field_settings.max_length")),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip(
-                                "Clear the field or set it to 0 to fallback to the default limit (71).",
-                            ),
+                            ariaDescription: app.attrs.tooltip(i18n.t("password_field.max_length_help")),
                         }),
                     ),
                     t.input({
@@ -72,7 +72,7 @@ export function settings(props) {
                         step: 1,
                         min: () => props.field.min || 0,
                         max: 71,
-                        placeholder: "Up to 71 chars",
+                        placeholder: i18n.t("password_field.up_to_71_chars"),
                         value: () => props.field.max || "",
                         oninput: (e) => {
                             // temp skip invalid numbers with leading 0 while typing to avoid reseting the entire input
@@ -96,12 +96,10 @@ export function settings(props) {
                     { className: "field" },
                     t.label(
                         { htmlFor: uniqueId + ".max" },
-                        t.span({ className: "txt" }, "Bcrypt cost"),
+                        t.span({ className: "txt" }, i18n.t("password_field.bcrypt_cost")),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip(
-                                "Clear the field or set it to 0 to fallback to the default (10).",
-                            ),
+                            ariaDescription: app.attrs.tooltip(i18n.t("password_field.bcrypt_cost_help")),
                         }),
                     ),
                     t.input({
@@ -112,7 +110,7 @@ export function settings(props) {
                         // https://pkg.go.dev/golang.org/x/crypto/bcrypt#pkg-constants
                         min: 4,
                         max: 31,
-                        placeholder: "Default to 10",
+                        placeholder: i18n.t("password_field.default_to_10"),
                         value: () => props.field.cost || "",
                         oninput: (e) => {
                             // temp skip invalid numbers with leading 0 while typing to avoid reseting the entire input
@@ -136,7 +134,7 @@ export function settings(props) {
                     { className: "field" },
                     t.label(
                         { htmlFor: uniqueId + ".pattern" },
-                        t.span({ className: "txt" }, "Validation pattern"),
+                        t.span({ className: "txt" }, i18n.t("field_settings.validation_pattern")),
                     ),
                     t.input({
                         type: "text",
@@ -152,7 +150,7 @@ export function settings(props) {
                 { className: "col-sm-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                    t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                     t.input({
                         type: "text",
                         id: uniqueId + ".help",
@@ -182,11 +180,11 @@ export function settings(props) {
                     }),
                     t.label(
                         { htmlFor: uniqueId + ".required" },
-                        t.span({ className: "txt" }, "Required"),
+                        t.span({ className: "txt" }, i18n.t("common.required")),
                         t.small({ className: "txt-hint" }, "(!='')"),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip("Requires the field value to be nonempty string."),
+                            ariaDescription: app.attrs.tooltip(i18n.t("text_field.required_help")),
                         }),
                     ),
                 ),

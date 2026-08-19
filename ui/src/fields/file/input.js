@@ -1,4 +1,5 @@
 import { filesToDeleteProp } from "./onrecordsave.js";
+import { i18n } from "../../i18n.js";
 
 // {
 //     collection: undefined,
@@ -165,7 +166,7 @@ export function input(props) {
                                 t.button(
                                     {
                                         type: "button",
-                                        ariaDescription: app.attrs.tooltip("Open in new tab"),
+                                        ariaDescription: app.attrs.tooltip(i18n.t("file_preview.open_in_new_tab")),
                                         onclick: async () => {
                                             const token = await app.getFileToken(props.record.collectionId);
                                             const url = app.pb.files.getURL(props.record, nameOrFile, {
@@ -183,7 +184,7 @@ export function input(props) {
                             app.components.uploadedFileThumb({
                                 file: nameOrFile,
                             }),
-                            t.span({ className: "label success" }, "New"),
+                            t.span({ className: "label success" }, i18n.t("file_field.new_badge")),
                             t.span({ className: "txt" }, nameOrFile.name),
                         ];
                     }),
@@ -193,7 +194,7 @@ export function input(props) {
                             {
                                 type: "button",
                                 className: "btn sm secondary transparent circle",
-                                ariaLabel: app.attrs.tooltip("Remove file"),
+                                ariaLabel: app.attrs.tooltip(i18n.t("file_field.remove_file")),
                                 hidden: () => isDeleted(nameOrFile),
                                 onclick: () => toDelete(nameOrFile),
                             },
@@ -206,7 +207,7 @@ export function input(props) {
                                 hidden: () => !isDeleted(nameOrFile),
                                 onclick: () => restoreDeleted(nameOrFile),
                             },
-                            t.span({ className: "txt" }, "Restore"),
+                            t.span({ className: "txt" }, i18n.t("common.restore")),
                         ),
                     ),
                 );
@@ -220,7 +221,7 @@ export function input(props) {
             {
                 type: "button",
                 className: "btn sm secondary block",
-                title: () => local.maxReached ? "Max allowed files reached" : undefined,
+                title: () => local.maxReached ? i18n.t("file_field.max_files_reached") : undefined,
                 disabled: () => local.maxReached,
                 onclick: (e) => {
                     if (!local.maxReached) {
@@ -230,7 +231,7 @@ export function input(props) {
                 },
             },
             t.i({ className: "ri-upload-cloud-line", ariaHidden: true }),
-            t.span({ className: "txt" }, "Upload or drop new file"),
+            t.span({ className: "txt" }, i18n.t("file_field.upload_or_drop")),
         ),
     );
 

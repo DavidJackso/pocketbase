@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -11,9 +13,9 @@ export function settings(props) {
     const ON_CREATE_UPDATE = 3;
 
     const options = [
-        { label: "Create", value: ON_CREATE },
-        { label: "Update", value: ON_UPDATE },
-        { label: "Create/Update", value: ON_CREATE_UPDATE },
+        { label: i18n.t("common.create"), value: ON_CREATE },
+        { label: i18n.t("autodate_field.update"), value: ON_UPDATE },
+        { label: i18n.t("autodate_field.create_update"), value: ON_CREATE_UPDATE },
     ];
 
     function getOptionFromField(field) {
@@ -53,7 +55,7 @@ export function settings(props) {
         header: t.div(
             {
                 className: "field header-select autodate-select",
-                ariaDescription: app.attrs.tooltip("Auto set on", "left"),
+                ariaDescription: app.attrs.tooltip(i18n.t("autodate_field.auto_set_on"), "left"),
                 onmount: () => {
                     // init default value
                     updateField(getOptionFromField(props.field));

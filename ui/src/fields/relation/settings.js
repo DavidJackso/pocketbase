@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -9,13 +11,13 @@ export function settings(props) {
     const uniqueId = "f_" + app.utils.randomString();
 
     const cascadeOptions = [
-        { label: "False", value: false },
-        { label: "True", value: true },
+        { label: i18n.t("common.false"), value: false },
+        { label: i18n.t("common.true"), value: true },
     ];
 
     const isMultipleOptions = [
-        { label: "Single", value: false },
-        { label: "Multiple", value: true },
+        { label: i18n.t("file_field.single"), value: false },
+        { label: i18n.t("file_field.multiple"), value: true },
     ];
 
     const watchers = [
@@ -43,7 +45,7 @@ export function settings(props) {
                 app.components.select({
                     required: true,
                     className: "inline-error",
-                    placeholder: "Select collection*",
+                    placeholder: i18n.t("relation_field.select_collection_required"),
                     name: () => `fields.${props.fieldIndex}.collectionId`,
                     disabled: () => !!props.originalField?.id,
                     options: () =>
@@ -72,7 +74,7 @@ export function settings(props) {
                                     },
                                 },
                                 t.i({ className: "ri-add-line", ariaHidden: true }),
-                                t.span({ className: "txt" }, "New collection"),
+                                t.span({ className: "txt" }, i18n.t("relation_field.new_collection")),
                             ),
                         ];
                     },
@@ -107,14 +109,14 @@ export function settings(props) {
                     { className: "col-sm-6", hidden: () => props.field.maxSelect << 0 < 2 },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".minSelect" }, "Min select"),
+                        t.label({ htmlFor: uniqueId + ".minSelect" }, i18n.t("relation_field.min_select")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".minSelect",
                             step: 1,
                             min: 0,
                             max: Number.MAX_SAFE_INTEGER,
-                            placeholder: "No min limit",
+                            placeholder: i18n.t("field_settings.no_min_limit"),
                             name: () => `fields.${props.fieldIndex}.minSelect`,
                             value: () => props.field.minSelect || "",
                             onchange: (e) => (props.field.minSelect = parseInt(e.target.value, 10)),
@@ -125,14 +127,14 @@ export function settings(props) {
                     { className: "col-sm-6", hidden: () => props.field.maxSelect << 0 < 2 },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".maxSelect" }, "Max select"),
+                        t.label({ htmlFor: uniqueId + ".maxSelect" }, i18n.t("file_field.max_select")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".maxSelect",
                             step: 1,
                             min: () => props.field.minSelect || 2,
                             max: Number.MAX_SAFE_INTEGER,
-                            placeholder: "Default to single",
+                            placeholder: i18n.t("file_field.default_single"),
                             name: () => `fields.${props.fieldIndex}.maxSelect`,
                             value: () => props.field.maxSelect || "",
                             onchange: (e) => {
@@ -150,7 +152,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".cascadeDelete" }, "Cascade delete"),
+                        t.label({ htmlFor: uniqueId + ".cascadeDelete" }, i18n.t("relation_field.cascade_delete")),
                         app.components.select({
                             required: true,
                             id: uniqueId + ".cascadeDelete",
@@ -167,7 +169,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -191,12 +193,16 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.small({ className: "txt-hint" }, () => props.field.maxSelect > 1 ? "(!=[])" : "(!='')"),
                     t.i({
                         className: "ri-information-line link-hint",
                         ariaDescription: app.attrs.tooltip(() =>
-                            `Requires the field value to be nonempty ${props.field.maxSelect > 1 ? "array" : "string"}.`
+                            i18n.t(
+                                props.field.maxSelect > 1
+                                    ? "file_field.required_help_array"
+                                    : "file_field.required_help_string",
+                            )
                         ),
                     }),
                 ),

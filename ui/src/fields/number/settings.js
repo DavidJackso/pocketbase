@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -16,7 +18,7 @@ export function settings(props) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".min" }, "Min"),
+                        t.label({ htmlFor: uniqueId + ".min" }, i18n.t("number_field.min")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".min",
@@ -36,7 +38,7 @@ export function settings(props) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".max" }, "Max"),
+                        t.label({ htmlFor: uniqueId + ".max" }, i18n.t("number_field.max")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".max",
@@ -57,7 +59,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -81,11 +83,11 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.small({ className: "txt-hint" }, "(!=0)"),
                     t.i({
                         className: "ri-information-line link-hint",
-                        ariaDescription: app.attrs.tooltip("Requires the field value to be not 0."),
+                        ariaDescription: app.attrs.tooltip(i18n.t("number_field.required_help")),
                     }),
                 ),
             ),
@@ -101,10 +103,10 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".onlyInt" },
-                    t.span({ className: "txt" }, "No decimals"),
+                    t.span({ className: "txt" }, i18n.t("number_field.no_decimals")),
                     t.i({
                         className: "ri-information-line link-hint",
-                        ariaDescription: app.attrs.tooltip("Existing decimal numbers will not be affected."),
+                        ariaDescription: app.attrs.tooltip(i18n.t("number_field.no_decimals_help")),
                     }),
                 ),
             ),

@@ -1,4 +1,5 @@
 import { ClientResponseError } from "pocketbase";
+import { i18n } from "../../i18n.js";
 
 // {
 //     originalRecord: undefined,
@@ -17,7 +18,7 @@ export function onrecordsave(props) {
         throw new ClientResponseError({
             status: 400,
             response: {
-                message: "Invalid JSON data",
+                message: i18n.t("json_field.invalid_json_data"),
                 data: {
                     [props.field.name]: {
                         code: "invalid_json",

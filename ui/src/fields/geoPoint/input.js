@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     get collection: undefined,
 //     get originalRecord: undefined,
@@ -26,7 +28,10 @@ export function input(props) {
                     { className: "field-list-item p-0" },
                     t.div(
                         { className: "fields" },
-                        t.div({ className: "field addon" }, t.label({ htmlFor: uniqueId + ".lon" }, "Longitude:")),
+                        t.div(
+                            { className: "field addon" },
+                            t.label({ htmlFor: uniqueId + ".lon" }, i18n.t("geo_point_field.longitude")),
+                        ),
                         t.div(
                             { className: "field" },
                             t.input({
@@ -46,7 +51,10 @@ export function input(props) {
                             }),
                         ),
                         t.span({ className: "delimiter" }),
-                        t.div({ className: "field addon" }, t.label({ htmlFor: uniqueId + ".lat" }, "Latitude:")),
+                        t.div(
+                            { className: "field addon" },
+                            t.label({ htmlFor: uniqueId + ".lat" }, i18n.t("geo_point_field.latitude")),
+                        ),
                         t.div(
                             { className: "field" },
                             t.input({

@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     record: undefined,
 //     field: undefined,
@@ -8,7 +10,7 @@ export function view(props) {
         { className: "record-field-view field-type-bool" },
         t.span(
             { className: () => `label ${props.record[props.field.name] ? "success" : ""}` },
-            () => props.record[props.field.name] ? "True" : "False",
+            () => props.record[props.field.name] ? i18n.t("common.true") : i18n.t("common.false"),
         ),
     );
 }
