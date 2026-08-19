@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 const excludedFieldNames = ["id", "email", "emailVisibility", "verified", "tokenKey", "password"];
 const allowedRegularTypes = ["text", "editor", "url", "email", "json"];
 
@@ -56,7 +58,7 @@ export function oauth2Accordion(collection) {
             t.span({ className: "txt", textContent: "OAuth2" }),
             t.span({
                 className: () => `label m-l-auto ${data.config.enabled ? "success" : ""}`,
-                textContent: () => (data.config.enabled ? "Enabled" : "Disabled"),
+                textContent: () => (data.config.enabled ? i18n.t("common.enabled") : i18n.t("common.disabled")),
             }),
             () => {
                 if (app.utils.isEmpty(app.store.errors?.oauth2)) {
@@ -65,7 +67,7 @@ export function oauth2Accordion(collection) {
 
                 return t.i({
                     className: "ri-error-warning-fill txt-danger",
-                    ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                    ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                 });
             },
         ),
@@ -85,7 +87,7 @@ export function oauth2Accordion(collection) {
                     }),
                     t.label({
                         htmlFor: uniqueId + ".enabled",
-                        textContent: "Enable",
+                        textContent: i18n.t("common.enable"),
                     }),
                 ),
             ),
@@ -114,7 +116,7 @@ export function oauth2Accordion(collection) {
                                     if (providerInfo.logo) {
                                         return t.img({
                                             src: "data:image/svg+xml;base64," + btoa(providerInfo.logo),
-                                            alt: providerConfig.name + " logo",
+                                            alt: i18n.t("record_upsert.provider_logo_alt", { provider: providerConfig.name }),
                                         });
                                     }
 
@@ -134,7 +136,7 @@ export function oauth2Accordion(collection) {
                                 t.button(
                                     {
                                         type: "button",
-                                        title: "Options",
+                                        title: i18n.t("collection_upsert.tab_options"),
                                         className: "btn secondary transparent sm circle",
                                         "html-popovertarget": providerId + "dropdown",
                                     },
@@ -161,7 +163,7 @@ export function oauth2Accordion(collection) {
                                                 });
                                             },
                                         },
-                                        t.span({ className: "txt" }, "Settings"),
+                                        t.span({ className: "txt" }, i18n.t("common.settings")),
                                     ),
                                     t.hr(),
                                     t.button(
@@ -171,10 +173,10 @@ export function oauth2Accordion(collection) {
                                             onclick: (e) => {
                                                 e.target.closest(".dropdown").hidePopover();
                                                 app.modals.confirm(
-                                                    `Do you really want to remove provider "${
-                                                        providerConfig.displayName || providerInfo.displayName
-                                                        || providerInfo.name
-                                                    }"?`,
+                                                    i18n.t("oauth2.confirm_remove_provider", {
+                                                        provider: providerConfig.displayName || providerInfo.displayName
+                                                            || providerInfo.name,
+                                                    }),
                                                     () => {
                                                         clearProviderErrors(configIndex);
 
@@ -187,7 +189,7 @@ export function oauth2Accordion(collection) {
                                                 );
                                             },
                                         },
-                                        t.span({ className: "txt" }, "Remove"),
+                                        t.span({ className: "txt" }, i18n.t("common.remove")),
                                     ),
                                 ),
                             ),
@@ -219,7 +221,7 @@ export function oauth2Accordion(collection) {
                         },
                     },
                     t.i({ className: "ri-add-line", ariaHidden: true }),
-                    t.span({ className: "txt " }, "Add provider"),
+                    t.span({ className: "txt " }, i18n.t("oauth2.add_provider")),
                 ),
             ),
             t.div(
@@ -230,7 +232,7 @@ export function oauth2Accordion(collection) {
                         className: () => `btn secondary sm ${data.showMapping ? "" : "transparent"}`,
                         onclick: () => (data.showMapping = !data.showMapping),
                     },
-                    t.span({ className: "txt" }, "Optional users create fields mapping"),
+                    t.span({ className: "txt" }, i18n.t("oauth2.optional_fields_mapping")),
                     t.i({
                         className: () => (data.showMapping ? "ri-arrow-drop-up-line" : "ri-arrow-drop-down-line"),
                         ariaHidden: true,
@@ -244,11 +246,11 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.name" }, "OAuth2 full name"),
+                                t.label({ htmlFor: uniqueId + ".mappedFields.name" }, i18n.t("oauth2.mapped_full_name")),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.name",
                                     name: "oauth2.mappedFields.name",
-                                    placeholder: "Select field",
+                                    placeholder: i18n.t("oauth2.select_field"),
                                     options: () => data.regularFieldOptions,
                                     value: () => collection.oauth2.mappedFields.name,
                                     onchange: (selectedOpts) => {
@@ -261,11 +263,11 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.avatarURL" }, "OAuth2 avatar"),
+                                t.label({ htmlFor: uniqueId + ".mappedFields.avatarURL" }, i18n.t("oauth2.mapped_avatar")),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.avatarURL",
                                     name: "oauth2.mappedFields.avatarURL",
-                                    placeholder: "Select field",
+                                    placeholder: i18n.t("oauth2.select_field"),
                                     options: () => data.regularAndFileFieldOptions,
                                     value: () => collection.oauth2.mappedFields.avatarURL,
                                     onchange: (selectedOpts) => {
@@ -278,11 +280,11 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.id" }, "OAuth2 id"),
+                                t.label({ htmlFor: uniqueId + ".mappedFields.id" }, i18n.t("oauth2.mapped_id")),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.id",
                                     name: "oauth2.mappedFields.id",
-                                    placeholder: "Select field",
+                                    placeholder: i18n.t("oauth2.select_field"),
                                     options: () => data.regularFieldOptions,
                                     value: () => collection.oauth2.mappedFields.id,
                                     onchange: (selectedOpts) => {
@@ -295,11 +297,11 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.username" }, "OAuth2 username"),
+                                t.label({ htmlFor: uniqueId + ".mappedFields.username" }, i18n.t("oauth2.mapped_username")),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.username",
                                     name: "oauth2.mappedFields.username",
-                                    placeholder: "Select field",
+                                    placeholder: i18n.t("oauth2.select_field"),
                                     options: () => data.regularFieldOptions,
                                     value: () => collection.oauth2.mappedFields.username,
                                     onchange: (selectedOpts) => {

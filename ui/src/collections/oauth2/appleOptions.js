@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 window.app = window.app || {};
 window.app.oauth2 = window.app.oauth2 || {};
 
@@ -20,7 +22,7 @@ window.app.oauth2.apple = function(providerInfo, namePrefix, data) {
                 },
             },
             t.i({ className: "ri-key-line", ariaHidden: true }),
-            t.span({ className: "txt" }, "Generate secret"),
+            t.span({ className: "txt" }, i18n.t("oauth2.generate_secret")),
         ),
     );
 };
@@ -74,7 +76,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
 
             data.isSubmitting = false;
 
-            app.toasts.success("Successfully generated client secret.");
+            app.toasts.success(i18n.t("oauth2.secret_generated"));
 
             modalSettings.ongenerate?.(result.secret);
 
@@ -107,7 +109,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
         },
         t.header(
             { className: "modal-header" },
-            t.h5({ className: "m-auto" }, "Generate Apple client secret"),
+            t.h5({ className: "m-auto" }, i18n.t("oauth2.generate_apple_secret")),
         ),
         t.form(
             {
@@ -124,7 +126,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".clientId" }, "Client ID"),
+                        t.label({ htmlFor: uniqueId + ".clientId" }, i18n.t("provider_settings.client_id")),
                         t.input({
                             id: uniqueId + ".clientId",
                             name: "clientId",
@@ -139,7 +141,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".teamId" }, "Team ID"),
+                        t.label({ htmlFor: uniqueId + ".teamId" }, i18n.t("oauth2.team_id")),
                         t.input({
                             id: uniqueId + ".teamId",
                             name: "teamId",
@@ -154,7 +156,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".keyId" }, "Key ID"),
+                        t.label({ htmlFor: uniqueId + ".keyId" }, i18n.t("oauth2.key_id")),
                         t.input({
                             id: uniqueId + ".keyId",
                             name: "keyId",
@@ -169,7 +171,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".duration" }, "Duration (in seconds)"),
+                        t.label({ htmlFor: uniqueId + ".duration" }, i18n.t("common.duration_seconds")),
                         t.input({
                             id: uniqueId + ".duration",
                             name: "duration",
@@ -184,14 +186,17 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     ),
                     t.div(
                         { className: "field-help" },
-                        `Max ${maxDuration} seconds (~${(maxDuration / (60 * 60 * 24 * 30)) << 0} months).`,
+                        i18n.t("oauth2.max_duration_help", {
+                            seconds: maxDuration,
+                            months: (maxDuration / (60 * 60 * 24 * 30)) << 0,
+                        }),
                     ),
                 ),
                 t.div(
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".privateKey" }, "Private key"),
+                        t.label({ htmlFor: uniqueId + ".privateKey" }, i18n.t("oauth2.private_key")),
                         t.textarea({
                             id: uniqueId + ".privateKey",
                             name: "privateKey",
@@ -205,7 +210,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     ),
                     t.div(
                         { className: "field-help" },
-                        "The key is not stored on the server and it is used only for generating the signed JWT.",
+                        i18n.t("oauth2.private_key_help"),
                     ),
                 ),
             ),
@@ -218,7 +223,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             t.button(
                 {
@@ -227,7 +232,7 @@ function appleSecretGeneratorModal(modalSettings = {}) {
                     className: "btn expanded",
                 },
                 t.i({ className: "ri-key-line", ariaHidden: true }),
-                t.span({ className: "txt" }, "Generate secret"),
+                t.span({ className: "txt" }, i18n.t("oauth2.generate_secret")),
             ),
         ),
     );

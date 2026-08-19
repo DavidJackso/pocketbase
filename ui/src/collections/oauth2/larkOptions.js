@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 window.app = window.app || {};
 window.app.oauth2 = window.app.oauth2 || {};
 
@@ -6,8 +8,8 @@ window.app.oauth2.lark = function(providerInfo, namePrefix, data) {
     const uniqueId = "lark_" + app.utils.randomString();
 
     const domainOptions = [
-        { label: "Feishu (China)", value: "feishu.cn" },
-        { label: "Lark (International)", value: "larksuite.com" },
+        { label: i18n.t("oauth2.feishu_china"), value: "feishu.cn" },
+        { label: i18n.t("oauth2.lark_international"), value: "larksuite.com" },
     ];
 
     const local = store({
@@ -40,7 +42,7 @@ window.app.oauth2.lark = function(providerInfo, namePrefix, data) {
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".site" }, "Site"),
+                    t.label({ htmlFor: uniqueId + ".site" }, i18n.t("oauth2.site")),
                     app.components.select({
                         id: uniqueId + ".site",
                         options: domainOptions,
@@ -56,15 +58,15 @@ window.app.oauth2.lark = function(providerInfo, namePrefix, data) {
                 { className: "col-12" },
                 t.div(
                     { className: "alert info" },
-                    "Note that the Lark user's ",
-                    t.strong(null, "Union ID"),
-                    " will be used for the association with the PocketBase user (see ",
+                    () => i18n.t("oauth2.lark_union_id_note_a") + " ",
+                    t.strong(null, i18n.t("oauth2.union_id")),
+                    () => " " + i18n.t("oauth2.lark_union_id_note_b") + " (" + i18n.t("common.see") + " ",
                     t.a({
                         href:
                             "https://open.feishu.cn/document/platform-overveiw/basic-concepts/user-identity-introduction/introduction#3f2d4b63",
                         target: "_blank",
                         rel: "noopener noreferrer",
-                        textContent: "Different Types of Lark User IDs",
+                        textContent: i18n.t("oauth2.lark_user_ids_doc"),
                     }),
                     ").",
                 ),
