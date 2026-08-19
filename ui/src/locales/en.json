@@ -943,5 +943,10 @@
     "api_preview.email_send_otp_desc": "The auth record email address to send the OTP request (if exists).",
     "api_preview.otp_id_desc": "The id of the OTP request.",
     "api_preview.otp_password_desc": "The one-time/short-lived password from the OTP request.",
-    "api_preview.list_auth_methods_desc": "Returns a public list with all allowed {name} authentication methods."
+    "api_preview.list_auth_methods_desc": "Returns a public list with all allowed {name} authentication methods.",
+    "common.docs": "Docs",
+    "settings_sidebar.group_system": "System",
+    "settings_sidebar.group_sync": "Sync",
+    "settings_sidebar.group_debug": "Debug",
+    "common.something_went_wrong": "Something went wrong!"
 }

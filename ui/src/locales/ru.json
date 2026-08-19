@@ -943,5 +943,10 @@
     "api_preview.email_send_otp_desc": "Email-адрес записи аутентификации для отправки запроса OTP (если существует).",
     "api_preview.otp_id_desc": "ID запроса OTP.",
     "api_preview.otp_password_desc": "Одноразовый/краткоживущий пароль из запроса OTP.",
-    "api_preview.list_auth_methods_desc": "Возвращает публичный список всех разрешённых методов аутентификации коллекции {name}."
+    "api_preview.list_auth_methods_desc": "Возвращает публичный список всех разрешённых методов аутентификации коллекции {name}.",
+    "common.docs": "Документация",
+    "settings_sidebar.group_system": "Система",
+    "settings_sidebar.group_sync": "Синхронизация",
+    "settings_sidebar.group_debug": "Отладка",
+    "common.something_went_wrong": "Что-то пошло не так!"
 }

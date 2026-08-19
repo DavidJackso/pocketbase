@@ -1,3 +1,5 @@
+import { i18n } from "./i18n.js";
+
 const DEFAULT_RANDOM_ALPHABET = "abcdefghijklmnopqrstuvwxyz0123456789";
 
 const navigationStore = store({
@@ -614,7 +616,7 @@ const utils = {
      * @param  {string} [missingValue]
      * @return {string}
      */
-    displayValue(val, truncateLength = 150, missingValue = "N/A") {
+    displayValue(val, truncateLength = 150, missingValue = i18n.t("common.na")) {
         // check the raw value for "emptiness"
         if (utils.isEmpty(val)) {
             return missingValue;
@@ -623,7 +625,7 @@ const utils = {
         if (typeof val == "string") {
             // already a string
         } else if (typeof val == "boolean") {
-            val = val ? "True" : "False";
+            val = val ? i18n.t("common.true") : i18n.t("common.false");
         } else if (Array.isArray(val) && typeof val[0] != "object") {
             // assuming primitive array values
             val = val.map((child) => utils.displayValue(child, truncateLength, missingValue)).join(", ");
