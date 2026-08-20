@@ -44,6 +44,9 @@ builds:
 
 release:
   draft: true
+  name_template: "{{ .Tag }} Release"
+  header: |
+    > To update the prebuilt executable you can run `./pocketbase update`.
 
 archives:
   - id: archive_noncgo
