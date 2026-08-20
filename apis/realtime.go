@@ -714,25 +714,10 @@ func realtimeBroadcastRecord(app core.App, action string, record *core.Record, d
 							Record: cleanRecord,
 						}
 
-						// resolve Localized fields against the subscription's
-						// own "?locale=" query param (mirrors the REST API
-						// behavior in apis/record_helpers.go), falling back
-						// to the app-wide base locale ("?locale=@all" skips
-						// resolution and keeps every locale value, see
-						// localeAllSentinel)
-						if hasLocalizedFields(collection) && options.Query[localeQueryParam] != localeAllSentinel {
-							base := core.BaseLocale(app)
-							locale := options.Query[localeQueryParam]
-							if locale == "" {
-								locale = base
-							}
-							data.Record = core.ResolveLocalizedExport(collection, cleanRecord.PublicExport(), base, locale)
-						}
-
 						// check fields
 						rawFields := options.Query[fieldsQueryParam]
 						if rawFields != "" {
-							decoded, err := picker.Pick(data.Record, rawFields)
+							decoded, err := picker.Pick(cleanRecord, rawFields)
 							if err == nil {
 								data.Record = decoded
 							} else {

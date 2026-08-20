@@ -954,15 +954,5 @@
     "common.something_went_wrong": "Что-то пошло не так!",
     "record_upsert.failed_to_load_record": "Не удалось загрузить запись.",
     "record_upsert.record_preview_suffix": "предпросмотр записи",
-    "common.loading_plugins": "Загрузка плагинов...",
-    "field_settings.localized": "Локализовано",
-    "field_settings.localized_help": "Хранить отдельное значение для каждого языка. Фильтрация, сортировка и поиск всегда используют значение базовой локали приложения; остальные языковые значения используются только для отображения.",
-    "app_settings.base_locale": "базовая локаль",
-    "app_settings.localization": "Локализация",
-    "app_settings.localization_intro": "Настройте базовую локаль, используемую для фильтрации, сортировки, поиска и валидации локализованных полей, а также список локалей, доступных для редактирования в редакторе записей.",
-    "app_settings.base_locale_label": "Базовая локаль",
-    "app_settings.base_locale_help": "Основная локаль для фильтрации, сортировки, поиска и валидации (Обязательное/Мин./Макс./Паттерн) локализованных полей.",
-    "app_settings.supported_locales": "Поддерживаемые локали",
-    "app_settings.supported_locales_help": "Список кодов локалей через запятую, доступных для редактирования в редакторе записей для локализованных полей.",
-    "app_settings.supported_locales_example": "Напр.: en, ru, de"
+    "common.loading_plugins": "Загрузка плагинов..."
 }

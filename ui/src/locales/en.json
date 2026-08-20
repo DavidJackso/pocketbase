@@ -954,15 +954,5 @@
     "common.loading_plugins": "Loading plugins...",
     "collection_rules.manage_rule_help1a": "This rule is executed in addition to the",
     "field_settings.help_text": "Help text",
-    "sync.merge_with_existing": "Merge with the existing collections",
-    "field_settings.localized": "Localized",
-    "field_settings.localized_help": "Store one value per language. Filtering, sorting and search always use the app-wide base locale value; other locale values are only used for display.",
-    "app_settings.base_locale": "base locale",
-    "app_settings.localization": "Localization",
-    "app_settings.localization_intro": "Configure the base locale used for filtering, sorting, search and validation of Localized fields, and the list of locales editable in the record editor.",
-    "app_settings.base_locale_label": "Base locale",
-    "app_settings.base_locale_help": "The authoritative locale for filtering, sorting, search and Required/Min/Max/Pattern validation of Localized fields.",
-    "app_settings.supported_locales": "Supported locales",
-    "app_settings.supported_locales_help": "Comma separated list of locale codes editable in the record editor for Localized fields.",
-    "app_settings.supported_locales_example": "Ex.: en, ru, de"
+    "sync.merge_with_existing": "Merge with the existing collections"
 }
