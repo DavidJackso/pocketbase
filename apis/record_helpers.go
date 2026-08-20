@@ -22,6 +22,13 @@ const (
 	expandQueryParam = "expand"
 	fieldsQueryParam = "fields"
 	localeQueryParam = "locale"
+
+	// localeAllSentinel is a special "?locale=" value that skips display-locale
+	// resolution entirely, returning every Localized field's full
+	// {"locale":"value", ...} JSON object unresolved. Used by the admin
+	// dashboard record editor, which needs to read/write every configured
+	// locale at once rather than a single resolved display value.
+	localeAllSentinel = "@all"
 )
 
 var ErrMFA = errors.New("mfa required")
@@ -278,16 +285,22 @@ func hasLocalizedFields(collection *core.Collection) bool {
 //
 // If the record's collection has at least one Localized field, it resolves
 // those fields' JSON locale map down to a single string based on the
-// "?locale=" query parameter (falling back to the app-wide base locale).
-// Otherwise the record is returned unchanged so that the common,
-// non-localized case has no extra overhead.
+// "?locale=" query parameter (falling back to the app-wide base locale),
+// unless "?locale=@all" is set (see localeAllSentinel) in which case the
+// record is returned unchanged so that every locale value is preserved -
+// this is what the admin dashboard record editor requests so it can
+// read/write every configured locale at once.
 func recordResponseData(e *core.RequestEvent, record *core.Record) any {
 	if record == nil || !hasLocalizedFields(record.Collection()) {
 		return record
 	}
 
-	base := core.BaseLocale(e.App)
 	locale := e.Request.URL.Query().Get(localeQueryParam)
+	if locale == localeAllSentinel {
+		return record
+	}
+
+	base := core.BaseLocale(e.App)
 	if locale == "" {
 		locale = base
 	}
@@ -302,8 +315,12 @@ func recordsResponseData(e *core.RequestEvent, collection *core.Collection, reco
 		return records
 	}
 
-	base := core.BaseLocale(e.App)
 	locale := e.Request.URL.Query().Get(localeQueryParam)
+	if locale == localeAllSentinel {
+		return records
+	}
+
+	base := core.BaseLocale(e.App)
 	if locale == "" {
 		locale = base
 	}
