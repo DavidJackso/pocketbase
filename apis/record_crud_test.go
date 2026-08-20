@@ -1216,6 +1216,15 @@ func TestRecordCrudViewLocalizedField(t *testing.T) {
 			ExpectedContent: []string{`"title":"hello"`},
 			ExpectedEvents:  map[string]int{"*": 0, "OnRecordViewRequest": 1, "OnRecordEnrich": 1},
 		},
+		{
+			Name:            "?locale=@all returns every locale unresolved (used by the record editor)",
+			Method:          http.MethodGet,
+			URL:             "/api/collections/test_localized_view/records/rec1?locale=@all",
+			BeforeTestFunc:  func(t testing.TB, app *tests.TestApp, e *core.ServeEvent) { setupLocalizedCollection(t, app) },
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"title":{"en":"hello","ru":"привет"}`},
+			ExpectedEvents:  map[string]int{"*": 0, "OnRecordViewRequest": 1, "OnRecordEnrich": 1},
+		},
 	}
 
 	for _, scenario := range scenarios {

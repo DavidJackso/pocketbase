@@ -243,8 +243,13 @@ function recordUpsertModal(collection, rawRecord, modalSettings) {
             data.record = JSON.parse(JSON.stringify(rawRecord));
 
             // fetch to ensure that the main record fields are up-to-date
+            //
+            // "locale=@all" requests every Localized field value unresolved
+            // (as {"en":"...", "ru":"...", ...}) since the editor needs to
+            // read/write all configured locales, not a single display value
             let record = await app.pb.collection(collection.name).getOne(rawRecord.id, {
                 requestKey: "upsert_load_" + rawRecord.id,
+                query: { locale: "@all" },
             });
 
             // preload existing expands (if any)
