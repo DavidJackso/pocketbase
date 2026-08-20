@@ -548,6 +548,23 @@ function recordUpsertModal(collection, rawRecord, modalSettings) {
                                             }`,
                                     },
                                     () => {
+                                        if (field.localized) {
+                                            return localizedFieldInput({
+                                                get collection() {
+                                                    return collection;
+                                                },
+                                                get originalRecord() {
+                                                    return data.originalRecord;
+                                                },
+                                                get record() {
+                                                    return data.record;
+                                                },
+                                                get field() {
+                                                    return field;
+                                                },
+                                            });
+                                        }
+
                                         return app.fieldTypes[field.type].input({
                                             get collection() {
                                                 return collection;
@@ -1109,6 +1126,85 @@ function deleteDropdownItem(collection, data, modalSettings) {
         },
         t.i({ className: "ri-delete-bin-7-line", ariaHidden: true }),
         t.span({ className: "txt" }, i18n.t("common.delete")),
+    );
+}
+
+// localized fields
+// -------------------------------------------------------------------
+
+// localizedFieldInput renders one language tab per app-configured
+// supported locale (base locale first) for a Localized TextField/EditorField,
+// reusing the field's own input widget for each tab but with its "record"
+// prop swapped for a per-locale wrapper that redirects field.name reads/
+// writes to record[field.name][localeCode] instead of record[field.name]
+// directly. All other record properties fall through unchanged.
+function localizedFieldInput(props) {
+    const supportedLocales = app.store.settings?.localization?.supportedLocales?.length
+        ? app.store.settings.localization.supportedLocales
+        : ["en"];
+    const baseLocale = app.store.settings?.localization?.baseLocale || "en";
+
+    // base locale tab always first
+    const locales = [baseLocale, ...supportedLocales.filter((l) => l != baseLocale)];
+
+    const data = store({ activeLocale: baseLocale });
+
+    function localeRecordProxy(localeCode) {
+        const wrapper = Object.create(props.record);
+        Object.defineProperty(wrapper, props.field.name, {
+            enumerable: true,
+            get() {
+                const raw = props.record[props.field.name];
+                return (raw && typeof raw == "object") ? (raw[localeCode] ?? "") : "";
+            },
+            set(val) {
+                const raw = props.record[props.field.name];
+                const existing = (raw && typeof raw == "object") ? raw : {};
+                props.record[props.field.name] = Object.assign({}, existing, { [localeCode]: val });
+            },
+        });
+        return wrapper;
+    }
+
+    return t.div(
+        { className: "localized-field-input" },
+        t.nav(
+            { className: "tabs-header compact m-b-5" },
+            () => {
+                return locales.map((localeCode) => {
+                    return t.button({
+                        type: "button",
+                        className: () => `btn sm expanded ${data.activeLocale == localeCode ? "active" : "secondary"}`,
+                        onclick: () => (data.activeLocale = localeCode),
+                        textContent: localeCode + (localeCode == baseLocale ? ` (${i18n.t("app_settings.base_locale")})` : ""),
+                    });
+                });
+            },
+        ),
+        () => {
+            return locales.map((localeCode) => {
+                return t.div(
+                    { hidden: () => data.activeLocale != localeCode },
+                    app.fieldTypes[props.field.type].input({
+                        get collection() {
+                            return props.collection;
+                        },
+                        get originalRecord() {
+                            return props.originalRecord;
+                        },
+                        get record() {
+                            return localeRecordProxy(localeCode);
+                        },
+                        get field() {
+                            // only require the base locale tab (the base
+                            // locale value is what Required validates on
+                            // the backend, see core.BaseLocale)
+                            return localeCode == baseLocale ? props.field : Object.assign({}, props.field, { required: false });
+                        },
+                    }),
+                );
+            });
+        },
     );
 }
 
