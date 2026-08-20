@@ -821,6 +821,84 @@ func TestRecordFieldResolverResolveCollectionFields(t *testing.T) {
 	}
 }
 
+func TestRecordFieldResolverLocalizedField(t *testing.T) {
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_localized_resolver")
+	collection.Fields.Add(
+		&core.TextField{Name: "id", PrimaryKey: true, Pattern: `^[a-z0-9]+$`, Required: true},
+		&core.TextField{Name: "title", Localized: true},
+	)
+
+	r := core.NewRecordFieldResolver(app, collection, nil, true)
+
+	result, err := r.Resolve("title")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	expected := "(CASE WHEN json_valid([[test_localized_resolver.title]]) THEN JSON_EXTRACT([[test_localized_resolver.title]], '$.en') ELSE JSON_EXTRACT(json_object('pb', [[test_localized_resolver.title]]), '$.pb.en') END)"
+	if result.Identifier != expected {
+		t.Fatalf("Expected identifier\n%q\ngot\n%q", expected, result.Identifier)
+	}
+
+	// the resolved identifier must follow the configured base locale, not the "en" default
+	app.Settings().Localization.BaseLocale = "ru"
+	r2 := core.NewRecordFieldResolver(app, collection, nil, true)
+	result2, err := r2.Resolve("title")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(result2.Identifier, "'$.ru'") {
+		t.Fatalf("Expected identifier to extract the configured \"ru\" base locale, got %q", result2.Identifier)
+	}
+}
+
+func TestRecordFieldResolverLocalizedFieldFilterIntegration(t *testing.T) {
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_localized_filter")
+	collection.Fields.Add(
+		&core.TextField{Name: "id", PrimaryKey: true, Pattern: `^[a-z0-9]+$`, Required: true},
+		&core.TextField{Name: "title", Localized: true},
+		&core.AutodateField{Name: "created", OnCreate: true},
+		&core.AutodateField{Name: "updated", OnCreate: true, OnUpdate: true},
+	)
+	if err := app.Save(collection); err != nil {
+		t.Fatal(err)
+	}
+
+	record := core.NewRecord(collection)
+	record.SetApp(app)
+	record.Id = "rec1"
+	record.Set("title", `{"en":"hello","ru":"привет"}`)
+	if err := app.Save(record); err != nil {
+		t.Fatal(err)
+	}
+
+	// filtering by the base-locale ("en") value must match, regardless
+	// of the other locale values also stored on the record
+	records, err := app.FindRecordsByFilter(collection, "title = 'hello'", "", 0, 0, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(records) != 1 {
+		t.Fatalf("expected 1 match filtering the base-locale value, got %d", len(records))
+	}
+
+	// filtering by a non-base-locale value must NOT match, since
+	// filter/search always operates on the base locale only
+	noMatch, err := app.FindRecordsByFilter(collection, "title = 'привет'", "", 0, 0, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(noMatch) != 0 {
+		t.Fatalf("expected 0 matches filtering a non-base-locale value, got %d", len(noMatch))
+	}
+}
+
 func TestRecordFieldResolverResolveStaticRequestInfoFields(t *testing.T) {
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()
