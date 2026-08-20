@@ -10,6 +10,12 @@ function detectInitialLocale() {
     if (stored && dictionaries[stored]) {
         return stored;
     }
+    for (const lang of window.navigator?.languages || [window.navigator?.language]) {
+        const code = lang?.slice(0, 2).toLowerCase();
+        if (code && dictionaries[code]) {
+            return code;
+        }
+    }
     return FALLBACK_LOCALE;
 }
 
@@ -43,8 +49,13 @@ export const i18n = {
         const value = dict[key] ?? dictionaries[FALLBACK_LOCALE][key] ?? key;
         return interpolate(value, vars);
     },
-    // used by locale-pack registration (see ui/src/locales/index.js)
-    _register(code, dict) {
-        dictionaries[code] = dict;
+    // locale-aware plural form lookup, eg. plural("records_list.record", 3)
+    // resolves to "records_list.record_" + Intl.PluralRules category ("one"/"few"/"many"/"other"),
+    // falling back to the "_other" form if the resolved category isn't translated.
+    plural(base, count, vars = {}) {
+        const category = new Intl.PluralRules(activeLocale).select(count);
+        const dict = dictionaries[activeLocale] || dictionaries[FALLBACK_LOCALE];
+        const key = `${base}_${category}` in dict ? `${base}_${category}` : `${base}_other`;
+        return this.t(key, { count, ...vars });
     },
 };

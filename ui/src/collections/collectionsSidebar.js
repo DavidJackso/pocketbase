@@ -217,7 +217,7 @@ function collectionItem(collection, data) {
             type: "button",
             className: () =>
                 `nav-item responsive-close ${collection.id == app.store.activeCollection?.id ? "active" : ""}`,
-            title: () => collection.name,
+            title: () => collection.label || collection.name,
             onauxclick: (e) => {
                 e.preventDefault();
                 window.open(`#/collections?collection=${collection.name}`, "_blank", "noreferrer,noopener");
@@ -231,7 +231,7 @@ function collectionItem(collection, data) {
             className: () => app.collectionTypes[collection.type]?.icon || app.utils.fallbackCollectionIcon,
             ariaHidden: true,
         }),
-        t.span({ className: "txt" }, () => collection.name),
+        t.span({ className: "txt" }, () => collection.label || collection.name),
         () => {
             if (
                 collection.type != "auth"

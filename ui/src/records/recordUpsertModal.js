@@ -707,14 +707,13 @@ function recordUpsertModal(collection, rawRecord, modalSettings) {
                         t.span(
                             null,
                             () =>
-                                (data.isNew ? i18n.t("record_upsert.create_prefix") : i18n.t("record_upsert.edit_prefix"))
+                                i18n.t(data.isNew ? "record_upsert.create_title" : "record_upsert.edit_title")
                                     + " ",
                         ),
                         t.strong(
                             { className: "txt-ellipsis collection-name", style: "max-width: 220px" },
-                            () => collection.name,
+                            () => collection.label || collection.name,
                         ),
-                        t.span(null, () => " " + i18n.t("record_upsert.record_suffix")),
                     ),
                     t.div({ className: "flex-fill" }),
                     () => {

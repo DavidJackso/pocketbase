@@ -223,6 +223,19 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                             return labels;
                         }),
                     ),
+                    t.div(
+                        { className: "field prop-label" },
+                        t.label({ htmlFor: uniqueId + ".label" }, i18n.t("field_settings.label")),
+                        t.input({
+                            type: "text",
+                            id: uniqueId + ".label",
+                            name: () => `fields.${data.fieldIndex}.label`,
+                            spellcheck: false,
+                            placeholder: () => data.field.name || "",
+                            value: () => data.field.label || "",
+                            oninput: (e) => (data.field.label = e.target.value),
+                        }),
+                    ),
                 ),
                 (el) => {
                     if (typeof settings.header == "function") {

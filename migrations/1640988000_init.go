@@ -40,6 +40,7 @@ func init() {
 				[[system]]     BOOLEAN DEFAULT FALSE NOT NULL,
 				[[type]]       TEXT DEFAULT "base" NOT NULL,
 				[[name]]       TEXT UNIQUE NOT NULL,
+				[[label]]      TEXT DEFAULT "" NOT NULL,
 				[[fields]]     JSON DEFAULT "[]" NOT NULL,
 				[[indexes]]    JSON DEFAULT "[]" NOT NULL,
 				[[listRule]]   TEXT DEFAULT NULL,

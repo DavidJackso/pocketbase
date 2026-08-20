@@ -148,4 +148,5 @@ func TestBoolFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeBool)
 	testDefaultFieldNameValidation(t, core.FieldTypeBool)
 	testDefaultFieldHelpValidation[core.BoolField](t)
+	testDefaultFieldLabelValidation[core.BoolField](t)
 }

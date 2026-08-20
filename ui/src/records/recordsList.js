@@ -714,7 +714,7 @@ window.app.components.recordsList = function(propsArg = {}) {
                     i18n.t("records_list.selected"),
                     " ",
                     t.strong(null, () => data.totalSelected),
-                    () => ` ${data.totalSelected == 1 ? i18n.t("records_list.record") : i18n.t("records_list.records")}`,
+                    () => ` ${i18n.plural("records_list.record", data.totalSelected)}`,
                 ),
                 t.button(
                     {

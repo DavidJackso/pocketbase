@@ -189,6 +189,7 @@ func TestJSONFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeJSON)
 	testDefaultFieldNameValidation(t, core.FieldTypeJSON)
 	testDefaultFieldHelpValidation[core.JSONField](t)
+	testDefaultFieldLabelValidation[core.JSONField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

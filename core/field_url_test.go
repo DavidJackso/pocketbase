@@ -183,6 +183,7 @@ func TestURLFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeURL)
 	testDefaultFieldNameValidation(t, core.FieldTypeURL)
 	testDefaultFieldHelpValidation[core.URLField](t)
+	testDefaultFieldLabelValidation[core.URLField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

@@ -10,10 +10,11 @@ const ALLOWED_SUBSTRINGS = ["TEXT", "JSON", "JavaScript", "Rust", "TypeScript", 
 
 function walk(dir, out = []) {
     for (const entry of readdirSync(dir)) {
+        if (entry === "locales") continue; // translation dictionaries, not app code
         const full = join(dir, entry);
         if (statSync(full).isDirectory()) {
             walk(full, out);
-        } else if (entry.endsWith(".js") && !entry.startsWith("locales")) {
+        } else if (entry.endsWith(".js")) {
             out.push(full);
         }
     }

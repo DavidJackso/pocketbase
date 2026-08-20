@@ -382,6 +382,7 @@ func TestTextFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeText)
 	testDefaultFieldNameValidation(t, core.FieldTypeText)
 	testDefaultFieldHelpValidation[core.TextField](t)
+	testDefaultFieldLabelValidation[core.TextField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

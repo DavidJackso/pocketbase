@@ -4,7 +4,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "dprint fmt && vite build"
+        "build": "dprint fmt && vite build",
+        "check-i18n": "node scripts/check-i18n.mjs"
     },
     "dependencies": {
         "leaflet": "^1.9.4",

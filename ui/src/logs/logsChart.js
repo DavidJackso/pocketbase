@@ -451,7 +451,7 @@ function tooltipsPlugin(logsSettings) {
                     },
                     t.div(
                         { className: "content-primary" },
-                        () => `${tooltip.total} ${tooltip.total == 1 ? i18n.t("logs.request") : i18n.t("logs.requests")}`,
+                        () => `${tooltip.total} ${i18n.plural("logs.request", tooltip.total)}`,
                     ),
                     t.div({ className: "content-secondary" }, () => tooltip.date),
                 );

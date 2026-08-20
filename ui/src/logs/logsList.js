@@ -485,7 +485,7 @@ export function logsList(logsSettings) {
                     { className: "txt" },
                     i18n.t("records_list.selected") + " ",
                     t.strong(null, () => data.totalSelected),
-                    () => ` ${data.totalSelected == 1 ? i18n.t("logs.log") : i18n.t("logs.logs")}`,
+                    () => ` ${i18n.plural("logs.log", data.totalSelected)}`,
                 ),
                 t.button(
                     {
