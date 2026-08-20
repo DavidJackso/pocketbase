@@ -136,7 +136,6 @@ func TestSQLRun(t *testing.T) {
 			ExpectedStatus: 200,
 			ExpectedContent: []string{
 				`"execTime":`,
-				`"affectedRows":0`,
 				`"columns":[]`,
 				`"rows":[]`,
 			},

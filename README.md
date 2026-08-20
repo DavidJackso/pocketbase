@@ -7,8 +7,8 @@
 <p align="center"><a href="#readme-en">English</a> | <a href="#readme-ru">Русский</a></p>
 
 <p align="center">
-    <a href="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml" target="_blank" rel="noopener"><img src="https://github.com/pocketbase/pocketbase/actions/workflows/release.yaml/badge.svg" alt="build" /></a>
-    <a href="https://github.com/pocketbase/pocketbase/releases" target="_blank" rel="noopener"><img src="https://img.shields.io/github/release/pocketbase/pocketbase.svg" alt="Latest releases" /></a>
+    <a href="https://github.com/DavidJackso/pocketbase/actions/workflows/release.yaml" target="_blank" rel="noopener"><img src="https://github.com/DavidJackso/pocketbase/actions/workflows/release.yaml/badge.svg" alt="build" /></a>
+    <a href="https://github.com/DavidJackso/pocketbase/releases" target="_blank" rel="noopener"><img src="https://img.shields.io/github/release/DavidJackso/pocketbase.svg" alt="Latest releases" /></a>
     <a href="https://pkg.go.dev/github.com/pocketbase/pocketbase" target="_blank" rel="noopener"><img src="https://godoc.org/github.com/pocketbase/pocketbase?status.svg" alt="Go package documentation" /></a>
 </p>
 
@@ -49,10 +49,10 @@ You could also check the recommendations in https://pocketbase.io/docs/how-to-us
 
 ### Use as standalone app
 
-You could download the prebuilt executable for your platform from the [Releases page](https://github.com/pocketbase/pocketbase/releases).
+You could download the prebuilt executable for your platform from the [Releases page](https://github.com/DavidJackso/pocketbase/releases).
 Once downloaded, extract the archive and run `./pocketbase serve` in the extracted directory.
 
-The prebuilt executables are based on the [`examples/base/main.go` file](https://github.com/pocketbase/pocketbase/blob/master/examples/base/main.go) and comes with the JS VM plugin enabled by default which allows to extend PocketBase with JavaScript (_for more details please refer to [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
+The prebuilt executables are based on the [`examples/base/main.go` file](https://github.com/DavidJackso/pocketbase/blob/master/examples/base/main.go) and comes with the JS VM plugin enabled by default which allows to extend PocketBase with JavaScript (_for more details please refer to [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
 
 ### Use as a Go framework/toolkit
 
@@ -214,9 +214,9 @@ Later we can always refer to it and/or take pieces of your implementation when t
 
 ### Использование как готовое приложение
 
-Скачайте собранный исполняемый файл для своей платформы со страницы [Releases](https://github.com/pocketbase/pocketbase/releases). После распаковки архива запустите `./pocketbase serve` в распакованной директории.
+Скачайте собранный исполняемый файл для своей платформы со страницы [Releases](https://github.com/DavidJackso/pocketbase/releases). После распаковки архива запустите `./pocketbase serve` в распакованной директории.
 
-Готовые исполняемые файлы собраны из [`examples/base/main.go`](https://github.com/pocketbase/pocketbase/blob/master/examples/base/main.go) и по умолчанию включают плагин JS VM, позволяющий расширять PocketBase на JavaScript (_подробнее: [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
+Готовые исполняемые файлы собраны из [`examples/base/main.go`](https://github.com/DavidJackso/pocketbase/blob/master/examples/base/main.go) и по умолчанию включают плагин JS VM, позволяющий расширять PocketBase на JavaScript (_подробнее: [Extend with JavaScript](https://pocketbase.io/docs/js-overview/)_).
 
 ### Использование как Go-фреймворк/тулкит
 
