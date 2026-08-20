@@ -1,7 +1,7 @@
+import { i18n } from "../i18n.js";
 import { fullDummyPayload, primitivesDummyPayload, replaceDummyPayloadPlaceholder } from "./docsCreate";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
-import { i18n } from "../i18n.js";
 
 export function docsUpdate(collection) {
     const baseURL = app.utils.getApiExampleURL();

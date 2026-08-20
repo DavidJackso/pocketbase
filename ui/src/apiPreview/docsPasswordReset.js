@@ -246,13 +246,21 @@ function confirm(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "password ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.new_password_to_set")),
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "passwordConfirm ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "passwordConfirm ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.confirmation_of_new_password")),
                 ),

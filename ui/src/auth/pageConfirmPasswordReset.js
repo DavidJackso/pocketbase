@@ -52,7 +52,12 @@ export function pageConfirmPasswordReset(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
+            t.img({
+                className: "main-logo",
+                src: () => app.store.mainLogo,
+                ariaHidden: true,
+                alt: i18n.t("app.logo_alt"),
+            }),
             t.h5({ className: "m-t-10" }, () => app.store.title),
         ),
         () => {
@@ -105,7 +110,9 @@ export function pageConfirmPasswordReset(route) {
                                     tabIndex: -1,
                                     className: "btn sm transparent secondary circle tooltip-right",
                                     ariaLabel: app.attrs.tooltip(() =>
-                                        data.showNewPassword ? i18n.t("auth.hide_password") : i18n.t("auth.show_password")
+                                        data.showNewPassword
+                                            ? i18n.t("auth.hide_password")
+                                            : i18n.t("auth.show_password")
                                     ),
                                     onclick: () => (data.showNewPassword = !data.showNewPassword),
                                 },
@@ -142,7 +149,9 @@ export function pageConfirmPasswordReset(route) {
                                     tabIndex: -1,
                                     className: "btn sm transparent secondary circle tooltip-right",
                                     ariaLabel: app.attrs.tooltip(() =>
-                                        data.showNewPasswordConfirm ? i18n.t("auth.hide_password") : i18n.t("auth.show_password")
+                                        data.showNewPasswordConfirm
+                                            ? i18n.t("auth.hide_password")
+                                            : i18n.t("auth.show_password")
                                     ),
                                     onclick: () => (data.showNewPasswordConfirm = !data.showNewPasswordConfirm),
                                 },

@@ -112,7 +112,11 @@ export function settings(props) {
                             oninput: (e) => (props.field.pattern = e.target.value),
                         }),
                     ),
-                    t.div({ className: "field-help" }, i18n.t("field_settings.example_prefix") + " ", t.code(null, "^[a-z0-9]+$")),
+                    t.div(
+                        { className: "field-help" },
+                        i18n.t("field_settings.example_prefix") + " ",
+                        t.code(null, "^[a-z0-9]+$"),
+                    ),
                 ),
                 t.div(
                     { className: "col-sm-6" },
@@ -134,7 +138,11 @@ export function settings(props) {
                             oninput: (e) => (props.field.autogeneratePattern = e.target.value),
                         }),
                     ),
-                    t.div({ className: "field-help" }, i18n.t("field_settings.example_prefix") + " ", t.code(null, "[a-z0-9]{30}")),
+                    t.div(
+                        { className: "field-help" },
+                        i18n.t("field_settings.example_prefix") + " ",
+                        t.code(null, "[a-z0-9]{30}"),
+                    ),
                 ),
                 t.div(
                     { className: "col-sm-12" },

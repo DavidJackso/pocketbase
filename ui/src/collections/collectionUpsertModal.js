@@ -1,9 +1,9 @@
 import { toDeleteProp } from "@/base/fieldSettings";
+import { i18n } from "../i18n.js";
 import { collectionAuthOptionsTab } from "./collectionAuthOptionsTab";
 import { collectionFieldsTab } from "./collectionFieldsTab";
 import { collectionRulesTab } from "./collectionRulesTab";
 import { collectionViewQueryTab } from "./collectionViewQueryTab";
-import { i18n } from "../i18n.js";
 
 function tabLabel(tabName) {
     const map = {
@@ -421,7 +421,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                             null,
                             () =>
                                 i18n.t(data.isNew ? "collection_upsert.create_title" : "collection_upsert.edit_title")
-                                    + " ",
+                                + " ",
                         ),
                         t.strong(
                             {
@@ -517,7 +517,9 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 htmlFor: uniqueId + "col_name",
                                 textContent: () => {
                                     return i18n.t("collection_upsert.name_label")
-                                        + (data.collection?.system ? " (" + i18n.t("collection_upsert.system_suffix") + ")" : "");
+                                        + (data.collection?.system
+                                            ? " (" + i18n.t("collection_upsert.system_suffix") + ")"
+                                            : "");
                                 },
                             }),
                             t.input({
@@ -899,7 +901,10 @@ function truncateDropdownItem(data, modalSettings) {
                         ),
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + ".confirm_name" }, i18n.t("collection_upsert.collection_name")),
+                            t.label(
+                                { htmlFor: uniqueId + ".confirm_name" },
+                                i18n.t("collection_upsert.collection_name"),
+                            ),
                             t.input({
                                 id: uniqueId + ".confirm_name",
                                 type: "text",
@@ -1007,7 +1012,10 @@ function deleteDropdownItem(data, modalSettings) {
                         ),
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + ".confirm_name" }, i18n.t("collection_upsert.collection_name")),
+                            t.label(
+                                { htmlFor: uniqueId + ".confirm_name" },
+                                i18n.t("collection_upsert.collection_name"),
+                            ),
                             t.input({
                                 id: uniqueId + ".confirm_name",
                                 type: "text",

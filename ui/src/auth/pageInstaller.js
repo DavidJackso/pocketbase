@@ -125,7 +125,12 @@ export function pageInstaller(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
+            t.img({
+                className: "main-logo",
+                src: () => app.store.mainLogo,
+                ariaHidden: true,
+                alt: i18n.t("app.logo_alt"),
+            }),
             t.h5({ className: "m-t-10" }, () => app.store.title),
         ),
         t.form(
@@ -220,7 +225,9 @@ export function pageInstaller(route) {
                                 tabIndex: -1,
                                 className: "btn sm transparent secondary circle tooltip-right",
                                 ariaLabel: app.attrs.tooltip(() =>
-                                    data.showPasswordConfirm ? i18n.t("auth.hide_password") : i18n.t("auth.show_password")
+                                    data.showPasswordConfirm
+                                        ? i18n.t("auth.hide_password")
+                                        : i18n.t("auth.show_password")
                                 ),
                                 onclick: () => (data.showPasswordConfirm = !data.showPasswordConfirm),
                             },

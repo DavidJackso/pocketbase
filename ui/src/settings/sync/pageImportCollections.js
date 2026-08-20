@@ -1,5 +1,5 @@
-import { settingsSidebar } from "../settingsSidebar";
 import { i18n } from "../../i18n.js";
+import { settingsSidebar } from "../settingsSidebar";
 
 export function pageImportCollections(route) {
     app.store.title = i18n.t("sync.import_title");
@@ -349,7 +349,10 @@ export function pageImportCollections(route) {
                         { className: "col-lg-12" },
                         t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + "_collections_field" }, i18n.t("collections_sidebar.collections")),
+                            t.label(
+                                { htmlFor: uniqueId + "_collections_field" },
+                                i18n.t("collections_sidebar.collections"),
+                            ),
                             t.textarea({
                                 id: uniqueId + "_collections_field",
                                 name: "collections",

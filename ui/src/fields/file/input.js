@@ -1,5 +1,5 @@
-import { filesToDeleteProp } from "./onrecordsave.js";
 import { i18n } from "../../i18n.js";
+import { filesToDeleteProp } from "./onrecordsave.js";
 
 // {
 //     collection: undefined,

@@ -35,11 +35,15 @@ export function emailTemplateAccordion(collection, key, propsArg = {}) {
 
         return t.div(
             { className: "field-help" },
-            t.div({ className: "flex flex-wrap gap-5" }, t.span({ className: "txt" }, i18n.t("email_template.placeholders")), () => {
-                return props.placeholders.map((p) => {
-                    return t.span({ className: "label sm" }, app.components.copyButton(p, p));
-                });
-            }),
+            t.div(
+                { className: "flex flex-wrap gap-5" },
+                t.span({ className: "txt" }, i18n.t("email_template.placeholders")),
+                () => {
+                    return props.placeholders.map((p) => {
+                        return t.span({ className: "label sm" }, app.components.copyButton(p, p));
+                    });
+                },
+            ),
         );
     };
 

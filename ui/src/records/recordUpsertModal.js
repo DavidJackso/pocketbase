@@ -708,7 +708,7 @@ function recordUpsertModal(collection, rawRecord, modalSettings) {
                             null,
                             () =>
                                 i18n.t(data.isNew ? "record_upsert.create_title" : "record_upsert.edit_title")
-                                    + " ",
+                                + " ",
                         ),
                         t.strong(
                             { className: "txt-ellipsis collection-name", style: "max-width: 220px" },
@@ -844,7 +844,9 @@ function recordUpsertModal(collection, rawRecord, modalSettings) {
                                 },
                                 t.span(
                                     { className: "txt" },
-                                    () => (data.isAuthCollection ? i18n.t("record_upsert.account_tab") : i18n.t("record_upsert.main_tab")),
+                                    () => (data.isAuthCollection
+                                        ? i18n.t("record_upsert.account_tab")
+                                        : i18n.t("record_upsert.main_tab")),
                                 ),
                             ),
                             t.button(
@@ -1145,7 +1147,10 @@ function authFieldEmail(collection, data) {
                     {
                         type: "button",
                         className: () => `btn sm transparent ${data.record.emailVisibility ? "success" : "secondary"}`,
-                        ariaDescription: app.attrs.tooltip(i18n.t("record_upsert.toggle_email_visibility"), "top-right"),
+                        ariaDescription: app.attrs.tooltip(
+                            i18n.t("record_upsert.toggle_email_visibility"),
+                            "top-right",
+                        ),
                         onclick: () => {
                             data.record.emailVisibility = !data.record.emailVisibility;
                         },

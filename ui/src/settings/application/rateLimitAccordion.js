@@ -1,5 +1,5 @@
-import { basePredefinedTags, openRateLimitInfoModal } from "./rateLimitInfoModal";
 import { i18n } from "../../i18n.js";
+import { basePredefinedTags, openRateLimitInfoModal } from "./rateLimitInfoModal";
 
 // sort the specified rules list in place
 export function sortRules(rules) {
@@ -417,7 +417,9 @@ export function rateLimitAccordion(pageData) {
                                                 t.button(
                                                     {
                                                         type: "button",
-                                                        araiaDescription: app.attrs.tooltip(i18n.t("rate_limit.remove_rule")),
+                                                        araiaDescription: app.attrs.tooltip(
+                                                            i18n.t("rate_limit.remove_rule"),
+                                                        ),
                                                         className: "btn sm secondary transparent circle",
                                                         onclick: () => removeRule(i),
                                                     },

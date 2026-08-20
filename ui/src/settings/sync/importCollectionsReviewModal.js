@@ -1,5 +1,5 @@
-import { collectionsDiffTable } from "./collectionsDiffTable";
 import { i18n } from "../../i18n.js";
+import { collectionsDiffTable } from "./collectionsDiffTable";
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};

@@ -1,8 +1,8 @@
+import { i18n } from "../../i18n.js";
 import { settingsSidebar } from "../settingsSidebar";
 import { backupsForm } from "./backupsForm";
 import { backupsList } from "./backupsList";
 import { backupUploadButton } from "./backupUploadButton";
-import { i18n } from "../../i18n.js";
 
 export function pageBackupsSettings(route) {
     app.store.title = i18n.t("backups.title");

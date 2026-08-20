@@ -255,7 +255,8 @@ function collectionItem(collection, data) {
                     tabIndex: -1,
                     role: "button",
                     className: "pin",
-                    title: () => pinnedIndex >= 0 ? i18n.t("collections_sidebar.unpin") : i18n.t("collections_sidebar.pin"),
+                    title: () =>
+                        pinnedIndex >= 0 ? i18n.t("collections_sidebar.unpin") : i18n.t("collections_sidebar.pin"),
                     onclick: (e) => {
                         e.preventDefault();
                         e.stopPropagation();

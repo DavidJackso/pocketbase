@@ -1,6 +1,6 @@
+import { i18n } from "../../i18n.js";
 import { settingsSidebar } from "../settingsSidebar";
 import { cronsList } from "./cronsList";
-import { i18n } from "../../i18n.js";
 
 export function pageCronsSettings(route) {
     app.store.title = i18n.t("crons.title");

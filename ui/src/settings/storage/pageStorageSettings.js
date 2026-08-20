@@ -1,5 +1,5 @@
-import { settingsSidebar } from "../settingsSidebar";
 import { i18n } from "../../i18n.js";
+import { settingsSidebar } from "../settingsSidebar";
 
 export function pageStorageSettings() {
     app.store.title = i18n.t("storage_settings.title");
@@ -181,7 +181,10 @@ export function pageStorageSettings() {
                                     t.span({ className: "txt" }, i18n.t("storage_settings.webp_conversion")),
                                     t.i({
                                         className: "ri-information-line link-faded",
-                                        ariaDescription: app.attrs.tooltip(i18n.t("storage_settings.webp_conversion_help"), "right"),
+                                        ariaDescription: app.attrs.tooltip(
+                                            i18n.t("storage_settings.webp_conversion_help"),
+                                            "right",
+                                        ),
                                     }),
                                 ),
                             ),

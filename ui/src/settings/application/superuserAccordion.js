@@ -152,8 +152,7 @@ export function superuserAccordion(pageData) {
                         app.utils.pushUnique(ips, info.realIP);
                         pageData.formSettings.superuserIPs = ips;
                     },
-                    textContent: () =>
-                        info.isLoading ? "..." : (info.realIP + " (" + i18n.t("app_settings.you") + ")"),
+                    textContent: () => info.isLoading ? "..." : (info.realIP + " (" + i18n.t("app_settings.you") + ")"),
                 }),
             ),
         ),

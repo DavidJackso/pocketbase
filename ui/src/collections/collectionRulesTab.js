@@ -38,10 +38,9 @@ export function collectionRulesTab(upsertData) {
                     t.strong({
                         tabIndex: -1,
                         className: "m-l-auto link-hint",
-                        textContent: () =>
-                            (local.showRulesInfo
-                                ? i18n.t("collection_rules.hide_available_fields")
-                                : i18n.t("collection_rules.show_available_fields")),
+                        textContent: () => (local.showRulesInfo
+                            ? i18n.t("collection_rules.hide_available_fields")
+                            : i18n.t("collection_rules.show_available_fields")),
                         onclick: () => (local.showRulesInfo = !local.showRulesInfo),
                     }),
                 ),

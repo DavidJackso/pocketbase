@@ -210,7 +210,11 @@ function request(collection) {
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "newEmail ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "newEmail ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.new_email_send_request_desc")),
                 ),
@@ -276,7 +280,11 @@ function confirm(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "password ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.account_password_confirm_email_change")),
                 ),

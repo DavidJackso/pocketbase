@@ -1,10 +1,10 @@
+import { i18n } from "../i18n.js";
 import { emailTemplateAccordion } from "./emailTemplateAccordion";
 import { mfaAccordion } from "./mfaAccordion";
 import { oauth2Accordion } from "./oauth2Accordion";
 import { otpAccordion } from "./otpAccordion";
 import { passwordAuthAccordion } from "./passwordAuthAccordion";
 import { tokenOptionsAccordion } from "./tokenOptionsAccordion";
-import { i18n } from "../i18n.js";
 
 export function collectionAuthOptionsTab(upsertData) {
     const uniqueId = "options_" + app.utils.randomString();

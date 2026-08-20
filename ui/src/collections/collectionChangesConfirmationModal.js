@@ -259,7 +259,10 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                                 { className: "list-item" },
                                 () => i18n.t("collection_changes.multiple_to_single") + " ",
                                 t.strong({ className: "label warning" }, field.name || field.id),
-                                t.em({ className: "txt-sm" }, () => " (" + i18n.t("collection_changes.keeps_last_item") + ")"),
+                                t.em(
+                                    { className: "txt-sm" },
+                                    () => " (" + i18n.t("collection_changes.keeps_last_item") + ")",
+                                ),
                             );
                         });
                     },
@@ -279,7 +282,10 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                                 { className: "list-item" },
                                 t.div(
                                     { className: "content" },
-                                    t.span({ className: "txt" }, () => i18n.t("collection_changes.changed_api_rule_for") + " "),
+                                    t.span(
+                                        { className: "txt" },
+                                        () => i18n.t("collection_changes.changed_api_rule_for") + " ",
+                                    ),
                                     t.code(null, ruleChange.prop),
                                 ),
                                 t.small({ className: "txt-bold" }, i18n.t("collection_changes.old")),

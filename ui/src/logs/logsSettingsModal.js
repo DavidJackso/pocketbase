@@ -1,5 +1,5 @@
-import { defaultLogLevels } from "./defaultLogLevels";
 import { i18n } from "../i18n.js";
+import { defaultLogLevels } from "./defaultLogLevels";
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};

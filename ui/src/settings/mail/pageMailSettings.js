@@ -1,16 +1,31 @@
-import { settingsSidebar } from "../settingsSidebar";
 import { i18n } from "../../i18n.js";
+import { settingsSidebar } from "../settingsSidebar";
 
 export function pageMailSettings(route) {
     app.store.title = i18n.t("mail_settings.title");
 
     const tlsOptions = [
-        { get label() { return i18n.t("mail_settings.tls_auto"); }, value: false },
-        { get label() { return i18n.t("mail_settings.tls_always"); }, value: true },
+        {
+            get label() {
+                return i18n.t("mail_settings.tls_auto");
+            },
+            value: false,
+        },
+        {
+            get label() {
+                return i18n.t("mail_settings.tls_always");
+            },
+            value: true,
+        },
     ];
 
     const authMethods = [
-        { get label() { return i18n.t("mail_settings.auth_plain"); }, value: "PLAIN" },
+        {
+            get label() {
+                return i18n.t("mail_settings.auth_plain");
+            },
+            value: "PLAIN",
+        },
         { label: "LOGIN", value: "LOGIN" },
     ];
 
@@ -280,7 +295,10 @@ export function pageMailSettings(route) {
                                             { className: "col-lg-3" },
                                             t.div(
                                                 { className: "field" },
-                                                t.label({ htmlFor: "smtp.tls" }, i18n.t("mail_settings.tls_encryption")),
+                                                t.label(
+                                                    { htmlFor: "smtp.tls" },
+                                                    i18n.t("mail_settings.tls_encryption"),
+                                                ),
                                                 app.components.select({
                                                     id: "smtp.tls",
                                                     name: "smtp.tls",
@@ -297,7 +315,10 @@ export function pageMailSettings(route) {
                                             { className: "col-lg-3" },
                                             t.div(
                                                 { className: "field" },
-                                                t.label({ htmlFor: "smtp.authMethod" }, i18n.t("mail_settings.auth_method")),
+                                                t.label(
+                                                    { htmlFor: "smtp.authMethod" },
+                                                    i18n.t("mail_settings.auth_method"),
+                                                ),
                                                 app.components.select({
                                                     id: "smtp.authMethod",
                                                     name: "smtp.authMethod",
@@ -317,10 +338,15 @@ export function pageMailSettings(route) {
                                                 { className: "field" },
                                                 t.label(
                                                     { htmlFor: "smtp.localName" },
-                                                    t.span({ className: "txt" }, i18n.t("mail_settings.ehlo_helo_domain")),
+                                                    t.span(
+                                                        { className: "txt" },
+                                                        i18n.t("mail_settings.ehlo_helo_domain"),
+                                                    ),
                                                     t.i({
                                                         className: "ri-information-line link-hint tooltip-top",
-                                                        ariaDescription: app.attrs.tooltip(i18n.t("mail_settings.ehlo_helo_help")),
+                                                        ariaDescription: app.attrs.tooltip(
+                                                            i18n.t("mail_settings.ehlo_helo_help"),
+                                                        ),
                                                     }),
                                                 ),
                                                 t.input({

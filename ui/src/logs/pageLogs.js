@@ -1,6 +1,6 @@
+import { i18n } from "../i18n.js";
 import { logsChart } from "./logsChart";
 import { logsList } from "./logsList";
-import { i18n } from "../i18n.js";
 
 export function pageLogs(route) {
     app.store.title = i18n.t("logs.title");

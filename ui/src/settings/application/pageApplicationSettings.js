@@ -1,9 +1,9 @@
+import { i18n } from "../../i18n.js";
 import { settingsSidebar } from "../settingsSidebar";
 import { batchAccordion } from "./batchAccordion";
 import { rateLimitAccordion, sortRules } from "./rateLimitAccordion";
 import { superuserAccordion } from "./superuserAccordion";
 import { trustedProxyAccordion } from "./trustedProxyAccordion";
-import { i18n } from "../../i18n.js";
 
 export function pageApplicationSettings() {
     app.store.title = i18n.t("app_settings.title");
@@ -253,7 +253,9 @@ export function pageApplicationSettings() {
                                     t.span({ className: "txt" }, i18n.t("app_settings.hide_lock_controls")),
                                     t.i({
                                         className: "ri-information-line link-hint",
-                                        ariaDescription: app.attrs.tooltip(i18n.t("app_settings.hide_lock_controls_help")),
+                                        ariaDescription: app.attrs.tooltip(
+                                            i18n.t("app_settings.hide_lock_controls_help"),
+                                        ),
                                     }),
                                 ),
                             ),

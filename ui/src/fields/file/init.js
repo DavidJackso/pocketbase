@@ -1,9 +1,9 @@
+import { i18n } from "../../i18n.js";
 import { input } from "./input";
 import { onrecordduplicate } from "./onrecordduplicate";
 import { onrecordsave } from "./onrecordsave";
 import { settings } from "./settings";
 import { view } from "./view";
-import { i18n } from "../../i18n.js";
 
 window.app = window.app || {};
 window.app.fieldTypes = window.app.fieldTypes || {};

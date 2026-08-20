@@ -8,10 +8,30 @@ export function backupsForm(propsArg = {}) {
     const watchers = app.utils.extendStore(props, propsArg);
 
     const presets = [
-        { cron: "0 0 * * *", get label() { return i18n.t("backups.preset_daily"); } },
-        { cron: "0 0 * * 0", get label() { return i18n.t("backups.preset_weekly_sunday"); } },
-        { cron: "0 0 * * 1,3", get label() { return i18n.t("backups.preset_mon_wed"); } },
-        { cron: "0 0 1 * *", get label() { return i18n.t("backups.preset_monthly"); } },
+        {
+            cron: "0 0 * * *",
+            get label() {
+                return i18n.t("backups.preset_daily");
+            },
+        },
+        {
+            cron: "0 0 * * 0",
+            get label() {
+                return i18n.t("backups.preset_weekly_sunday");
+            },
+        },
+        {
+            cron: "0 0 * * 1,3",
+            get label() {
+                return i18n.t("backups.preset_mon_wed");
+            },
+        },
+        {
+            cron: "0 0 1 * *",
+            get label() {
+                return i18n.t("backups.preset_monthly");
+            },
+        },
     ];
 
     const data = store({
@@ -231,7 +251,10 @@ export function backupsForm(propsArg = {}) {
                                         { className: "col-lg-6" },
                                         t.div(
                                             { className: "field" },
-                                            t.label({ htmlFor: "backups.cronMaxKeep" }, i18n.t("backups.max_auto_backups")),
+                                            t.label(
+                                                { htmlFor: "backups.cronMaxKeep" },
+                                                i18n.t("backups.max_auto_backups"),
+                                            ),
                                             t.input({
                                                 id: "backups.cronMaxKeep",
                                                 name: "backups.cronMaxKeep",

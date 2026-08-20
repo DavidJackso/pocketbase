@@ -277,7 +277,10 @@ function rules(data) {
                                                 return local.activeRuleOption.emptyLabel;
                                             }
 
-                                            return t.span({ className: "label info" }, i18n.t("collections_overview.public"));
+                                            return t.span(
+                                                { className: "label info" },
+                                                i18n.t("collections_overview.public"),
+                                            );
                                         }
 
                                         return app.components.codeBlock({

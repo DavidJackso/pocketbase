@@ -1,5 +1,5 @@
-import { settingsSidebar } from "../settingsSidebar";
 import { i18n } from "../../i18n.js";
+import { settingsSidebar } from "../settingsSidebar";
 
 export function pageExportCollections(route) {
     app.store.title = i18n.t("sync.export_title");

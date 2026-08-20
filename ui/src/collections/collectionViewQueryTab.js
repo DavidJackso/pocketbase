@@ -142,7 +142,10 @@ export function collectionViewQueryTab(upsertData) {
                             {
                                 hidden: () => !local.testError,
                                 className: "query-state",
-                                ariaDescription: app.attrs.tooltip(i18n.t("collection_view_query.invalid_query_short"), "left"),
+                                ariaDescription: app.attrs.tooltip(
+                                    i18n.t("collection_view_query.invalid_query_short"),
+                                    "left",
+                                ),
                             },
                             t.i({ className: "ri-error-warning-fill txt-danger", ariaHidden: true }),
                         ),

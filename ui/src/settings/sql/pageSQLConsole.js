@@ -1,5 +1,5 @@
-import { settingsSidebar } from "../settingsSidebar";
 import { i18n } from "../../i18n.js";
+import { settingsSidebar } from "../settingsSidebar";
 
 const SQL_HISTORY_STORAGE_KEY = "pbSQLConsoleHistory";
 
@@ -242,7 +242,10 @@ export function pageSQLConsole(route) {
                         },
                         () => {
                             if (!pageData.executedHistory.length) {
-                                return t.span({ className: "txt txt-hint p-5" }, i18n.t("sql_console.no_recent_queries"));
+                                return t.span(
+                                    { className: "txt txt-hint p-5" },
+                                    i18n.t("sql_console.no_recent_queries"),
+                                );
                             }
 
                             return pageData.executedHistory.map((item) => {
@@ -356,7 +359,11 @@ export function pageSQLConsole(route) {
                     // show the affected rows only when a non empty value is returned
                     // to avoid ambiguity with drivers that don't support it
                     if (pageData.result?.affectedRows) {
-                        return t.p(null, () => i18n.t("sql_console.affected_rows") + " ", pageData.result?.affectedRows);
+                        return t.p(
+                            null,
+                            () => i18n.t("sql_console.affected_rows") + " ",
+                            pageData.result?.affectedRows,
+                        );
                     }
                 },
             ),
@@ -438,7 +445,9 @@ export function pageSQLConsole(route) {
                                     t.span({
                                         className: "txt",
                                         textContent: () =>
-                                            i18n.t("sql_console.load_remaining", { count: pageData.totalRemainingRows }),
+                                            i18n.t("sql_console.load_remaining", {
+                                                count: pageData.totalRemainingRows,
+                                            }),
                                     }),
                                 ),
                             ),

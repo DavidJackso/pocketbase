@@ -1,5 +1,5 @@
-import { logLevel } from "./logLevel";
 import { i18n } from "../i18n.js";
+import { logLevel } from "./logLevel";
 
 const perPage = 50;
 

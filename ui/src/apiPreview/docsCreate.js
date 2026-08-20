@@ -1,7 +1,7 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
 import { filterSyntax } from "./filterSyntax";
-import { i18n } from "../i18n.js";
 
 export function docsCreate(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -219,7 +219,10 @@ curl -X POST \\
                                     return t.em(null, "(" + i18n.t("api_preview.optional") + ")");
                                 },
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(
+                                { className: "min-width" },
+                                t.span({ className: "label" }, i18n.t("api_preview.string")),
+                            ),
                             t.td(null, i18n.t("api_preview.auth_email_desc")),
                         ),
                         t.tr(
@@ -234,7 +237,10 @@ curl -X POST \\
                                     return t.em(null, "(" + i18n.t("api_preview.optional") + ")");
                                 },
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.boolean"))),
+                            t.td(
+                                { className: "min-width" },
+                                t.span({ className: "label" }, i18n.t("api_preview.boolean")),
+                            ),
                             t.td(
                                 null,
                                 i18n.t("api_preview.email_visibility_desc1"),
@@ -249,7 +255,10 @@ curl -X POST \\
                                 "password ",
                                 t.em(null, "(" + i18n.t("api_preview.required") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(
+                                { className: "min-width" },
+                                t.span({ className: "label" }, i18n.t("api_preview.string")),
+                            ),
                             t.td(null, i18n.t("api_preview.auth_password_field_desc")),
                         ),
                         t.tr(
@@ -259,7 +268,10 @@ curl -X POST \\
                                 "passwordConfirm ",
                                 t.em(null, "(" + i18n.t("api_preview.required") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(
+                                { className: "min-width" },
+                                t.span({ className: "label" }, i18n.t("api_preview.string")),
+                            ),
                             t.td(null, i18n.t("api_preview.auth_password_confirm_field_desc")),
                         ),
                         t.tr(
@@ -269,7 +281,10 @@ curl -X POST \\
                                 "verified ",
                                 t.em(null, "(" + i18n.t("api_preview.optional") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(
+                                { className: "min-width" },
+                                t.span({ className: "label" }, i18n.t("api_preview.string")),
+                            ),
                             t.td(
                                 null,
                                 t.p(null, i18n.t("api_preview.verified_field_desc1")),

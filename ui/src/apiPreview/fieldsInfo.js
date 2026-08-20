@@ -11,7 +11,12 @@ export function fieldsInfo() {
             value:
                 `// return all root level fields and only\n// "relField.someField" from expand\n?fields=*,expand.relField.someField`,
         }),
-        t.p(null, i18n.t("api_preview.fields_info_use") + " ", t.code(null, "*"), " " + i18n.t("api_preview.fields_info_target_depth")),
+        t.p(
+            null,
+            i18n.t("api_preview.fields_info_use") + " ",
+            t.code(null, "*"),
+            " " + i18n.t("api_preview.fields_info_target_depth"),
+        ),
         t.p(null, i18n.t("api_preview.fields_info_modifiers")),
         t.ul(
             null,

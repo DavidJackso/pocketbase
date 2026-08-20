@@ -1,7 +1,7 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
 import { filterSyntax } from "./filterSyntax";
-import { i18n } from "../i18n.js";
 
 export function docsList(collection) {
     const baseURL = app.utils.getApiExampleURL();

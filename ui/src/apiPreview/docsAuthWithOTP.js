@@ -1,6 +1,6 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
-import { i18n } from "../i18n.js";
 
 export function docsAuthWithOTP(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -287,7 +287,11 @@ function otpAuth(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "password ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.otp_password_desc")),
                 ),

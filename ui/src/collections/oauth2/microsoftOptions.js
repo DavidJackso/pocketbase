@@ -16,7 +16,12 @@ window.app.oauth2.microsoft = function(providerInfo, namePrefix, data) {
             label: () => {
                 return t.div(
                     { className: "option-content" },
-                    t.strong(null, i18n.t("oauth2.ms_graph_mail_field_a") + " ", t.code(null, "mail"), " " + i18n.t("oauth2.ms_graph_mail_field_b")),
+                    t.strong(
+                        null,
+                        i18n.t("oauth2.ms_graph_mail_field_a") + " ",
+                        t.code(null, "mail"),
+                        " " + i18n.t("oauth2.ms_graph_mail_field_b"),
+                    ),
                     t.br(),
                     t.small(
                         { className: "txt-hint" },
@@ -50,7 +55,13 @@ window.app.oauth2.microsoft = function(providerInfo, namePrefix, data) {
             label: () => {
                 return t.div(
                     { className: "option-content" },
-                    t.strong(null, t.code(null, "email"), " + ", t.code(null, "xms_edov"), " " + i18n.t("oauth2.ms_id_token_claims")),
+                    t.strong(
+                        null,
+                        t.code(null, "email"),
+                        " + ",
+                        t.code(null, "xms_edov"),
+                        " " + i18n.t("oauth2.ms_id_token_claims"),
+                    ),
                     t.br(),
                     t.small(
                         { className: "txt-hint" },
@@ -163,7 +174,11 @@ window.app.oauth2.microsoft = function(providerInfo, namePrefix, data) {
                     { className: "field-help" },
                     t.p(null, () => i18n.t("oauth2.default_scopes") + " ", t.code(null, "User.Read"), () => {
                         if (data.config.extra?.idTokenEmailClaim) {
-                            return [" " + i18n.t("common.and") + " ", t.code(null, "openid"), " (" + i18n.t("oauth2.for_id_token") + ")"];
+                            return [
+                                " " + i18n.t("common.and") + " ",
+                                t.code(null, "openid"),
+                                " (" + i18n.t("oauth2.for_id_token") + ")",
+                            ];
                         }
                     }, "."),
                     t.p(

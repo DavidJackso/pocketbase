@@ -407,7 +407,9 @@ function registerMediaButton(editor) {
                                         `
                                         <video controls width="300">
                                             <source src="${escapedUrl}" />
-                                            <p>${i18n.t("common.download")}: <a href="${escapedUrl}" download="${escapedName}">${escapedName}</a>.</p>
+                                            <p>${
+                                            i18n.t("common.download")
+                                        }: <a href="${escapedUrl}" download="${escapedName}">${escapedName}</a>.</p>
                                         </video>
                                     `,
                                     );

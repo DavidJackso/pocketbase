@@ -17,11 +17,31 @@ function mailTestModal(preselectedCollectionIdOrName = "", template = "") {
     const testRequestKey = "email_test_request";
 
     const templateOptions = [
-        { get label() { return i18n.t("mail_test.template_verification"); }, value: "verification" },
-        { get label() { return i18n.t("mail_test.template_password_reset"); }, value: "password-reset" },
-        { get label() { return i18n.t("mail_test.template_email_change"); }, value: "email-change" },
+        {
+            get label() {
+                return i18n.t("mail_test.template_verification");
+            },
+            value: "verification",
+        },
+        {
+            get label() {
+                return i18n.t("mail_test.template_password_reset");
+            },
+            value: "password-reset",
+        },
+        {
+            get label() {
+                return i18n.t("mail_test.template_email_change");
+            },
+            value: "email-change",
+        },
         { label: "OTP", value: "otp" },
-        { get label() { return i18n.t("mail_test.template_login_alert"); }, value: "login-alert" },
+        {
+            get label() {
+                return i18n.t("mail_test.template_login_alert");
+            },
+            value: "login-alert",
+        },
     ];
 
     const data = store({

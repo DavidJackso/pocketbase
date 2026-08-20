@@ -1,6 +1,6 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
-import { i18n } from "../i18n.js";
 
 export function docsAuthWithPassword(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -163,7 +163,11 @@ export function docsAuthWithPassword(collection) {
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "identity ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "identity ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(
                         null,
@@ -173,7 +177,11 @@ export function docsAuthWithPassword(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "identityField ", t.em(null, "(" + i18n.t("api_preview.optional") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "identityField ",
+                        t.em(null, "(" + i18n.t("api_preview.optional") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(
                         null,
@@ -184,7 +192,11 @@ export function docsAuthWithPassword(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "password ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.auth_record_password_desc")),
                 ),

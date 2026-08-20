@@ -1,5 +1,5 @@
-import { settings } from "./settings";
 import { i18n } from "../../i18n.js";
+import { settings } from "./settings";
 
 window.app = window.app || {};
 window.app.fieldTypes = window.app.fieldTypes || {};

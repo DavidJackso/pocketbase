@@ -33,14 +33,24 @@ export function pageRequestSuperuserPasswordReset(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
+            t.img({
+                className: "main-logo",
+                src: () => app.store.mainLogo,
+                ariaHidden: true,
+                alt: i18n.t("app.logo_alt"),
+            }),
             t.h5({ className: "m-t-10" }, () => app.store.title),
         ),
         () => {
             if (data.success) {
                 return t.div(
                     { pbEvent: "superuserPasswordResetAlert", className: "alert success txt-center" },
-                    t.p(null, i18n.t("auth.check") + " ", t.strong(null, data.email), " " + i18n.t("auth.for_recovery_link")),
+                    t.p(
+                        null,
+                        i18n.t("auth.check") + " ",
+                        t.strong(null, data.email),
+                        " " + i18n.t("auth.for_recovery_link"),
+                    ),
                 );
             }
 

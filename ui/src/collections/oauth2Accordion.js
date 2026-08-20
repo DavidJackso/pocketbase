@@ -116,7 +116,9 @@ export function oauth2Accordion(collection) {
                                     if (providerInfo.logo) {
                                         return t.img({
                                             src: "data:image/svg+xml;base64," + btoa(providerInfo.logo),
-                                            alt: i18n.t("record_upsert.provider_logo_alt", { provider: providerConfig.name }),
+                                            alt: i18n.t("record_upsert.provider_logo_alt", {
+                                                provider: providerConfig.name,
+                                            }),
                                         });
                                     }
 
@@ -246,7 +248,10 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.name" }, i18n.t("oauth2.mapped_full_name")),
+                                t.label(
+                                    { htmlFor: uniqueId + ".mappedFields.name" },
+                                    i18n.t("oauth2.mapped_full_name"),
+                                ),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.name",
                                     name: "oauth2.mappedFields.name",
@@ -263,7 +268,10 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.avatarURL" }, i18n.t("oauth2.mapped_avatar")),
+                                t.label(
+                                    { htmlFor: uniqueId + ".mappedFields.avatarURL" },
+                                    i18n.t("oauth2.mapped_avatar"),
+                                ),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.avatarURL",
                                     name: "oauth2.mappedFields.avatarURL",
@@ -297,7 +305,10 @@ export function oauth2Accordion(collection) {
                             { className: "col-sm-6" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: uniqueId + ".mappedFields.username" }, i18n.t("oauth2.mapped_username")),
+                                t.label(
+                                    { htmlFor: uniqueId + ".mappedFields.username" },
+                                    i18n.t("oauth2.mapped_username"),
+                                ),
                                 app.components.select({
                                     id: uniqueId + ".mappedFields.username",
                                     name: "oauth2.mappedFields.username",

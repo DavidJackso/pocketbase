@@ -1,6 +1,6 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
-import { i18n } from "../i18n.js";
 
 export function docsAuthRefresh(collection) {
     const baseURL = app.utils.getApiExampleURL();

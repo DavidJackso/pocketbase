@@ -1,6 +1,6 @@
+import { i18n } from "../i18n.js";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
-import { i18n } from "../i18n.js";
 
 export function docsAuthWithOAuth2(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -185,7 +185,11 @@ export function docsAuthWithOAuth2(collection) {
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "provider ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "provider ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.oauth2_provider_name_desc")),
                 ),
@@ -197,19 +201,31 @@ export function docsAuthWithOAuth2(collection) {
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "codeVerifier ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "codeVerifier ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.oauth2_code_verifier_desc")),
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "redirectURL ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "redirectURL ",
+                        t.em(null, "(" + i18n.t("api_preview.required") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, i18n.t("api_preview.oauth2_redirect_url_desc")),
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "createData ", t.em(null, "(" + i18n.t("api_preview.optional") + ")")),
+                    t.td(
+                        { className: "min-width" },
+                        "createData ",
+                        t.em(null, "(" + i18n.t("api_preview.optional") + ")"),
+                    ),
                     t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(
                         null,

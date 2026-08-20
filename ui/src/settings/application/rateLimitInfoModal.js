@@ -6,10 +6,20 @@ export let basePredefinedTags = [
     { value: "*:create" },
     { value: "*:update" },
     { value: "*:delete" },
-    { value: "*:file", get description() { return i18n.t("rate_limit.tag_files_desc"); } },
+    {
+        value: "*:file",
+        get description() {
+            return i18n.t("rate_limit.tag_files_desc");
+        },
+    },
     { value: "*:listAuthMethods" },
     { value: "*:authRefresh" },
-    { value: "*:auth", get description() { return i18n.t("rate_limit.tag_auth_desc"); } },
+    {
+        value: "*:auth",
+        get description() {
+            return i18n.t("rate_limit.tag_auth_desc");
+        },
+    },
     { value: "*:authWithPassword" },
     { value: "*:authWithOAuth2" },
     { value: "*:authWithOTP" },

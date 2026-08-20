@@ -1,5 +1,5 @@
-import { logLevel } from "./logLevel";
 import { i18n } from "../i18n.js";
+import { logLevel } from "./logLevel";
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
@@ -256,7 +256,7 @@ function logPreviewModal(logIdOrModel, settings) {
             { className: "modal-footer" },
             t.button(
                 {
-    type: "button",
+                    type: "button",
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },

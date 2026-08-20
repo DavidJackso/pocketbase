@@ -1,5 +1,5 @@
-import { fieldsInfo } from "./fieldsInfo";
 import { i18n } from "../i18n.js";
+import { fieldsInfo } from "./fieldsInfo";
 
 export function docsListAuthMethods(collection) {
     const baseURL = app.utils.getApiExampleURL();

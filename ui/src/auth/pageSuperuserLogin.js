@@ -56,7 +56,12 @@ export function pageSuperuserLogin(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
+            t.img({
+                className: "main-logo",
+                src: () => app.store.mainLogo,
+                ariaHidden: true,
+                alt: i18n.t("app.logo_alt"),
+            }),
             t.h5(
                 { className: "m-t-10" },
                 t.span(null, () => app.store.title),

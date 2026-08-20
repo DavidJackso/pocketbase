@@ -1,6 +1,6 @@
+import { i18n } from "../../i18n.js";
 import { openBackupCreateModal } from "./backupCreateModal";
 import { openBackupRestoreModal } from "./backupRestoreModal";
-import { i18n } from "../../i18n.js";
 
 export function backupsList(propsArg = {}) {
     const props = store({
