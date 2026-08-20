@@ -954,5 +954,7 @@
     "common.something_went_wrong": "Что-то пошло не так!",
     "record_upsert.failed_to_load_record": "Не удалось загрузить запись.",
     "record_upsert.record_preview_suffix": "предпросмотр записи",
-    "common.loading_plugins": "Загрузка плагинов..."
+    "common.loading_plugins": "Загрузка плагинов...",
+    "field_settings.localized": "Локализовано",
+    "field_settings.localized_help": "Хранить отдельное значение для каждого языка. Фильтрация, сортировка и поиск всегда используют значение базовой локали приложения; остальные языковые значения используются только для отображения."
 }

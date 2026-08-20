@@ -954,5 +954,7 @@
     "common.loading_plugins": "Loading plugins...",
     "collection_rules.manage_rule_help1a": "This rule is executed in addition to the",
     "field_settings.help_text": "Help text",
-    "sync.merge_with_existing": "Merge with the existing collections"
+    "sync.merge_with_existing": "Merge with the existing collections",
+    "field_settings.localized": "Localized",
+    "field_settings.localized_help": "Store one value per language. Filtering, sorting and search always use the app-wide base locale value; other locale values are only used for display."
 }
