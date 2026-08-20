@@ -1165,6 +1165,64 @@ func TestRecordCrudView(t *testing.T) {
 	}
 }
 
+func TestRecordCrudViewLocalizedField(t *testing.T) {
+	t.Parallel()
+
+	setupLocalizedCollection := func(t testing.TB, app *tests.TestApp) {
+		collection := core.NewBaseCollection("test_localized_view")
+		collection.Fields.Add(
+			&core.TextField{Name: "id", PrimaryKey: true, Pattern: `^[a-z0-9]+$`, Required: true},
+			&core.TextField{Name: "title", Localized: true},
+		)
+		collection.ViewRule = types.Pointer("")
+		if err := app.Save(collection); err != nil {
+			t.Fatal(err)
+		}
+
+		record := core.NewRecord(collection)
+		record.SetApp(app)
+		record.Id = "rec1"
+		record.Set("title", `{"en":"hello","ru":"привет"}`)
+		if err := app.Save(record); err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	scenarios := []tests.ApiScenario{
+		{
+			Name:            "no locale query param falls back to the base locale",
+			Method:          http.MethodGet,
+			URL:             "/api/collections/test_localized_view/records/rec1",
+			BeforeTestFunc:  func(t testing.TB, app *tests.TestApp, e *core.ServeEvent) { setupLocalizedCollection(t, app) },
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"title":"hello"`},
+			ExpectedEvents:  map[string]int{"*": 0, "OnRecordViewRequest": 1, "OnRecordEnrich": 1},
+		},
+		{
+			Name:            "?locale=ru returns the ru value",
+			Method:          http.MethodGet,
+			URL:             "/api/collections/test_localized_view/records/rec1?locale=ru",
+			BeforeTestFunc:  func(t testing.TB, app *tests.TestApp, e *core.ServeEvent) { setupLocalizedCollection(t, app) },
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"title":"привет"`},
+			ExpectedEvents:  map[string]int{"*": 0, "OnRecordViewRequest": 1, "OnRecordEnrich": 1},
+		},
+		{
+			Name:            "?locale=fr (not stored) falls back to the base locale",
+			Method:          http.MethodGet,
+			URL:             "/api/collections/test_localized_view/records/rec1?locale=fr",
+			BeforeTestFunc:  func(t testing.TB, app *tests.TestApp, e *core.ServeEvent) { setupLocalizedCollection(t, app) },
+			ExpectedStatus:  200,
+			ExpectedContent: []string{`"title":"hello"`},
+			ExpectedEvents:  map[string]int{"*": 0, "OnRecordViewRequest": 1, "OnRecordEnrich": 1},
+		},
+	}
+
+	for _, scenario := range scenarios {
+		scenario.Test(t)
+	}
+}
+
 func TestRecordCrudDelete(t *testing.T) {
 	t.Parallel()
 
