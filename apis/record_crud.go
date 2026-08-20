@@ -233,6 +233,7 @@ func recordCreate(responseWriteAfterTx bool, optFinalizer func(data any) error) 
 		}
 
 		record := core.NewRecord(collection)
+		record.SetApp(e.App)
 
 		data, err := recordDataFromRequest(e, record)
 		if err != nil {

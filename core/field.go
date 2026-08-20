@@ -270,3 +270,24 @@ func checkForVia(value any) error {
 func noopSetter(record *Record, raw any) {
 	// do nothing
 }
+
+// defaultBaseLocale is the fallback base locale used for Localized
+// TextField/EditorField values when the app-wide setting is unset or
+// unavailable (eg. app is nil, such as for a record constructed via
+// NewRecord() without a follow-up SetApp() call).
+const defaultBaseLocale = "en"
+
+// BaseLocale returns the app-wide base locale used for validating and
+// filtering/sorting Localized text/editor fields. Defaults to "en".
+func BaseLocale(app App) string {
+	if app == nil {
+		return defaultBaseLocale
+	}
+
+	base := app.Settings().Localization.BaseLocale
+	if base == "" {
+		return defaultBaseLocale
+	}
+
+	return base
+}
