@@ -1,0 +1,3 @@
+import{i as e}from"./index-N8C3j6FQ.js";function n(){return t.div({className:`api-fields-info`},t.p(null,e.t(`api_preview.fields_info_intro`)),app.components.codeBlock({value:`// return all root level fields and only
+// "relField.someField" from expand
+?fields=*,expand.relField.someField`}),t.p(null,e.t(`api_preview.fields_info_use`)+` `,t.code(null,`*`),` `+e.t(`api_preview.fields_info_target_depth`)),t.p(null,e.t(`api_preview.fields_info_modifiers`)),t.ul(null,t.li(null,t.code(null,`:excerpt(maxLength, withEllipsis?)`),t.br(),e.t(`api_preview.fields_info_excerpt`)+` `,t.code(null,`?fields=*,someTextField:excerpt(200,true)`))))}export{n as t};
