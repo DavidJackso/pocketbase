@@ -8,6 +8,7 @@ import (
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
+	"github.com/pocketbase/pocketbase/tools/types"
 )
 
 func TestTextFieldBaseMethods(t *testing.T) {
@@ -59,6 +60,169 @@ func TestTextFieldPrepareValue(t *testing.T) {
 
 			if vStr != s.expected {
 				t.Fatalf("Expected %q, got %q", s.expected, v)
+			}
+		})
+	}
+}
+
+func TestTextFieldLocalizedColumnType(t *testing.T) {
+	t.Parallel()
+
+	f := &core.TextField{Localized: true}
+	if got := f.ColumnType(nil); got != "JSON DEFAULT NULL" {
+		t.Fatalf("expected JSON DEFAULT NULL, got %q", got)
+	}
+
+	plain := &core.TextField{}
+	if got := plain.ColumnType(nil); got != "TEXT DEFAULT '' NOT NULL" {
+		t.Fatalf("plain TextField ColumnType regressed, got %q", got)
+	}
+}
+
+func TestTextFieldLocalizedPrepareAndValidate(t *testing.T) {
+	t.Parallel()
+
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_localized")
+
+	scenarios := []struct {
+		name      string
+		field     *core.TextField
+		raw       any
+		expectErr bool
+	}{
+		{
+			name:      "plain string gets wrapped in base locale",
+			field:     &core.TextField{Name: "title", Localized: true, Required: true},
+			raw:       "hello",
+			expectErr: false,
+		},
+		{
+			name:      "object with base locale key",
+			field:     &core.TextField{Name: "title", Localized: true, Required: true},
+			raw:       `{"en":"hello","ru":"привет"}`,
+			expectErr: false,
+		},
+		{
+			name:      "required but missing base locale key",
+			field:     &core.TextField{Name: "title", Localized: true, Required: true},
+			raw:       `{"ru":"привет"}`,
+			expectErr: true,
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			record := core.NewRecord(collection)
+			record.SetApp(app)
+
+			prepared, err := s.field.PrepareValue(record, s.raw)
+			if err != nil {
+				t.Fatalf("PrepareValue error: %v", err)
+			}
+			record.SetRaw(s.field.Name, prepared)
+
+			err = s.field.ValidateValue(context.Background(), app, record)
+			hasErr := err != nil
+			if hasErr != s.expectErr {
+				t.Fatalf("expected error=%v, got %v (%v)", s.expectErr, hasErr, err)
+			}
+		})
+	}
+}
+
+func TestTextFieldLocalizedRespectsConfiguredBaseLocale(t *testing.T) {
+	t.Parallel()
+
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	app.Settings().Localization.BaseLocale = "ru"
+
+	collection := core.NewBaseCollection("test_localized_base")
+	f := &core.TextField{Name: "title", Localized: true, Required: true}
+
+	record := core.NewRecord(collection)
+	record.SetApp(app)
+
+	// a plain string write must be keyed under the configured "ru" base
+	// locale, not the "en" default
+	prepared, err := f.PrepareValue(record, "привет")
+	if err != nil {
+		t.Fatal(err)
+	}
+	record.SetRaw(f.Name, prepared)
+
+	if err := f.ValidateValue(context.Background(), app, record); err != nil {
+		t.Fatalf("expected valid record with ru base locale populated, got %v", err)
+	}
+
+	raw, ok := record.GetRaw(f.Name).(types.JSONRaw)
+	if !ok {
+		t.Fatalf("expected types.JSONRaw stored value, got %T", record.GetRaw(f.Name))
+	}
+	if !strings.Contains(raw.String(), `"ru":"привет"`) {
+		t.Fatalf("expected the value to be keyed under \"ru\", got %s", raw.String())
+	}
+
+	// missing the configured base locale ("ru") must fail even if "en" is present
+	f2 := &core.TextField{Name: "title2", Localized: true, Required: true}
+	record.SetRaw(f2.Name, types.JSONRaw(`{"en":"hello"}`))
+	if err := f2.ValidateValue(context.Background(), app, record); err == nil {
+		t.Fatal("expected validation error when the configured base locale key is missing")
+	}
+}
+
+func TestTextFieldLocalizedFindSetter(t *testing.T) {
+	t.Parallel()
+
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_localized_setter")
+	f := &core.TextField{Name: "title", Localized: true}
+	collection.Fields.Add(f)
+
+	record := core.NewRecord(collection)
+	record.SetApp(app)
+
+	record.Set("title", "hello")
+
+	raw, ok := record.GetRaw("title").(types.JSONRaw)
+	if !ok {
+		t.Fatalf("expected types.JSONRaw stored value after Set(), got %T", record.GetRaw("title"))
+	}
+	if !strings.Contains(raw.String(), `"en":"hello"`) {
+		t.Fatalf(`expected the value to be wrapped as {"en":"hello"}, got %s`, raw.String())
+	}
+}
+
+func TestTextFieldLocalizedValidateSettings(t *testing.T) {
+	t.Parallel()
+
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_localized_settings")
+
+	scenarios := []struct {
+		name      string
+		field     *core.TextField
+		expectErr bool
+	}{
+		{"localized text field", &core.TextField{Id: "f1", Name: "title", Localized: true}, false},
+		{"localized + primary key", &core.TextField{Id: "f2", Name: "id", Localized: true, PrimaryKey: true, Pattern: `^[a-z0-9]+$`, Required: true}, true},
+		{"localized + autogenerate pattern", &core.TextField{Id: "f3", Name: "slug", Localized: true, AutogeneratePattern: "[a-z0-9]{10}"}, true},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			err := s.field.ValidateSettings(context.Background(), app, collection)
+			hasErr := err != nil
+			if hasErr != s.expectErr {
+				t.Fatalf("expected error=%v, got %v (%v)", s.expectErr, hasErr, err)
 			}
 		})
 	}
