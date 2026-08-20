@@ -116,6 +116,10 @@ func (validator *collectionValidator) run() error {
 			validation.By(validator.checkUniqueName),
 		),
 		validation.Field(
+			&validator.new.Label,
+			validation.Length(0, 255),
+		),
+		validation.Field(
 			&validator.new.Fields,
 			validation.By(validator.checkFieldDuplicates),
 			validation.By(validator.checkMinFields),

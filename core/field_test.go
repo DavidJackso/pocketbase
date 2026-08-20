@@ -318,3 +318,60 @@ func testDefaultFieldHelpValidation[T any](t *testing.T) {
 		})
 	}
 }
+
+func testDefaultFieldLabelValidation[T any](t *testing.T) {
+	app, _ := tests.NewTestApp()
+	defer app.Cleanup()
+
+	collection := core.NewBaseCollection("test_collection")
+
+	scenarios := []struct {
+		name        string
+		json        string
+		expectError bool
+	}{
+		{
+			"empty value",
+			`{}`,
+			false,
+		},
+		{
+			"< max limit",
+			`{"label":"abc"}`,
+			false,
+		},
+		{
+			"= max limit",
+			`{"label":"` + strings.Repeat("a", 200) + `"}`,
+			false,
+		},
+		{
+			"> max limit",
+			`{"label":"` + strings.Repeat("a", 201) + `"}`,
+			true,
+		},
+	}
+
+	for _, s := range scenarios {
+		t.Run("[label] "+s.name, func(t *testing.T) {
+			var zeroField T
+
+			field, ok := reflect.New(reflect.TypeOf(zeroField)).Interface().(core.Field)
+			if !ok {
+				t.Fatalf("Expected core.Field instance, got %T", zeroField)
+			}
+
+			err := json.Unmarshal([]byte(s.json), &field)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			errs, _ := field.ValidateSettings(context.Background(), app, collection).(validation.Errors)
+
+			hasErr := errs["label"] != nil
+			if hasErr != s.expectError {
+				t.Fatalf("Expected hasErr %v, got %v (%v)", s.expectError, hasErr, errs)
+			}
+		})
+	}
+}

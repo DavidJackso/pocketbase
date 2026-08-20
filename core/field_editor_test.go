@@ -164,6 +164,7 @@ func TestEditorFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeEditor)
 	testDefaultFieldNameValidation(t, core.FieldTypeEditor)
 	testDefaultFieldHelpValidation[core.EditorField](t)
+	testDefaultFieldLabelValidation[core.EditorField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

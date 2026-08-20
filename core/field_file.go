@@ -77,6 +77,10 @@ type FileField struct {
 	// Name (required) is the unique name of the field.
 	Name string `form:"name" json:"name"`
 
+	// Label is an optional, human-friendly display name for the field.
+	// The Name remains the technical/API identifier and is left untouched.
+	Label string `form:"label" json:"label"`
+
 	// Id is the unique stable field identifier.
 	//
 	// It is automatically generated from the name when adding to a collection FieldsList.
@@ -228,6 +232,7 @@ func (f *FileField) ValidateSettings(ctx context.Context, app App, collection *C
 		validation.Field(&f.Id, validation.By(DefaultFieldIdValidationRule)),
 		validation.Field(&f.Name, validation.By(DefaultFieldNameValidationRule)),
 		validation.Field(&f.Help, validation.By(DefaultFieldHelpValidationRule)),
+		validation.Field(&f.Label, validation.By(DefaultFieldLabelValidationRule)),
 		validation.Field(&f.MaxSelect, validation.Min(0), validation.Max(maxSafeJSONInt)),
 		validation.Field(&f.MaxSize, validation.Min(0), validation.Max(maxSafeJSONInt)),
 		validation.Field(&f.Thumbs, validation.Each(

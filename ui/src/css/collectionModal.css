@@ -9,6 +9,20 @@
             max-width: 220px;
         }
     }
+    /* separate the Label field from the Type button the same way the
+       button is already visually split off from the Name field */
+    .fields .addon + .prop-label {
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: 0;
+            width: 1px;
+            background: var(--surfaceAlt4Color);
+        }
+    }
 }
 
 .new-collection-field-btn-wrapper {

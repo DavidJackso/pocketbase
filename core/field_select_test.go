@@ -338,6 +338,7 @@ func TestSelectFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeSelect)
 	testDefaultFieldNameValidation(t, core.FieldTypeSelect)
 	testDefaultFieldHelpValidation[core.SelectField](t)
+	testDefaultFieldLabelValidation[core.SelectField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

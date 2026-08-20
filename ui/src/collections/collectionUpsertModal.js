@@ -420,7 +420,7 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                         t.span(
                             null,
                             () =>
-                                (data.isNew ? i18n.t("record_upsert.create_prefix") : i18n.t("record_upsert.edit_prefix"))
+                                i18n.t(data.isNew ? "collection_upsert.create_title" : "collection_upsert.edit_title")
                                     + " ",
                         ),
                         t.strong(
@@ -428,9 +428,8 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                 hidden: () => data.isNew,
                                 className: "txt-ellipsis collection-name",
                             },
-                            () => data.originalCollection?.name,
+                            () => data.originalCollection?.label || data.originalCollection?.name,
                         ),
-                        t.span(null, () => " " + i18n.t("collection_upsert.collection_suffix")),
                     ),
                     t.div({ className: "flex-fill" }),
                     () => {
@@ -601,6 +600,22 @@ function collectionUpsertModal(rawCollection, modalSettings) {
                                     return options;
                                 },
                             ),
+                        ),
+                        t.div(
+                            { className: "field prop-label" },
+                            t.label({
+                                htmlFor: uniqueId + "col_label",
+                                textContent: i18n.t("collection_upsert.label_label"),
+                            }),
+                            t.input({
+                                id: uniqueId + "col_label",
+                                type: "text",
+                                name: "label",
+                                spellcheck: false,
+                                placeholder: i18n.t("collection_upsert.label_placeholder"),
+                                value: () => data.collection.label || "",
+                                oninput: (e) => (data.collection.label = e.target.value),
+                            }),
                         ),
                     ),
                 ),
