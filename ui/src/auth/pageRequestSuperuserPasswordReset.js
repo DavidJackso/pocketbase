@@ -1,5 +1,7 @@
+import { i18n } from "../i18n.js";
+
 export function pageRequestSuperuserPasswordReset(route) {
-    app.store.title = "Forgotten superuser password";
+    app.store.title = i18n.t("auth.forgotten_superuser_password");
 
     const data = store({
         email: "",
@@ -31,14 +33,14 @@ export function pageRequestSuperuserPasswordReset(route) {
         },
         t.header(
             { className: "txt-center m-b-base" },
-            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: "App logo" }),
+            t.img({ className: "main-logo", src: () => app.store.mainLogo, ariaHidden: true, alt: i18n.t("app.logo_alt") }),
             t.h5({ className: "m-t-10" }, () => app.store.title),
         ),
         () => {
             if (data.success) {
                 return t.div(
                     { pbEvent: "superuserPasswordResetAlert", className: "alert success txt-center" },
-                    t.p(null, "Check ", t.strong(null, data.email), " for the recovery link!"),
+                    t.p(null, i18n.t("auth.check") + " ", t.strong(null, data.email), " " + i18n.t("auth.for_recovery_link")),
                 );
             }
 
@@ -55,11 +57,11 @@ export function pageRequestSuperuserPasswordReset(route) {
                     { className: "col-12" },
                     t.div(
                         { className: "content txt-center m-b-sm" },
-                        t.p(null, "Enter the email associated with your account and we'll send you a recovery link:"),
+                        t.p(null, i18n.t("auth.enter_email_recovery_link")),
                     ),
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: "password_reset_email" }, "Email"),
+                        t.label({ htmlFor: "password_reset_email" }, i18n.t("field_types.email")),
                         t.input({
                             id: "password_reset_email",
                             name: "email",
@@ -79,14 +81,14 @@ export function pageRequestSuperuserPasswordReset(route) {
                             disabled: () => data.isSubmitting,
                         },
                         t.i({ className: "ri-mail-send-line", ariaHidden: true }),
-                        t.span({ className: "txt" }, "Send recovery link"),
+                        t.span({ className: "txt" }, i18n.t("auth.send_recovery_link")),
                     ),
                 ),
             );
         },
         t.div(
             { className: "block m-t-sm txt-center" },
-            t.a({ href: "#/login", className: "link-hint" }, "Back to login"),
+            t.a({ href: "#/login", className: "link-hint" }, i18n.t("auth.back_to_login")),
         ),
     );
 }

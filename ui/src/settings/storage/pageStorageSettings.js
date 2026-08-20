@@ -1,7 +1,8 @@
 import { settingsSidebar } from "../settingsSidebar";
+import { i18n } from "../../i18n.js";
 
 export function pageStorageSettings() {
-    app.store.title = "File storage";
+    app.store.title = i18n.t("storage_settings.title");
 
     const data = store({
         isLoading: false,
@@ -43,7 +44,7 @@ export function pageStorageSettings() {
             const settings = await app.pb.settings.update(redacted);
             init(settings);
 
-            app.toasts.success("Successfully saved storage settings.");
+            app.toasts.success(i18n.t("storage_settings.saved_success"));
         } catch (err) {
             app.checkApiError(err);
         }
@@ -79,7 +80,7 @@ export function pageStorageSettings() {
                 { className: "page-header" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div({ className: "breadcrumb-item" }, "Settings"),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("common.settings")),
                     t.div({ className: "breadcrumb-item" }, () => app.store.title),
                 ),
             ),
@@ -104,11 +105,11 @@ export function pageStorageSettings() {
                             { className: "col-lg-12 txt-lg" },
                             t.p(
                                 null,
-                                "By default PocketBase uses and recommends the local file system to store uploaded files because it is more performant, easier to manage and backup.",
+                                i18n.t("storage_settings.intro1"),
                             ),
                             t.p(
                                 null,
-                                "Alternatively, if you have limited disk space available, you could opt to an S3 compatible external storage.",
+                                i18n.t("storage_settings.intro2"),
                             ),
                         ),
                         t.div(
@@ -124,16 +125,23 @@ export function pageStorageSettings() {
 
                                     return t.div(
                                         { className: "alert info m-t-sm" },
-                                        "If you have existing uploaded files, you'll have to migrate them manually from the ",
-                                        t.strong(null, originalEnabled ? "S3 storage" : "local file system"),
-                                        " to the ",
+                                        () => i18n.t("storage_settings.migrate_note_a") + " ",
                                         t.strong(
                                             null,
-                                            data.formSettings.s3?.enabled ? "S3 storage" : "local file system",
+                                            originalEnabled
+                                                ? i18n.t("storage_settings.s3_storage")
+                                                : i18n.t("storage_settings.local_file_system"),
+                                        ),
+                                        () => " " + i18n.t("storage_settings.migrate_note_b") + " ",
+                                        t.strong(
+                                            null,
+                                            data.formSettings.s3?.enabled
+                                                ? i18n.t("storage_settings.s3_storage")
+                                                : i18n.t("storage_settings.local_file_system"),
                                         ),
                                         ".",
                                         t.br(),
-                                        "There are several command line tools that can help you, such as: ",
+                                        () => i18n.t("storage_settings.migrate_tools_intro") + " ",
                                         t.a({
                                             href: "https://github.com/rclone/rclone",
                                             target: "_blank",
@@ -167,14 +175,14 @@ export function pageStorageSettings() {
                                         className: "btn transparent secondary",
                                         onclick: reset,
                                     },
-                                    t.span({ className: "txt" }, "Cancel"),
+                                    t.span({ className: "txt" }, i18n.t("common.cancel")),
                                 ),
                                 t.button(
                                     {
                                         className: () => `btn expanded-lg ${data.isSaving ? "loading" : ""}`,
                                         disabled: () => !data.hasChanges || data.isSaving,
                                     },
-                                    t.span({ className: "txt" }, "Save changes"),
+                                    t.span({ className: "txt" }, i18n.t("record_upsert.save_changes")),
                                 ),
                             ),
                         ),

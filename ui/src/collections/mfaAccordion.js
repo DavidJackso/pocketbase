@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function mfaAccordion(collection) {
     const uniqueId = "mfa_" + app.utils.randomString();
 
@@ -27,10 +29,10 @@ export function mfaAccordion(collection) {
         t.summary(
             null,
             t.i({ className: "ri-shield-check-line", ariaHidden: true }),
-            t.span({ className: "txt", textContent: "Multi-factor authentication (MFA)" }),
+            t.span({ className: "txt", textContent: i18n.t("mfa.title") }),
             t.span({
                 className: () => `label m-l-auto ${data.config.enabled ? "success" : ""}`,
-                textContent: () => (data.config.enabled ? "Enabled" : "Disabled"),
+                textContent: () => (data.config.enabled ? i18n.t("common.enabled") : i18n.t("common.disabled")),
             }),
             () => {
                 if (!app.store.errors?.mfa) {
@@ -39,7 +41,7 @@ export function mfaAccordion(collection) {
 
                 return t.i({
                     className: "ri-error-warning-fill txt-danger",
-                    ariaDescription: app.attrs.tooltip("Has errors", "left"),
+                    ariaDescription: app.attrs.tooltip(i18n.t("common.has_errors"), "left"),
                 });
             },
         ),
@@ -53,13 +55,13 @@ export function mfaAccordion(collection) {
                         { className: "content" },
                         t.p(
                             null,
-                            "Multi-factor authentication (MFA) requires the user to authenticate with any 2 different auth methods (otp, identity/password, oauth2) before issuing an auth token. ",
+                            () => i18n.t("mfa.description") + " ",
                             t.a({
                                 href: import.meta.env.PB_MFA_DOCS,
                                 className: "link-hint",
                                 target: "_blank",
                                 rel: "noopener noreferrer",
-                                textContent: "Learn more.",
+                                textContent: i18n.t("mfa.learn_more"),
                             }),
                         ),
                     ),
@@ -85,7 +87,7 @@ export function mfaAccordion(collection) {
                     }),
                     t.label({
                         htmlFor: uniqueId + ".enabled",
-                        textContent: "Enable",
+                        textContent: i18n.t("common.enable"),
                     }),
                 ),
             ),
@@ -95,7 +97,7 @@ export function mfaAccordion(collection) {
                     { className: "field" },
                     t.label({
                         htmlFor: uniqueId + ".duration",
-                        textContent: "Max duration between 2 authentications (in seconds)",
+                        textContent: i18n.t("mfa.duration_label"),
                     }),
                     t.input({
                         type: "number",
@@ -112,11 +114,11 @@ export function mfaAccordion(collection) {
             t.div(
                 { className: "col-sm-12" },
                 app.components.ruleField({
-                    label: "MFA rule",
+                    label: i18n.t("mfa.rule_label"),
                     id: uniqueId + ".rule",
                     name: "mfa.rule",
                     nullable: false,
-                    placeholder: "Leave empty to require MFA for everyone",
+                    placeholder: i18n.t("mfa.rule_placeholder"),
                     autocomplete: (word) => {
                         return app.utils.collectionAutocompleteKeys(collection, word);
                     },
@@ -125,14 +127,14 @@ export function mfaAccordion(collection) {
                 }),
                 t.div(
                     { className: "field-help" },
-                    t.p(null, "This optional rule could be used to enable/disable MFA per account basis."),
+                    t.p(null, i18n.t("mfa.rule_help1")),
                     t.p(
                         null,
-                        "For example, to require MFA only for accounts with non-empty email you can set it to ",
+                        () => i18n.t("mfa.rule_help2") + " ",
                         t.code(null, "email != ''"),
                         ".",
                     ),
-                    t.p(null, "Leave the rule empty to require MFA for everyone."),
+                    t.p(null, i18n.t("mfa.rule_help3")),
                 ),
             ),
         ),

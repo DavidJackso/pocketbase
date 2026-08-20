@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function docsRealtime(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
@@ -9,35 +11,35 @@ export function docsRealtime(collection) {
     return t.div(
         { pbEvent: "apiPreviewRealtime", className: "content" },
         // description
-        t.p(null, `Subscribe to realtime changes via Server-Sent Events (SSE).`),
+        t.p(null, i18n.t("api_preview.realtime_desc1")),
         t.p(
             null,
-            "Events are sent for ",
-            t.strong(null, "create"),
+            i18n.t("api_preview.realtime_desc2") + " ",
+            t.strong(null, i18n.t("api_preview.tab_create").toLowerCase()),
             ", ",
-            t.strong(null, "update"),
-            " and ",
-            t.strong(null, "delete"),
-            ` record operations (see "Event data format" below).`,
+            t.strong(null, i18n.t("api_preview.tab_update").toLowerCase()),
+            " " + i18n.t("common.and") + " ",
+            t.strong(null, i18n.t("api_preview.tab_delete").toLowerCase()),
+            " " + i18n.t("api_preview.realtime_desc3"),
         ),
         t.div(
             { className: "alert info" },
-            t.p({ className: "txt-bold" }, "You could subscribe to a single record or to an entire collection."),
+            t.p({ className: "txt-bold" }, i18n.t("api_preview.realtime_alert_intro")),
             t.p(
                 null,
-                "When you subscribe to a ",
-                t.strong(null, "single record"),
-                ", the collection's ",
-                t.strong(null, "View rule"),
-                " will be used to determine whether the subscriber is allowed to receive the event message.",
+                i18n.t("api_preview.realtime_single_record_pre") + " ",
+                t.strong(null, i18n.t("api_preview.realtime_single_record")),
+                ", " + i18n.t("api_preview.realtime_view_rule_pre") + " ",
+                t.strong(null, i18n.t("api_preview.realtime_view_rule")),
+                " " + i18n.t("api_preview.realtime_rule_will_be_used"),
             ),
             t.p(
                 null,
-                "When you subscribe to an ",
-                t.strong(null, "entire collection"),
-                ", the collection's ",
-                t.strong(null, "List/Search rule"),
-                " will be used to determine whether the subscriber is allowed to receive the event message.",
+                i18n.t("api_preview.realtime_entire_collection_pre") + " ",
+                t.strong(null, i18n.t("api_preview.realtime_entire_collection")),
+                ", " + i18n.t("api_preview.realtime_view_rule_pre") + " ",
+                t.strong(null, i18n.t("api_preview.realtime_list_search_rule")),
+                " " + i18n.t("api_preview.realtime_rule_will_be_used"),
             ),
         ),
         app.components.codeBlockTabs({
@@ -86,7 +88,7 @@ export function docsRealtime(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -132,7 +134,7 @@ export function docsRealtime(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -160,7 +162,7 @@ export function docsRealtime(collection) {
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert api-preview-alert" },
             t.span({ className: "label method" }, "GET/POST"),
@@ -171,11 +173,11 @@ export function docsRealtime(collection) {
                     href: import.meta.env.PB_REALTIME_DOCS,
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    textContent: "Realtime docs",
+                    textContent: i18n.t("api_preview.realtime_docs"),
                 }),
             ),
         ),
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Event data format")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.event_data_format"))),
         app.components.codeBlock({
             value: JSON.stringify(
                 {

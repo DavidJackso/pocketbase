@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -20,7 +22,7 @@ window.app.components.s3Test = function(propsArg = {}) {
     const props = store({
         rid: undefined,
         config: null, // S3 config store
-        label: "Use S3 storage",
+        label: i18n.t("s3.use_s3_storage"),
         testFilesystem: "storage", // "storage" or "backups"
     });
 
@@ -65,7 +67,7 @@ window.app.components.s3Test = function(propsArg = {}) {
         clearTimeout(testTimeoutId);
         testTimeoutId = setTimeout(() => {
             app.pb.cancelRequest(testRequestKey);
-            data.testError = new Error("S3 test connection timeout.");
+            data.testError = new Error(i18n.t("s3.test_timeout"));
             data.isTesting = false;
         }, 30000);
 
@@ -112,13 +114,13 @@ window.app.components.s3Test = function(propsArg = {}) {
             if (data.hasError) {
                 return [
                     t.i({ className: "ri-error-warning-line txt-warning", ariaHidden: true }),
-                    t.span({ className: "txt" }, "Failed to establish S3 connection"),
+                    t.span({ className: "txt" }, i18n.t("s3.connection_failed")),
                 ];
             }
 
             return [
                 t.i({ className: "ri-checkbox-circle-line txt-success", ariaHidden: true }),
-                t.span({ className: "txt" }, "S3 connected successfully"),
+                t.span({ className: "txt" }, i18n.t("s3.connection_success")),
             ];
         },
     );

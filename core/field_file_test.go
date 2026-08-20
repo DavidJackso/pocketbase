@@ -448,6 +448,7 @@ func TestFileFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeFile)
 	testDefaultFieldNameValidation(t, core.FieldTypeFile)
 	testDefaultFieldHelpValidation[core.FileField](t)
+	testDefaultFieldLabelValidation[core.FileField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

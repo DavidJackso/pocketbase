@@ -1,13 +1,15 @@
+import { i18n } from "../../i18n.js";
+
 export let basePredefinedTags = [
     { value: "*:list" },
     { value: "*:view" },
     { value: "*:create" },
     { value: "*:update" },
     { value: "*:delete" },
-    { value: "*:file", description: "targets the files download endpoint" },
+    { value: "*:file", get description() { return i18n.t("rate_limit.tag_files_desc"); } },
     { value: "*:listAuthMethods" },
     { value: "*:authRefresh" },
-    { value: "*:auth", description: "targets all auth methods" },
+    { value: "*:auth", get description() { return i18n.t("rate_limit.tag_auth_desc"); } },
     { value: "*:authWithPassword" },
     { value: "*:authWithOAuth2" },
     { value: "*:authWithOTP" },
@@ -37,10 +39,10 @@ function rateLimitInfoModal() {
                 el?.remove();
             },
         },
-        t.header({ className: "modal-header" }, t.h5(null, "Rate limit label format")),
+        t.header({ className: "modal-header" }, t.h5(null, i18n.t("rate_limit.info_title"))),
         t.div(
             { className: "modal-content" },
-            t.p(null, "The rate limit rules are resolved in the following order (stops on the first match):"),
+            t.p(null, i18n.t("rate_limit.resolve_order_intro")),
             t.ol(
                 null,
                 t.li(null, "exact tag (e.g. ", t.code(null, "users:create")),
@@ -52,10 +54,10 @@ function rateLimitInfoModal() {
             ),
             t.p(
                 null,
-                `In case of multiple rules with the same label but different target user audience (e.g. "guest" vs "auth"), only the matching audience rule is taken in consideration.`,
+                i18n.t("rate_limit.multiple_rules_note"),
             ),
             t.hr(),
-            t.p(null, "The rate limit label could be in one of the following formats:"),
+            t.p(null, i18n.t("rate_limit.label_formats_intro")),
             t.ul(
                 null,
                 t.li(
@@ -145,7 +147,7 @@ function rateLimitInfoModal() {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
         ),
     );

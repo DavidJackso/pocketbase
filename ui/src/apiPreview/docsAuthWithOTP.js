@@ -1,12 +1,13 @@
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
+import { i18n } from "../i18n.js";
 
 export function docsAuthWithOTP(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
     const actionTabs = [
-        { title: "OTP request", content: otpRequest },
-        { title: "OTP auth", content: otpAuth },
+        { title: () => i18n.t("api_preview.otp_request"), content: otpRequest },
+        { title: () => i18n.t("api_preview.otp_auth"), content: otpAuth },
     ];
 
     const data = store({
@@ -19,16 +20,16 @@ export function docsAuthWithOTP(collection) {
             className: "content",
         },
         // description
-        t.p(null, "Authenticate with an one-time/short-lived password (OTP)."),
+        t.p(null, i18n.t("api_preview.otp_desc1")),
         t.p(
             null,
-            "On successful authentication the user will be also marked as verified (if the OTP source is email and the user is not verified already).",
+            i18n.t("api_preview.otp_desc2"),
         ),
         t.p(
             null,
-            "Note that when requesting an OTP we return an ",
+            i18n.t("api_preview.otp_desc3") + " ",
             t.code(null, "otpId"),
-            " even if a user with the provided email doesn't exist as a very basic enumeration protection.",
+            " " + i18n.t("api_preview.otp_desc4"),
         ),
         app.components.codeBlockTabs({
             className: "sdk-examples m-t-sm",
@@ -69,7 +70,7 @@ export function docsAuthWithOTP(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -108,7 +109,7 @@ export function docsAuthWithOTP(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -138,7 +139,7 @@ export function docsAuthWithOTP(collection) {
                     return t.button({
                         type: "button",
                         className: () => `btn sm expanded ${data.activeActionIndex == i ? "active" : "secondary"}`,
-                        textContent: () => tab.title,
+                        textContent: () => tab.title(),
                         onclick: () => data.activeActionIndex = i,
                     });
                 });
@@ -187,7 +188,7 @@ function otpRequest(collection) {
 
     return [
         // api
-        t.div(null, t.strong(null, "API details")),
+        t.div(null, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -199,23 +200,23 @@ function otpRequest(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "email ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The auth record email address to send the OTP request (if exists)."),
+                    t.td({ className: "min-width" }, "email ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.email_send_otp_desc")),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),
@@ -259,7 +260,7 @@ function otpAuth(collection) {
 
     return [
         // api
-        t.div(null, t.strong(null, "API details")),
+        t.div(null, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -271,24 +272,24 @@ function otpAuth(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
                 null,
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "otpId ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The id of the OTP request."),
+                    t.td({ className: "min-width" }, "otpId ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.otp_id_desc")),
                 ),
                 t.tr(
                     null,
-                    t.td({ className: "min-width" }, "password ", t.em(null, "(required)")),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "The one-time/short-lived password from the OTP request."),
+                    t.td({ className: "min-width" }, "password ", t.em(null, "(" + i18n.t("api_preview.required") + ")")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.otp_password_desc")),
                 ),
             ),
         ),
@@ -298,9 +299,9 @@ function otpAuth(collection) {
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "?query params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.query_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -308,19 +309,19 @@ function otpAuth(collection) {
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "expand"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, expandInfo()),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "fields"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, fieldsInfo()),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

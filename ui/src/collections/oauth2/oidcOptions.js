@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 window.app = window.app || {};
 window.app.oauth2 = window.app.oauth2 || {};
 
@@ -6,8 +8,8 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
     const uniqueId = "oidc_" + app.utils.randomString();
 
     const userInfoOptions = [
-        { label: "User info URL", value: true },
-        { label: "ID Token", value: false },
+        { label: i18n.t("oauth2.user_info_url"), value: true },
+        { label: i18n.t("oauth2.id_token"), value: false },
     ];
 
     const local = store({
@@ -58,7 +60,7 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".displayName" }, "Display name"),
+                    t.label({ htmlFor: uniqueId + ".displayName" }, i18n.t("oauth2.display_name")),
                     t.input({
                         id: uniqueId + ".displayName",
                         name: namePrefix + ".displayName",
@@ -71,10 +73,10 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
             ),
             t.div(
                 { className: "col-12" },
-                t.p({ className: "txt-bold" }, "Endpoints"),
+                t.p({ className: "txt-bold" }, i18n.t("oauth2.endpoints")),
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".authURL" }, "Auth URL"),
+                    t.label({ htmlFor: uniqueId + ".authURL" }, i18n.t("oauth2.auth_url")),
                     t.input({
                         id: uniqueId + ".authURL",
                         name: namePrefix + ".authURL",
@@ -89,7 +91,7 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".tokenURL" }, "Token URL"),
+                    t.label({ htmlFor: uniqueId + ".tokenURL" }, i18n.t("oauth2.token_url")),
                     t.input({
                         id: uniqueId + ".tokenURL",
                         name: namePrefix + ".tokenURL",
@@ -105,7 +107,7 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".userInfoSelect" }, "Fetch user info from"),
+                    t.label({ htmlFor: uniqueId + ".userInfoSelect" }, i18n.t("oauth2.fetch_user_info_from")),
                     app.components.select({
                         id: uniqueId + ".userInfoSelect",
                         required: true,
@@ -118,7 +120,7 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                     if (local.useUserInfoUrl) {
                         return t.div(
                             { className: "field" },
-                            t.label({ htmlFor: uniqueId + ".userInfoURL" }, "User info URL"),
+                            t.label({ htmlFor: uniqueId + ".userInfoURL" }, i18n.t("oauth2.user_info_url")),
                             t.input({
                                 id: uniqueId + ".userInfoURL",
                                 name: namePrefix + ".userInfoURL",
@@ -136,9 +138,9 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                             { className: "col-12 txt-hint txt-sm" },
                             t.em(
                                 null,
-                                "Both fields are considered optional because the parsed ",
+                                () => i18n.t("oauth2.both_fields_optional_a") + " ",
                                 t.code(null, "id_token"),
-                                " is a direct result of the TLS code->token exchange server response.",
+                                () => " " + i18n.t("oauth2.both_fields_optional_b"),
                             ),
                         ),
                         t.div(
@@ -147,12 +149,10 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                                 { className: "field" },
                                 t.label(
                                     { htmlFor: uniqueId + ".extra.jwksURL" },
-                                    t.span({ className: "txt" }, "JWKS verification URL"),
+                                    t.span({ className: "txt" }, i18n.t("oauth2.jwks_url")),
                                     t.i({
                                         className: "ri-information-line link-hint",
-                                        ariaDescription: app.attrs.tooltip(
-                                            "URL to the public token verification keys.",
-                                        ),
+                                        ariaDescription: app.attrs.tooltip(i18n.t("oauth2.jwks_url_help")),
                                     }),
                                 ),
                                 t.input({
@@ -173,12 +173,10 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                                 { className: "field" },
                                 t.label(
                                     { htmlFor: uniqueId + ".extra.issuers" },
-                                    t.span({ className: "txt" }, "Issuers"),
+                                    t.span({ className: "txt" }, i18n.t("oauth2.issuers")),
                                     t.i({
                                         className: "ri-information-line link-hint",
-                                        ariaDescription: app.attrs.tooltip(
-                                            "Comma separated list of accepted values for the iss token claim validation.",
-                                        ),
+                                        ariaDescription: app.attrs.tooltip(i18n.t("oauth2.issuers_help")),
                                     }),
                                 ),
                                 t.input({
@@ -216,12 +214,10 @@ window.app.oauth2.oidc = function(providerInfo, namePrefix, data) {
                     }),
                     t.label(
                         { htmlFor: uniqueId + ".pkce" },
-                        t.span({ className: "txt", textContent: "Support PKCE" }),
+                        t.span({ className: "txt", textContent: i18n.t("oauth2.support_pkce") }),
                         t.i({
                             className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip(
-                                "Usually it should be safe to be always enabled as most providers will just ignore the extra query parameters if they don't support PKCE.",
-                            ),
+                            ariaDescription: app.attrs.tooltip(i18n.t("oauth2.support_pkce_help")),
                         }),
                     ),
                 ),

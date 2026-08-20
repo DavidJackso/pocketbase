@@ -1,4 +1,5 @@
 import cssVars from "@/css/vars.css?inline";
+import { i18n } from "../i18n.js";
 
 window.app = window.app || {};
 window.app.components = window.app.components || {};
@@ -335,12 +336,12 @@ function registerDirectionButton(editor) {
     // text direction dropdown
     editor.ui.registry.addMenuButton("direction", {
         icon: "visualchars",
-        tooltip: "Direction",
+        tooltip: i18n.t("tinymce.direction"),
         fetch: (callback) => {
             const items = [
                 {
                     type: "menuitem",
-                    text: "LTR content",
+                    text: i18n.t("tinymce.ltr_content"),
                     icon: "ltr",
                     onAction: () => {
                         window?.localStorage?.setItem(lastDirectionKey, "ltr");
@@ -349,7 +350,7 @@ function registerDirectionButton(editor) {
                 },
                 {
                     type: "menuitem",
-                    text: "RTL content",
+                    text: i18n.t("tinymce.rtl_content"),
                     icon: "rtl",
                     onAction: () => {
                         window?.localStorage?.setItem(lastDirectionKey, "rtl");
@@ -365,20 +366,20 @@ function registerDirectionButton(editor) {
 
 function registerMediaButton(editor) {
     editor.ui.registry.addMenuButton("media_picker", {
-        tooltip: "Insert media",
+        tooltip: i18n.t("tinymce.insert_media"),
         icon: "embed",
         fetch: (callback) => {
             const items = [
                 {
                     type: "menuitem",
-                    text: "Inline image (Base64)",
+                    text: i18n.t("tinymce.inline_image_base64"),
                     onAction: () => {
                         editor.execCommand("mceImage");
                     },
                 },
                 {
                     type: "menuitem",
-                    text: "Media from collection",
+                    text: i18n.t("tinymce.media_from_collection"),
                     onAction: () => {
                         app.modals.openRecordFilePicker({
                             fileTypes: ["image", "audio", "video"],
@@ -406,7 +407,7 @@ function registerMediaButton(editor) {
                                         `
                                         <video controls width="300">
                                             <source src="${escapedUrl}" />
-                                            <p>Download: <a href="${escapedUrl}" download="${escapedName}">${escapedName}</a>.</p>
+                                            <p>${i18n.t("common.download")}: <a href="${escapedUrl}" download="${escapedName}">${escapedName}</a>.</p>
                                         </video>
                                     `,
                                     );
@@ -417,7 +418,7 @@ function registerMediaButton(editor) {
                 },
                 {
                     type: "menuitem",
-                    text: "Manual embed",
+                    text: i18n.t("tinymce.manual_embed"),
                     onAction: () => {
                         tinymce.activeEditor.execCommand("mceMedia");
                     },

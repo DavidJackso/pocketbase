@@ -1,12 +1,15 @@
 import { input } from "./input";
 import { settings } from "./settings";
 import { view } from "./view";
+import { i18n } from "../../i18n.js";
 
 window.app = window.app || {};
 window.app.fieldTypes = window.app.fieldTypes || {};
 window.app.fieldTypes.select = {
     icon: "ri-list-check",
-    label: "Select",
+    get label() {
+        return i18n.t("field_types.select");
+    },
     settings,
     input,
     view,

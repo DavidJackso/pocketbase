@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -20,7 +22,7 @@ window.app.components.refreshButton = function(propsArg = {}) {
         id: undefined,
         hidden: undefined,
         inert: undefined,
-        tooltip: "Refresh",
+        tooltip: i18n.t("common.refresh"),
         className: "btn transparent secondary circle rotate-btn",
         disabled: false,
         onclick: function(e) {},

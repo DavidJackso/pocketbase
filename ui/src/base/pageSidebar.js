@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -72,7 +74,7 @@ window.app.components.pageSidebar = function(propsArg = {}, ...children) {
                 {
                     type: "button",
                     className: "btn transparent secondary responsive-sidebar-btn",
-                    title: "Toggle sidebar",
+                    title: i18n.t("page_sidebar.toggle"),
                     onclick: (e) => {
                         e.stopPropagation();
                         data.responsiveShow = !data.responsiveShow;

@@ -1,6 +1,7 @@
 import { fullDummyPayload, primitivesDummyPayload, replaceDummyPayloadPlaceholder } from "./docsCreate";
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
+import { i18n } from "../i18n.js";
 
 export function docsUpdate(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -71,25 +72,25 @@ export function docsUpdate(collection) {
     return t.div(
         { pbEvent: "apiPreviewUpdate", className: "content" },
         // description
-        t.p(null, `Updates an existing ${collection.name} record.`),
+        t.p(null, i18n.t("api_preview.update_desc", { name: collection.name })),
         t.p(
             null,
-            "Body parameters could be sent as ",
+            i18n.t("api_preview.body_params_sent_as") + " ",
             t.code(null, "application/json"),
-            " or ",
+            " " + i18n.t("common.or") + " ",
             t.code(null, "multipart/form-data"),
             ".",
         ),
         t.p(
             null,
-            "File upload is supported only via ",
+            i18n.t("api_preview.file_upload_supported_via") + " ",
             t.code(null, "multipart/form-data"),
-            ". For more info and examples you could check the detailed ",
+            ". " + i18n.t("api_preview.for_more_info_check") + " ",
             t.a({
                 href: import.meta.env.PB_FILE_UPLOAD_DOCS,
                 target: "_blank",
                 rel: "noopener noreferrer",
-                textContent: "Files upload and handling docs",
+                textContent: i18n.t("api_preview.files_upload_docs"),
             }),
             ".",
         ),
@@ -97,7 +98,7 @@ export function docsUpdate(collection) {
             null,
             t.em(
                 null,
-                "Note that in case of a password change all previously issued tokens for the current record will be automatically invalidated and if you want your user to remain signed in you need to reauthenticate manually after the update call.",
+                i18n.t("api_preview.password_change_note"),
             ),
         ),
         app.components.codeBlockTabs({
@@ -126,7 +127,7 @@ const record = await pb.collection('${collection.name}').update('RECORD_ID', bod
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -156,7 +157,7 @@ final record = await pb.collection('${collection.name}').update(
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -174,14 +175,14 @@ final record = await pb.collection('${collection.name}').update(
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert warning api-preview-alert" },
             t.span({ className: "label method" }, "PATCH"),
             t.span({ className: "path" }, `/api/collections/${collection.name}/records/`, t.strong(null, ":id")),
             () => {
                 if (isSuperusersOnly) {
-                    return t.small({ className: "extra" }, "Requires superuser Authorization:TOKEN header");
+                    return t.small({ className: "extra" }, i18n.t("api_preview.requires_superuser_auth"));
                 }
             },
         ),
@@ -191,9 +192,9 @@ final record = await pb.collection('${collection.name}').update(
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Path params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.path_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -201,8 +202,8 @@ final record = await pb.collection('${collection.name}').update(
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "id"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                    t.td(null, "ID of the record to update."),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                    t.td(null, i18n.t("api_preview.id_of_record_to_update")),
                 ),
             ),
         ),
@@ -212,9 +213,9 @@ final record = await pb.collection('${collection.name}').update(
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "?query params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.query_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -222,19 +223,19 @@ final record = await pb.collection('${collection.name}').update(
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "expand"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, expandInfo()),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "fields"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, fieldsInfo()),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

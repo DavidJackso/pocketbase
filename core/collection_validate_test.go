@@ -1,6 +1,7 @@
 package core_test
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/pocketbase/pocketbase/core"
@@ -121,6 +122,27 @@ func TestCollectionValidate(t *testing.T) {
 			},
 			expectedErrors: []string{},
 		},
+
+		// label checks
+		{
+			name: "label at max limit",
+			collection: func(app core.App) (*core.Collection, error) {
+				c := core.NewBaseCollection("test")
+				c.Label = strings.Repeat("a", 255)
+				return c, nil
+			},
+			expectedErrors: []string{},
+		},
+		{
+			name: "label over max limit",
+			collection: func(app core.App) (*core.Collection, error) {
+				c := core.NewBaseCollection("test")
+				c.Label = strings.Repeat("a", 256)
+				return c, nil
+			},
+			expectedErrors: []string{"label"},
+		},
+
 		{
 			name: "view type",
 			collection: func(app core.App) (*core.Collection, error) {

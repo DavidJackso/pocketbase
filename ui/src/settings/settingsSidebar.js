@@ -1,3 +1,15 @@
+import { i18n } from "../i18n.js";
+
+const groupLabels = {
+    System: () => i18n.t("settings_sidebar.group_system"),
+    Sync: () => i18n.t("settings_sidebar.group_sync"),
+    Debug: () => i18n.t("settings_sidebar.group_debug"),
+};
+
+function groupLabel(groupName) {
+    return groupLabels[groupName]?.() || groupName;
+}
+
 export function settingsSidebar() {
     return app.components.pageSidebar(
         {
@@ -16,7 +28,7 @@ export function settingsSidebar() {
                         { className: "nav-group", "html-data-group": groupName, open: true },
                         t.summary(
                             { tabIndex: -1, onfocusout: () => false, onclick: () => false, onkeyup: () => false },
-                            groupName,
+                            groupLabel(groupName),
                         ),
                         () => {
                             return children.map((link) => {

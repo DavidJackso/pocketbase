@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function appHeader() {
     return () => {
         if (!app.store._ready || !app.store.showHeader || !app.store.superuser?.id) {
@@ -24,7 +26,7 @@ export function appHeader() {
             },
             t.a(
                 { href: "#/", className: "logo" },
-                t.img({ src: () => app.store.headerLogo, alt: "App logo" }),
+                t.img({ src: () => app.store.headerLogo, alt: i18n.t("app.logo_alt") }),
             ),
             t.nav(
                 {
@@ -56,6 +58,7 @@ export function appHeader() {
                 },
             ),
             t.div({ className: "flex-fill app-header-separator" }),
+            localeButton(),
             colorSchemeButton(),
             t.button(
                 {
@@ -82,7 +85,7 @@ export function appHeader() {
                         },
                     },
                     t.i({ className: "ri-group-line", ariaHidden: true }),
-                    t.span({ className: "txt" }, "Manage superusers"),
+                    t.span({ className: "txt" }, i18n.t("header.manage_superusers")),
                 ),
                 t.hr(),
                 t.button(
@@ -92,18 +95,56 @@ export function appHeader() {
                         onclick: () => app.pb.authStore.clear(),
                     },
                     t.i({ className: "ri-logout-circle-line", ariaHidden: true }),
-                    t.span({ className: "txt" }, "Logout"),
+                    t.span({ className: "txt" }, i18n.t("header.logout")),
                 ),
             ),
         );
     };
 }
 
+function localeButton() {
+    return [
+        t.button(
+            {
+                type: "button",
+                className: "header-link locale-picker",
+                "html-popovertarget": "locale-dropdown",
+                title: i18n.t("header.language_picker_title"),
+            },
+            t.i({ className: "ri-translate-2", ariaHidden: true }),
+        ),
+        t.div(
+            {
+                pbEvent: "localeDropdown",
+                id: "locale-dropdown",
+                className: "dropdown sm nowrap locale-dropdown",
+                popover: "auto",
+            },
+            () => {
+                return i18n.available.map((code) => {
+                    return t.button(
+                        {
+                            type: "button",
+                            className: () => `dropdown-item ${app.store.locale == code ? "active" : ""}`,
+                            onclick: (e) => {
+                                e.target.closest(".dropdown").hidePopover();
+                                i18n.setLocale(code);
+                                window.location.reload();
+                            },
+                        },
+                        t.span({ className: "txt" }, code.toUpperCase()),
+                    );
+                });
+            },
+        ),
+    ];
+}
+
 function colorSchemeButton() {
     const options = [
-        { value: "light", icon: "ri-sun-line", label: "Light" },
-        { value: "dark", icon: "ri-moon-line", label: "Dark" },
-        { value: "", icon: "ri-subtract-line", label: "Auto" },
+        { value: "light", icon: "ri-sun-line", label: i18n.t("header.color_scheme_light") },
+        { value: "dark", icon: "ri-moon-line", label: i18n.t("header.color_scheme_dark") },
+        { value: "", icon: "ri-subtract-line", label: i18n.t("header.color_scheme_auto") },
     ];
 
     return [
@@ -112,7 +153,7 @@ function colorSchemeButton() {
                 type: "button",
                 className: "header-link color-scheme-picker",
                 "html-popovertarget": "color-scheme-dropdown",
-                title: "Color scheme",
+                title: i18n.t("header.color_scheme_title"),
             },
             t.i({
                 className: () => app.store.activeColorScheme == "dark" ? "ri-moon-line" : "ri-sun-line",

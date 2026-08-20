@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function collectionFieldsTab(upsertData) {
     return t.div(
         { className: "collection-tab-content collection-fields-tab-content" },
@@ -35,7 +37,7 @@ export function collectionFieldsTab(upsertData) {
         t.hr(),
         t.p(
             { className: "txt-bold" },
-            "Unique constraints and indexes (",
+            () => i18n.t("collection_fields.unique_constraints_and_indexes") + " (",
             () => upsertData.collection.indexes?.length,
             ")",
         ),
@@ -60,7 +62,7 @@ export function collectionFieldsTab(upsertData) {
                     },
                     () => {
                         if (parsed.unique) {
-                            return t.strong(null, "Unique:");
+                            return t.strong(null, i18n.t("collection_fields.unique_prefix"));
                         }
                     },
                     t.span({ className: "txt" }, () => parsed.columns?.map((c) => c.name).join(", ")),
@@ -74,7 +76,7 @@ export function collectionFieldsTab(upsertData) {
                         onclick: () => app.modals.openIndexUpsert(upsertData.collection),
                     },
                     t.i({ className: "ri-add-line", ariaHidden: true }),
-                    t.span({ className: "txt" }, "New index"),
+                    t.span({ className: "txt" }, i18n.t("collection_fields.new_index")),
                 );
             },
         }),

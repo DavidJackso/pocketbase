@@ -215,6 +215,7 @@ func TestNumberFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeNumber)
 	testDefaultFieldNameValidation(t, core.FieldTypeNumber)
 	testDefaultFieldHelpValidation[core.NumberField](t)
+	testDefaultFieldLabelValidation[core.NumberField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -35,7 +37,7 @@ window.app.components.ruleField = function(propsArg = {}) {
         help: undefined,
         value: null,
         nullable: true,
-        placeholder: "Leave empty to grant everyone access...",
+        placeholder: i18n.t("rule_field.placeholder"),
         autocomplete: (word) => [],
         oninput: (newVal) => {},
         onmount: (el) => {},
@@ -105,7 +107,7 @@ window.app.components.ruleField = function(propsArg = {}) {
             { htmlFor: uniqueId },
             (el) => {
                 if (!props.label) {
-                    return t.span({ className: "txt" }, "Rule");
+                    return t.span({ className: "txt" }, i18n.t("rule_field.rule"));
                 }
 
                 if (typeof props.label == "function") {
@@ -118,7 +120,10 @@ window.app.components.ruleField = function(propsArg = {}) {
 
                 return props.label;
             },
-            t.span({ hidden: () => !props.isLocked, className: "txt superusers-label" }, "(Superusers only)"),
+            t.span(
+                { hidden: () => !props.isLocked, className: "txt superusers-label" },
+                i18n.t("rule_field.superusers_only_label"),
+            ),
         ),
         (el) => {
             if (props.isLocked) {
@@ -129,7 +134,7 @@ window.app.components.ruleField = function(propsArg = {}) {
                         disabled: () => props.disabled,
                         onclick: unlock,
                     },
-                    t.span({ className: "txt" }, "Unlock and set custom rule"),
+                    t.span({ className: "txt" }, i18n.t("rule_field.unlock")),
                     t.i({ className: "ri-lock-unlock-line", ariaHidden: true }),
                 );
             }
@@ -155,7 +160,7 @@ window.app.components.ruleField = function(propsArg = {}) {
                         onclick: lock,
                     },
                     t.i({ className: "ri-lock-line", ariaHidden: true }),
-                    t.span({ className: "txt" }, "Set superusers only"),
+                    t.span({ className: "txt" }, i18n.t("rule_field.set_superusers_only")),
                 ),
             ];
         },

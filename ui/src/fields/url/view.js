@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     record: undefined,
 //     field: undefined,
@@ -10,7 +12,7 @@ export function view(props) {
             const value = props.record[props.field.name] || "";
 
             if (!value) {
-                return t.span({ className: "missing-value" });
+                return t.span({ className: "missing-value", "html-data-missing-label": i18n.t("common.na") });
             }
 
             return t.a({
@@ -19,7 +21,7 @@ export function view(props) {
                 rel: "noopener noreferrer",
                 target: "_blank",
                 textContent: app.utils.truncate(value),
-                ariaDescription: app.attrs.tooltip("Open in new tab"),
+                ariaDescription: app.attrs.tooltip(i18n.t("file_preview.open_in_new_tab")),
                 onclick: (e) => {
                     e.stopPropagation();
                 },

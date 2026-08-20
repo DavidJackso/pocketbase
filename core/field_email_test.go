@@ -183,6 +183,7 @@ func TestEmailFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypeEmail)
 	testDefaultFieldNameValidation(t, core.FieldTypeEmail)
 	testDefaultFieldHelpValidation[core.EmailField](t)
+	testDefaultFieldLabelValidation[core.EmailField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

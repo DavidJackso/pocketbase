@@ -3,9 +3,10 @@ import { batchAccordion } from "./batchAccordion";
 import { rateLimitAccordion, sortRules } from "./rateLimitAccordion";
 import { superuserAccordion } from "./superuserAccordion";
 import { trustedProxyAccordion } from "./trustedProxyAccordion";
+import { i18n } from "../../i18n.js";
 
 export function pageApplicationSettings() {
-    app.store.title = "Application settings";
+    app.store.title = i18n.t("app_settings.title");
 
     const data = store({
         isLoading: false,
@@ -63,14 +64,14 @@ export function pageApplicationSettings() {
                 { className: "txt-center" },
                 t.h6(
                     null,
-                    "The ONLY allowed superuser IPs will change to: ",
+                    () => i18n.t("app_settings.superuser_ips_will_change") + " ",
                     t.br(),
                     t.strong(null, superuserIPs.join(", ")),
                 ),
-                t.p(null, "Please make sure that your IP is in the list or you'll be locked."),
+                t.p(null, i18n.t("app_settings.make_sure_ip_in_list")),
                 t.p(
                     { className: "txt-hint" },
-                    "In case of lockout, you can reset the setting with the ",
+                    () => i18n.t("app_settings.lockout_reset_a") + " ",
                     t.a(
                         {
                             href: import.meta.env.PB_SUPERUSER_IPS_RESET_DOCS,
@@ -84,12 +85,12 @@ export function pageApplicationSettings() {
                             t.i({ ariaHidden: true, className: "ri-arrow-right-up-line txt-sm" }),
                         ),
                     ),
-                    " console command.",
+                    () => " " + i18n.t("app_settings.lockout_reset_b"),
                 ),
             ),
             () => save(),
             null,
-            { yesButton: "Yes, save changes" },
+            { yesButton: i18n.t("collection_changes.yes_save_changes") },
         );
     }
 
@@ -118,7 +119,7 @@ export function pageApplicationSettings() {
 
             init(updatedSettings);
 
-            app.toasts.success("Successfully saved application settings.");
+            app.toasts.success(i18n.t("app_settings.saved_success"));
         } catch (err) {
             app.checkApiError(err);
         }
@@ -168,8 +169,8 @@ export function pageApplicationSettings() {
                 { className: "page-header" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div({ className: "breadcrumb-item" }, "Settings"),
-                    t.div({ className: "breadcrumb-item" }, "Application"),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("common.settings")),
+                    t.div({ className: "breadcrumb-item" }, i18n.t("app_settings.application")),
                 ),
             ),
             t.div(
@@ -193,7 +194,7 @@ export function pageApplicationSettings() {
                             { className: "col-md-5" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: "meta.appName" }, "Application name"),
+                                t.label({ htmlFor: "meta.appName" }, i18n.t("app_settings.app_name")),
                                 t.input({
                                     id: "meta.appName",
                                     name: "meta.appName",
@@ -208,7 +209,7 @@ export function pageApplicationSettings() {
                             { className: "col-md-5" },
                             t.div(
                                 { className: "field" },
-                                t.label({ htmlFor: "meta.appURL" }, "Application URL"),
+                                t.label({ htmlFor: "meta.appURL" }, i18n.t("app_settings.app_url")),
                                 t.input({
                                     id: "meta.appURL",
                                     name: "meta.appURL",
@@ -249,12 +250,10 @@ export function pageApplicationSettings() {
                                 }),
                                 t.label(
                                     { htmlFor: "meta.hideControls" },
-                                    t.span({ className: "txt" }, "Hide/Lock collection and record controls"),
+                                    t.span({ className: "txt" }, i18n.t("app_settings.hide_lock_controls")),
                                     t.i({
                                         className: "ri-information-line link-hint",
-                                        ariaDescription: app.attrs.tooltip(
-                                            "To prevent accidental changes when in production environment, collections create and update buttons will be hidden.\nRecords update will also require an extra unlock step before save.",
-                                        ),
+                                        ariaDescription: app.attrs.tooltip(i18n.t("app_settings.hide_lock_controls_help")),
                                     }),
                                 ),
                             ),
@@ -273,14 +272,14 @@ export function pageApplicationSettings() {
                                         hidden: () => !data.hasChanges,
                                         onclick: reset,
                                     },
-                                    t.span({ className: "txt" }, "Cancel"),
+                                    t.span({ className: "txt" }, i18n.t("common.cancel")),
                                 ),
                                 t.button(
                                     {
                                         className: () => `btn expanded-lg ${data.isSaving ? "loading" : ""}`,
                                         disabled: () => !data.hasChanges || data.isSaving,
                                     },
-                                    t.span({ className: "txt" }, "Save changes"),
+                                    t.span({ className: "txt" }, i18n.t("record_upsert.save_changes")),
                                 ),
                             ),
                         ),
@@ -331,7 +330,7 @@ function accentColorField(pageData) {
     return t.div(
         {
             className: "field",
-            ariaDescription: app.attrs.tooltip(() => local.isTooLight ? "Invalid - color is too light" : ""),
+            ariaDescription: app.attrs.tooltip(() => local.isTooLight ? i18n.t("app_settings.accent_too_light") : ""),
             onunmount: () => {
                 clearTimeout(colorChangeTimeoutId);
                 changeAccentColor(pageData.formSettings.meta.accentColor);
@@ -340,7 +339,7 @@ function accentColorField(pageData) {
         },
         t.label(
             { htmlFor: uniqueId },
-            t.span({ className: "txt" }, "Accent"),
+            t.span({ className: "txt" }, i18n.t("app_settings.accent")),
             t.i({
                 hidden: () => !local.isTooLight,
                 className: "txt-warning ri-alert-line",

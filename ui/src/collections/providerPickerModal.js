@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
@@ -60,7 +62,7 @@ function providerPickerModal(settings = {}) {
         },
         t.header(
             { className: "modal-header" },
-            t.h6({ className: "modal-title" }, t.span({ className: "txt" }, "Select OAuth2 provider")),
+            t.h6({ className: "modal-title" }, t.span({ className: "txt" }, i18n.t("provider_picker.title"))),
         ),
         t.div(
             { className: "modal-content" },
@@ -74,7 +76,7 @@ function providerPickerModal(settings = {}) {
                         t.div(
                             { className: "field" },
                             t.input({
-                                placeholder: "Search...",
+                                placeholder: i18n.t("common.search_placeholder"),
                                 className: "p-l-20",
                                 value: () => data.searchTerm,
                                 oninput: (e) => data.searchTerm = e.target.value,
@@ -93,7 +95,7 @@ function providerPickerModal(settings = {}) {
                                         className: "btn sm pill secondary transparent",
                                         onclick: () => clearSearch(),
                                     },
-                                    "Clear",
+                                    i18n.t("common.clear"),
                                 ),
                             );
                         },
@@ -107,11 +109,11 @@ function providerPickerModal(settings = {}) {
 
                     return t.div(
                         { rid: "notfound", className: "block txt-center txt-hint" },
-                        t.p(null, "No providers found."),
+                        t.p(null, i18n.t("provider_picker.no_providers_found")),
                         t.button({
                             type: "button",
                             className: "btn sm secondary",
-                            textContent: "Clear search",
+                            textContent: i18n.t("common.clear_search"),
                             onclick: () => clearSearch(),
                         }),
                     );
@@ -140,7 +142,9 @@ function providerPickerModal(settings = {}) {
                                         if (provider.logo) {
                                             return t.img({
                                                 src: "data:image/svg+xml;base64," + btoa(provider.logo),
-                                                alt: provider.name + " logo",
+                                                alt: i18n.t("record_upsert.provider_logo_alt", {
+                                                    provider: provider.name,
+                                                }),
                                             });
                                         }
 
@@ -166,7 +170,7 @@ function providerPickerModal(settings = {}) {
                     className: "btn transparent m-r-auto",
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
         ),
     );

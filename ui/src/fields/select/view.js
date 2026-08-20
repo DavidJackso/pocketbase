@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     record: undefined,
 //     field: undefined,
@@ -10,7 +12,7 @@ export function view(props) {
             const opts = app.utils.toArray(props.record[props.field.name], false);
 
             if (!opts.length) {
-                return t.span({ className: "missing-value" });
+                return t.span({ className: "missing-value", "html-data-missing-label": i18n.t("common.na") });
             }
 
             return opts.map((opt) => {

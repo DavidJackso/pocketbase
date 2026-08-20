@@ -1,3 +1,5 @@
+import { i18n } from "./i18n.js";
+
 const notifyChannel = new BroadcastChannel("tabsSync");
 
 const SETTINGS_STORAGE_KEY = "pbSettings";
@@ -14,9 +16,12 @@ window.app.store = store({
     // used to force hiding the header even when authenticated
     showHeader: true,
 
+    // the active admin UI interface language (see ui/src/i18n.js for persistence)
+    locale: i18n.locale,
+
     page: t.div({ className: "page" }, () => {
         if (!app.store._ready) {
-            return t.span({ className: "loader lg m-auto", title: "Loading plugins..." });
+            return t.span({ className: "loader lg m-auto", title: i18n.t("common.loading_plugins") });
         }
     }),
 
@@ -46,7 +51,9 @@ window.app.store = store({
             // optional: isActive
             href: import.meta.env.PB_DOCS_URL,
             icon: "ri-book-open-line",
-            label: "Docs",
+            get label() {
+                return i18n.t("common.docs");
+            },
         },
         {
             href: import.meta.env.PB_RELEASES,
@@ -60,66 +67,92 @@ window.app.store = store({
             // optional: isActive
             href: "#/collections",
             icon: "ri-database-2-line",
-            label: "Collections",
+            get label() {
+                return i18n.t("collections_sidebar.collections");
+            },
         },
         {
             href: "#/logs",
             icon: "ri-bar-chart-box-line",
-            label: "Logs",
+            get label() {
+                return i18n.t("logs.title");
+            },
         },
         {
             href: "#/settings",
             icon: "ri-settings-3-line",
-            label: "Settings",
+            get label() {
+                return i18n.t("common.settings");
+            },
         },
     ],
 
+    // note: the group keys (System/Sync/Debug) are stable internal
+    // identifiers referenced by the "html-data-group" attribute and
+    // hideControls.css - only the rendered labels are localized, see
+    // settingsSidebar.js
     settingsNavGroups: {
         System: [
             {
                 // optional: isActive
                 href: "#/settings",
                 icon: "ri-home-gear-line",
-                label: "Application",
+                get label() {
+                    return i18n.t("app_settings.application");
+                },
             },
             {
                 href: "#/settings/mail",
                 icon: "ri-send-plane-2-line",
-                label: "Mail settings",
+                get label() {
+                    return i18n.t("mail_settings.title");
+                },
             },
             {
                 href: "#/settings/storage",
                 icon: "ri-archive-drawer-line",
-                label: "Files storage",
+                get label() {
+                    return i18n.t("storage_settings.title");
+                },
             },
             {
                 href: "#/settings/backups",
                 icon: "ri-archive-line",
-                label: "Backups",
+                get label() {
+                    return i18n.t("backups.title");
+                },
             },
             {
                 href: "#/settings/crons",
                 icon: "ri-time-line",
-                label: "Crons",
+                get label() {
+                    return i18n.t("crons.title");
+                },
             },
         ],
         Sync: [
             {
                 href: "#/settings/export-collections",
                 icon: "ri-uninstall-line",
-                label: "Export collections",
+                get label() {
+                    return i18n.t("sync.export_title");
+                },
             },
             {
                 href: "#/settings/import-collections",
                 icon: "ri-install-line",
-                label: "Import collections",
+                get label() {
+                    return i18n.t("sync.import_title");
+                },
             },
         ],
         Debug: [
             {
                 href: "#/settings/sql",
                 icon: "ri-terminal-box-line",
-                label: "SQL console",
+                get label() {
+                    return i18n.t("sql_console.title");
+                },
             },
         ],
     },

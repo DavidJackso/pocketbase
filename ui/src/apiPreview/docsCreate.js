@@ -1,6 +1,7 @@
 import { expandInfo } from "./expandInfo";
 import { fieldsInfo } from "./fieldsInfo";
 import { filterSyntax } from "./filterSyntax";
+import { i18n } from "../i18n.js";
 
 export function docsCreate(collection) {
     const baseURL = app.utils.getApiExampleURL();
@@ -61,25 +62,25 @@ export function docsCreate(collection) {
     return t.div(
         { pbEvent: "apiPreviewCreate", className: "content" },
         // description
-        t.p(null, `Creates a new ${collection.name} record.`),
+        t.p(null, i18n.t("api_preview.create_desc", { name: collection.name })),
         t.p(
             null,
-            "Body parameters could be sent as ",
+            i18n.t("api_preview.body_params_sent_as") + " ",
             t.code(null, "application/json"),
-            " or ",
+            " " + i18n.t("common.or") + " ",
             t.code(null, "multipart/form-data"),
             ".",
         ),
         t.p(
             null,
-            "File upload is supported only via ",
+            i18n.t("api_preview.file_upload_supported_via") + " ",
             t.code(null, "multipart/form-data"),
-            ". For more info and examples you could check the detailed ",
+            ". " + i18n.t("api_preview.for_more_info_check") + " ",
             t.a({
                 href: import.meta.env.PB_FILE_UPLOAD_DOCS,
                 target: "_blank",
                 rel: "noopener noreferrer",
-                textContent: "Files upload and handling docs",
+                textContent: i18n.t("api_preview.files_upload_docs"),
             }),
             ".",
         ),
@@ -112,7 +113,7 @@ await pb.collection('${collection?.name}').requestVerification(record.email);
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -143,7 +144,7 @@ await pb.collection('${collection?.name}').requestVerification(
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -169,14 +170,14 @@ curl -X POST \\
             ],
         }),
         // api
-        t.div({ className: "block m-t-base" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-base" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
             t.span({ className: "path" }, `/api/collections/${collection.name}/records`),
             () => {
                 if (isSuperusersOnly) {
-                    return t.small({ className: "extra" }, "Requires superuser Authorization:TOKEN header");
+                    return t.small({ className: "extra" }, i18n.t("api_preview.requires_superuser_auth"));
                 }
             },
         ),
@@ -186,9 +187,9 @@ curl -X POST \\
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "Body params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.body_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -203,7 +204,7 @@ curl -X POST \\
                             null,
                             t.th(
                                 { colSpan: 99 },
-                                "Auth specific fields",
+                                i18n.t("api_preview.auth_specific_fields"),
                             ),
                         ),
                         t.tr(
@@ -213,13 +214,13 @@ curl -X POST \\
                                 "email ",
                                 () => {
                                     if (collection.fields?.find((f) => f.name == "email")?.required) {
-                                        return t.em(null, "(required)");
+                                        return t.em(null, "(" + i18n.t("api_preview.required") + ")");
                                     }
-                                    return t.em(null, "(optional)");
+                                    return t.em(null, "(" + i18n.t("api_preview.optional") + ")");
                                 },
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                            t.td(null, "Auth record email address."),
+                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(null, i18n.t("api_preview.auth_email_desc")),
                         ),
                         t.tr(
                             null,
@@ -228,17 +229,17 @@ curl -X POST \\
                                 "emailVisibility ",
                                 () => {
                                     if (collection.fields?.find((f) => f.name == "emailVisibility")?.required) {
-                                        return t.em(null, "(required)");
+                                        return t.em(null, "(" + i18n.t("api_preview.required") + ")");
                                     }
-                                    return t.em(null, "(optional)");
+                                    return t.em(null, "(" + i18n.t("api_preview.optional") + ")");
                                 },
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, "Boolean")),
+                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.boolean"))),
                             t.td(
                                 null,
-                                "Whether to show/hide the auth record email when fetching the record data.",
+                                i18n.t("api_preview.email_visibility_desc1"),
                                 t.br(),
-                                "Superusers and the owner of the record always have access to the email address.",
+                                i18n.t("api_preview.email_visibility_desc2"),
                             ),
                         ),
                         t.tr(
@@ -246,35 +247,35 @@ curl -X POST \\
                             t.td(
                                 { className: "min-width" },
                                 "password ",
-                                t.em(null, "(required)"),
+                                t.em(null, "(" + i18n.t("api_preview.required") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                            t.td(null, "Auth record password."),
+                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(null, i18n.t("api_preview.auth_password_field_desc")),
                         ),
                         t.tr(
                             null,
                             t.td(
                                 { className: "min-width" },
                                 "passwordConfirm ",
-                                t.em(null, "(required)"),
+                                t.em(null, "(" + i18n.t("api_preview.required") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
-                            t.td(null, "Auth record password confirmation."),
+                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
+                            t.td(null, i18n.t("api_preview.auth_password_confirm_field_desc")),
                         ),
                         t.tr(
                             null,
                             t.td(
                                 { className: "min-width" },
                                 "verified ",
-                                t.em(null, "(optional)"),
+                                t.em(null, "(" + i18n.t("api_preview.optional") + ")"),
                             ),
-                            t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                            t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                             t.td(
                                 null,
-                                t.p(null, "Indicates whether the auth record is verified or not."),
+                                t.p(null, i18n.t("api_preview.verified_field_desc1")),
                                 t.p(
                                     null,
-                                    `This field can be set only by superusers or auth records with "Manage" access.`,
+                                    i18n.t("api_preview.verified_field_desc2"),
                                 ),
                             ),
                         ),
@@ -282,7 +283,7 @@ curl -X POST \\
                             null,
                             t.th(
                                 { colSpan: 99 },
-                                "Other fields",
+                                i18n.t("api_preview.other_fields"),
                             ),
                         ),
                     ];
@@ -294,7 +295,12 @@ curl -X POST \\
                             t.td(
                                 { className: "min-width" },
                                 f.name,
-                                t.em(null, f.required && !f.autogeneratePattern ? " (required)" : " (optional)"),
+                                t.em(
+                                    null,
+                                    f.required && !f.autogeneratePattern
+                                        ? ` (${i18n.t("api_preview.required")})`
+                                        : ` (${i18n.t("api_preview.optional")})`,
+                                ),
                             ),
                             t.td(
                                 { className: "min-width" },
@@ -304,30 +310,30 @@ curl -X POST \\
                                         const dummyData = app.fieldTypes[f.type]?.dummyData(f, true);
                                         const dummyDataType = typeof dummyData;
 
-                                        if (f.type == "file") return "File";
-                                        if (dummyDataType === "string") return "String";
-                                        if (dummyDataType == "number") return "Number";
-                                        if (dummyDataType == "bool") return "Boolean";
-                                        if (Array.isArray(dummyData)) return "Array";
-                                        if (app.utils.isObject(dummyData)) return "Object";
+                                        if (f.type == "file") return i18n.t("api_preview.file");
+                                        if (dummyDataType === "string") return i18n.t("api_preview.string");
+                                        if (dummyDataType == "number") return i18n.t("api_preview.number");
+                                        if (dummyDataType == "bool") return i18n.t("api_preview.boolean");
+                                        if (Array.isArray(dummyData)) return i18n.t("api_preview.array");
+                                        if (app.utils.isObject(dummyData)) return i18n.t("api_preview.object");
 
-                                        return "Mixed";
+                                        return i18n.t("api_preview.mixed");
                                     },
                                 ),
                             ),
                             t.td(
                                 null,
                                 t.code(null, f.type),
-                                " field type value.",
+                                " " + i18n.t("api_preview.field_type_value"),
                                 t.br(),
                                 t.small(
                                     { className: "txt-hint" },
-                                    "For more details you could check the ",
+                                    i18n.t("api_preview.for_more_details_check") + " ",
                                     t.a({
                                         href: import.meta.env.PB_FIELDS_DOCS,
                                         target: "_blank",
                                         rel: "noopener noreferrer",
-                                        textContent: "Fields docs",
+                                        textContent: i18n.t("api_preview.fields_docs"),
                                     }),
                                     ".",
                                 ),
@@ -343,9 +349,9 @@ curl -X POST \\
                 null,
                 t.tr(
                     null,
-                    t.th({ className: "min-width txt-primary" }, "?query params"),
-                    t.th({ className: "min-width" }, "Type"),
-                    t.th(null, "Description"),
+                    t.th({ className: "min-width txt-primary" }, i18n.t("api_preview.query_params")),
+                    t.th({ className: "min-width" }, i18n.t("api_preview.type")),
+                    t.th(null, i18n.t("api_preview.description")),
                 ),
             ),
             t.tbody(
@@ -353,19 +359,19 @@ curl -X POST \\
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "expand"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, expandInfo()),
                 ),
                 t.tr(
                     null,
                     t.td({ className: "min-width" }, "fields"),
-                    t.td({ className: "min-width" }, t.span({ className: "label" }, "String")),
+                    t.td({ className: "min-width" }, t.span({ className: "label" }, i18n.t("api_preview.string"))),
                     t.td(null, fieldsInfo()),
                 ),
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

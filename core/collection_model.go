@@ -367,6 +367,7 @@ type baseCollection struct {
 	RawOptions types.JSONRaw `db:"options" json:"-" xml:"-" form:"-"`
 
 	Name    string                  `db:"name" json:"name" form:"name"`
+	Label   string                  `db:"label" json:"label" form:"label"`
 	Type    string                  `db:"type" json:"type" form:"type"`
 	Fields  FieldsList              `db:"fields" json:"fields" form:"fields"`
 	Indexes types.JSONArray[string] `db:"indexes" json:"indexes" form:"indexes"`
@@ -605,6 +606,7 @@ func (m *Collection) DBExport(app App) (map[string]any, error) {
 		"updateRule": m.UpdateRule,
 		"deleteRule": m.DeleteRule,
 		"name":       m.Name,
+		"label":      m.Label,
 		"fields":     m.Fields,
 		"indexes":    m.Indexes,
 		"system":     m.System,

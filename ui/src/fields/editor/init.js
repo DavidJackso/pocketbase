@@ -1,12 +1,15 @@
 import { input } from "./input";
 import { settings } from "./settings";
 import { view } from "./view";
+import { i18n } from "../../i18n.js";
 
 window.app = window.app || {};
 window.app.fieldTypes = window.app.fieldTypes || {};
 window.app.fieldTypes.editor = {
     icon: "ri-edit-2-line",
-    label: "Rich editor",
+    get label() {
+        return i18n.t("field_types.editor");
+    },
     settings,
     input,
     view,

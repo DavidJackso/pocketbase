@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -22,7 +24,7 @@ export function settings(props) {
                         { className: "field" },
                         t.label(
                             { htmlFor: uniqueId + ".maxSize" },
-                            t.span(null, "Max size "),
+                            t.span(null, () => i18n.t("field_settings.max_size") + " "),
                             t.small(null, "(bytes)"),
                         ),
                         t.input({
@@ -32,7 +34,7 @@ export function settings(props) {
                             min: 0,
                             step: 1,
                             max: Number.MAX_SAFE_INTEGER,
-                            placeholder: "Default to max ~1MB",
+                            placeholder: i18n.t("json_field.default_max_size"),
                             value: () => props.field.maxSize || "",
                             oninput: (e) => {
                                 // temp skip invalid numbers with leading 0 while typing to avoid reseting the entire input
@@ -54,7 +56,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -72,7 +74,7 @@ export function settings(props) {
                             className: () => `btn sm secondary ${local.showInfo ? "" : "transparent"}`,
                             onclick: () => (local.showInfo = !local.showInfo),
                         },
-                        t.span({ className: "txt" }, "String value normalizations"),
+                        t.span({ className: "txt" }, i18n.t("json_field.string_normalizations")),
                         t.i({
                             className: () => (local.showInfo ? "ri-arrow-up-s-line" : "ri-arrow-down-s-line"),
                             ariaHidden: true,
@@ -130,10 +132,10 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.i({
                         className: "ri-information-line link-hint",
-                        ariaDescription: app.attrs.tooltip("Requires the field value NOT to be null, '', [], {}."),
+                        ariaDescription: app.attrs.tooltip(i18n.t("json_field.required_help")),
                     }),
                 ),
             ),

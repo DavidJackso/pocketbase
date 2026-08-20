@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     collection: undefined,
 //     originalRecord: undefined,
@@ -48,7 +50,7 @@ export function input(props) {
                         name: () => props.field.name,
                         required: () => local.isRequired,
                         disabled: () => local.isDisabled,
-                        placeholder: () => (local.hasAutogenerate ? "Leave empty to autogenerate..." : ""),
+                        placeholder: () => (local.hasAutogenerate ? i18n.t("text_field.autogenerate_placeholder") : ""),
                         value: () => props.record[props.field.name] || "",
                         oninput: (e) => (props.record[props.field.name] = e.target.value || ""),
                     }),

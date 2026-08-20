@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function tokenOptionsAccordion(collection) {
     const uniqueId = "token_" + app.utils.randomString();
 
@@ -5,18 +7,18 @@ export function tokenOptionsAccordion(collection) {
         get tokensList() {
             if (collection?.name === "_superusers") {
                 return [
-                    { key: "authToken", label: "Auth" },
-                    { key: "passwordResetToken", label: "Password reset" },
-                    { key: "fileToken", label: "Protected file" },
+                    { key: "authToken", label: i18n.t("token_options.auth") },
+                    { key: "passwordResetToken", label: i18n.t("token_options.password_reset") },
+                    { key: "fileToken", label: i18n.t("token_options.protected_file") },
                 ];
             }
 
             return [
-                { key: "authToken", label: "Auth" },
-                { key: "verificationToken", label: "Email verification" },
-                { key: "passwordResetToken", label: "Password reset" },
-                { key: "emailChangeToken", label: "Email change" },
-                { key: "fileToken", label: "Protected file" },
+                { key: "authToken", label: i18n.t("token_options.auth") },
+                { key: "verificationToken", label: i18n.t("token_options.email_verification") },
+                { key: "passwordResetToken", label: i18n.t("token_options.password_reset") },
+                { key: "emailChangeToken", label: i18n.t("token_options.email_change") },
+                { key: "fileToken", label: i18n.t("token_options.protected_file") },
             ];
         },
     });
@@ -30,7 +32,7 @@ export function tokenOptionsAccordion(collection) {
         t.summary(
             null,
             t.i({ className: "ri-key-2-line", ariaHidden: true }),
-            t.span({ className: "txt", textContent: "Token options (invalidate, duration)" }),
+            t.span({ className: "txt", textContent: i18n.t("token_options.title") }),
         ),
         t.div({ className: "grid sm" }, () => {
             return data.tokensList.map((token) => {
@@ -42,7 +44,7 @@ export function tokenOptionsAccordion(collection) {
                         { className: "field token-field" },
                         t.label({
                             htmlFor: fieldId,
-                            textContent: () => token.label + " duration (in seconds)",
+                            textContent: () => token.label + " " + i18n.t("common.duration_seconds_lower"),
                         }),
                         t.input({
                             id: fieldId,
@@ -60,7 +62,7 @@ export function tokenOptionsAccordion(collection) {
                         t.button({
                             type: "button",
                             className: () => `link-hint ${collection[token.key].secret ? "txt-success" : ""}`,
-                            textContent: "Invalidate all previously issued tokens",
+                            textContent: i18n.t("token_options.invalidate_all"),
                             onclick: () => {
                                 // toggle
                                 if (collection[token.key].secret) {

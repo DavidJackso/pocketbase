@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -72,7 +74,7 @@ window.app.components.uploadedFileThumb = function(propsArg = {}) {
                 return t.img({
                     draggable: false,
                     loading: "lazy",
-                    alt: () => "Thumb of " + props.file.name,
+                    alt: () => i18n.t("uploaded_file_thumb.alt", { name: props.file.name }),
                     src: data.thumbSrc,
                 });
             }

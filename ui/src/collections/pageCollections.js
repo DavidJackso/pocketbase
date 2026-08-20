@@ -1,4 +1,5 @@
 import { collectionsSidebar } from "./collectionsSidebar";
+import { i18n } from "../i18n.js";
 
 const SORT_QUERY_KEY = "sort";
 const FILTER_QUERY_KEY = "filter";
@@ -61,7 +62,8 @@ export function pageCollections(route) {
         watch(
             () => (app.store.activeCollection?.name || "") + (app.store.activeCollection?.updated || ""),
             (newVal, oldVal) => {
-                app.store.title = app.store.activeCollection?.name || "Collections";
+                app.store.title = app.store.activeCollection?.label || app.store.activeCollection?.name
+                    || i18n.t("collections_sidebar.collections");
 
                 const hasChanged = oldVal && oldVal != newVal;
 
@@ -200,12 +202,12 @@ export function pageCollections(route) {
                 { className: "page-header flex-nowrap" },
                 t.nav(
                     { className: "breadcrumbs" },
-                    t.div(null, "Collections"),
+                    t.div(null, i18n.t("collections_sidebar.collections")),
                     () => {
                         if (app.store.activeCollection?.name) {
                             return t.div({
-                                title: app.store.activeCollection.name,
-                                textContent: app.store.activeCollection.name,
+                                title: app.store.activeCollection.label || app.store.activeCollection.name,
+                                textContent: app.store.activeCollection.label || app.store.activeCollection.name,
                             });
                         }
                     },
@@ -220,7 +222,7 @@ export function pageCollections(route) {
                         {
                             type: "button",
                             className: "btn circle transparent secondary tooltip-bottom btn-collection-settings",
-                            ariaLabel: app.attrs.tooltip("Collection settings"),
+                            ariaLabel: app.attrs.tooltip(i18n.t("page_collections.collection_settings")),
                             onclick: () => {
                                 app.modals.openCollectionUpsert(app.store.activeCollection, {
                                     ontruncate: () => refreshRecordsList(),
@@ -241,7 +243,9 @@ export function pageCollections(route) {
                         onclick: () => refreshRecordsList(),
                         className: () =>
                             `btn transparent circle rotate-btn ${pageData.suggestReset ? "warning" : "secondary"}`,
-                        tooltip: () => `Refresh${pageData.suggestReset ? "\n(list changed)" : ""}`,
+                        tooltip: () =>
+                            i18n.t("common.refresh")
+                                + (pageData.suggestReset ? "\n" + i18n.t("page_collections.list_changed") : ""),
                     }),
                 ),
                 t.div(
@@ -257,7 +261,7 @@ export function pageCollections(route) {
                             onclick: () => app.modals.openApiPreview(app.store.activeCollection),
                         },
                         t.i({ className: "ri-code-s-slash-line", ariaHidden: true }),
-                        t.span({ className: "txt", textContent: "API preview" }),
+                        t.span({ className: "txt", textContent: i18n.t("page_collections.api_preview") }),
                     ),
                     () => {
                         if (app.store.activeCollection?.type == "view") {
@@ -271,7 +275,7 @@ export function pageCollections(route) {
                                 onclick: () => app.modals.openRecordUpsert(app.store.activeCollection),
                             },
                             t.i({ className: "ri-add-line", ariaHidden: true }),
-                            t.span({ className: "txt", textContent: "New record" }),
+                            t.span({ className: "txt", textContent: i18n.t("records_list.new_record") }),
                         );
                     },
                 ),
@@ -294,9 +298,9 @@ export function pageCollections(route) {
                     { className: "txt" },
                     () => {
                         if (app.store.collections?.length) {
-                            return "Select collection from the sidebar.";
+                            return i18n.t("page_collections.select_from_sidebar");
                         }
-                        return "No collections found.";
+                        return i18n.t("collections_sidebar.no_collections_found");
                     },
                 ),
             ),
@@ -339,7 +343,7 @@ export function pageCollections(route) {
                     {
                         className: () => `total-count ${pageData.isTotalCountLoading ? "faded" : ""}`,
                     },
-                    "Total: ",
+                    () => i18n.t("page_collections.total") + " ",
                     () => pageData.totalCount,
                 ),
                 app.components.credits(),

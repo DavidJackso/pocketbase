@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -9,8 +11,8 @@ export function settings(props) {
     const uniqueId = "f_" + app.utils.randomString();
 
     const isMultipleOptions = [
-        { label: "Single", value: false },
-        { label: "Multiple", value: true },
+        { label: i18n.t("file_field.single"), value: false },
+        { label: i18n.t("file_field.multiple"), value: true },
     ];
 
     return app.components.fieldSettings(props, {
@@ -46,17 +48,15 @@ export function settings(props) {
                         { className: "field" },
                         t.label(
                             { htmlFor: uniqueId + ".mimeTypes" },
-                            t.span({ className: "txt" }, "Allowed mime types"),
+                            t.span({ className: "txt" }, i18n.t("file_field.allowed_mime_types")),
                             t.i({
                                 className: "ri-information-line link-hint",
-                                ariaDescription: app.attrs.tooltip(
-                                    "Allow files ONLY with the listed mime types.\n Leave empty for no restriction.",
-                                ),
+                                ariaDescription: app.attrs.tooltip(i18n.t("file_field.allowed_mime_types_help")),
                             }),
                         ),
                         app.components.select({
                             max: 99,
-                            placeholder: "No restriction",
+                            placeholder: i18n.t("file_field.no_restriction"),
                             options: app.utils.mimeTypes.map((opt) => {
                                 return {
                                     value: opt.mimeType,
@@ -81,7 +81,7 @@ export function settings(props) {
                                 "className": "link-hint gap-0",
                                 "html-popovertarget": uniqueId + "mimeTypesDropdown",
                             },
-                            t.span({ className: "txt" }, "Choose presets"),
+                            t.span({ className: "txt" }, i18n.t("file_field.choose_presets")),
                             t.i({ className: "ri-arrow-drop-down-fill", ariaHidden: true }),
                         ),
                         t.div(
@@ -105,7 +105,7 @@ export function settings(props) {
 
                                     e.target.closest(".dropdown").hidePopover();
                                 },
-                                textContent: "Images (jpg, png, svg, gif, webp)",
+                                textContent: i18n.t("file_field.preset_images"),
                             }),
                             t.button({
                                 type: "button",
@@ -122,7 +122,7 @@ export function settings(props) {
 
                                     e.target.closest(".dropdown").hidePopover();
                                 },
-                                textContent: "Documents (pdf, doc/docx, xls/xlsx)",
+                                textContent: i18n.t("file_field.preset_documents"),
                             }),
                             t.button({
                                 type: "button",
@@ -139,7 +139,7 @@ export function settings(props) {
 
                                     e.target.closest(".dropdown").hidePopover();
                                 },
-                                textContent: "Videos (mp4, mpeg, avi, mov, 3gp)",
+                                textContent: i18n.t("file_field.preset_videos"),
                             }),
                             t.button({
                                 type: "button",
@@ -154,7 +154,7 @@ export function settings(props) {
 
                                     e.target.closest(".dropdown").hidePopover();
                                 },
-                                textContent: "Archives (zip, 7zip, rar)",
+                                textContent: i18n.t("file_field.preset_archives"),
                             }),
                         ),
                     ),
@@ -167,12 +167,10 @@ export function settings(props) {
                             {
                                 htmlFor: uniqueId + ".thumbs",
                             },
-                            t.span({ className: "txt" }, "Thumb sizes"),
+                            t.span({ className: "txt" }, i18n.t("file_field.thumb_sizes")),
                             t.i({
                                 className: "ri-information-line link-hint",
-                                ariaDescription: app.attrs.tooltip(
-                                    "List of additional thumb sizes for image files, along with the default thumb size of 100x100. The thumbs are generated lazily on first access.",
-                                ),
+                                ariaDescription: app.attrs.tooltip(i18n.t("file_field.thumb_sizes_help")),
                             }),
                         ),
                         t.input({
@@ -186,14 +184,14 @@ export function settings(props) {
                     ),
                     t.div(
                         { className: "field-help" },
-                        t.span({ className: "txt m-r-5" }, "Use comma as separator."),
+                        t.span({ className: "txt m-r-5" }, i18n.t("email_url_field.comma_separator")),
                         t.button(
                             {
                                 "type": "button",
                                 "className": "link-hint gap-0",
                                 "html-popovertarget": uniqueId + "thumbFormatsDropdown",
                             },
-                            t.span({ className: "txt" }, "Supported formats"),
+                            t.span({ className: "txt" }, i18n.t("file_field.supported_formats")),
                             t.i({ className: "ri-arrow-drop-down-fill", ariaHidden: true }),
                         ),
                         t.div(
@@ -242,14 +240,14 @@ export function settings(props) {
                     { className: "col-sm-3" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".maxSize" }, "Max size"),
+                        t.label({ htmlFor: uniqueId + ".maxSize" }, i18n.t("field_settings.max_size")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".maxSize",
                             step: 1,
                             min: 0,
                             max: Number.MAX_SAFE_INTEGER,
-                            placeholder: "~5MB default",
+                            placeholder: i18n.t("file_field.default_5mb"),
                             name: () => `fields.${props.fieldIndex}.maxSize`,
                             value: () => props.field.maxSize || "",
                             oninput: (e) => {
@@ -267,17 +265,17 @@ export function settings(props) {
                             },
                         }),
                     ),
-                    t.div({ className: "field-help" }, "In bytes."),
+                    t.div({ className: "field-help" }, i18n.t("file_field.in_bytes")),
                 ),
                 t.div(
                     { className: "col-sm-3", hidden: () => props.field.maxSelect << 0 < 2 },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".maxSelect" }, "Max select"),
+                        t.label({ htmlFor: uniqueId + ".maxSelect" }, i18n.t("file_field.max_select")),
                         t.input({
                             type: "number",
                             id: uniqueId + ".maxSelect",
-                            placeholder: "Default to single",
+                            placeholder: i18n.t("file_field.default_single"),
                             step: 1,
                             min: 2,
                             required: true,
@@ -309,15 +307,15 @@ export function settings(props) {
                         }),
                         t.label(
                             { htmlFor: uniqueId + ".protected" },
-                            t.span({ className: "txt" }, "Protected"),
+                            t.span({ className: "txt" }, i18n.t("file_field.protected")),
                             t.small(
                                 { className: "txt-hint" },
-                                "File download requests will need to satisfy the View API rule (",
+                                () => i18n.t("file_field.protected_help_prefix") + " (",
                                 t.a({
                                     href: import.meta.env.PB_PROTECTED_FILE_DOCS,
                                     target: "_blank",
                                     rel: "noopener noreferrer",
-                                    textContent: "Learn more",
+                                    textContent: i18n.t("file_field.learn_more"),
                                 }),
                                 ").",
                             ),
@@ -328,7 +326,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -352,12 +350,16 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.small({ className: "txt-hint" }, () => props.field.maxSelect > 1 ? "(!=[])" : "(!='')"),
                     t.i({
                         className: "ri-information-line link-hint",
                         ariaDescription: app.attrs.tooltip(() =>
-                            `Requires the field value to be nonempty ${props.field.maxSelect > 1 ? "array" : "string"}.`
+                            i18n.t(
+                                props.field.maxSelect > 1
+                                    ? "file_field.required_help_array"
+                                    : "file_field.required_help_string",
+                            )
                         ),
                     }),
                 ),

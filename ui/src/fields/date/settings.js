@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 // {
 //     originalCollection: undefined,
 //     collection: undefined,
@@ -16,7 +18,10 @@ export function settings(props) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".min" }, t.span({ className: "txt" }, "Min date (Local)")),
+                        t.label(
+                            { htmlFor: uniqueId + ".min" },
+                            t.span({ className: "txt" }, i18n.t("date_field.min_date")),
+                        ),
                         t.input({
                             type: "datetime-local",
                             id: uniqueId + ".min",
@@ -33,7 +38,10 @@ export function settings(props) {
                     { className: "col-sm-6" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".max" }, t.span({ className: "txt" }, "Max date (Local)")),
+                        t.label(
+                            { htmlFor: uniqueId + ".max" },
+                            t.span({ className: "txt" }, i18n.t("date_field.max_date")),
+                        ),
                         t.input({
                             type: "datetime-local",
                             id: uniqueId + ".max",
@@ -50,7 +58,7 @@ export function settings(props) {
                     { className: "col-sm-12" },
                     t.div(
                         { className: "field" },
-                        t.label({ htmlFor: uniqueId + ".help" }, "Help text"),
+                        t.label({ htmlFor: uniqueId + ".help" }, i18n.t("field_settings.help_text")),
                         t.input({
                             type: "text",
                             id: uniqueId + ".help",
@@ -74,11 +82,11 @@ export function settings(props) {
                 }),
                 t.label(
                     { htmlFor: uniqueId + ".required" },
-                    t.span({ className: "txt" }, "Required"),
+                    t.span({ className: "txt" }, i18n.t("common.required")),
                     t.small({ className: "txt-hint" }, "(!='')"),
                     t.i({
                         className: "ri-information-line link-hint",
-                        ariaDescription: app.attrs.tooltip("Requires the field value to be nonempty string."),
+                        ariaDescription: app.attrs.tooltip(i18n.t("text_field.required_help")),
                     }),
                 ),
             ),

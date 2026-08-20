@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 export function docsBatch(collection) {
     const baseURL = app.utils.getApiExampleURL();
 
@@ -67,23 +69,23 @@ export function docsBatch(collection) {
     return t.div(
         { pbEvent: "apiPreviewBatch", className: "content" },
         // description
-        t.p(null, `Batch and transactional create/update/upsert/delete of multiple records in a single request.`),
+        t.p(null, i18n.t("api_preview.batch_desc")),
         t.div(
             { className: "alert warning" },
             t.p(
                 { className: "txt-bold" },
-                "The batch Web API need to be explicitly enabled and configured from the ",
+                i18n.t("api_preview.batch_warning1") + " ",
                 t.a({
                     href: "#/settings",
                     target: "_blank",
-                    title: "Open in new tab",
-                    textContent: "App settings",
+                    title: i18n.t("api_preview.open_in_new_tab"),
+                    textContent: i18n.t("api_preview.app_settings"),
                 }),
                 ".",
             ),
             t.p(
                 null,
-                "Because this endpoint process the requests in a single DB transaction it could degrade the performance of your application if not used with proper care and configuration (use smaller max processing and body size limits, avoid large file uploads over slow S3 networks and custom hooks that communicate with slow external APIs).",
+                i18n.t("api_preview.batch_warning2"),
             ),
         ),
         app.components.codeBlockTabs({
@@ -115,7 +117,7 @@ export function docsBatch(collection) {
                             href: import.meta.env.PB_JS_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "JS SDK docs",
+                            textContent: i18n.t("api_preview.js_sdk_docs"),
                         }),
                     ),
                 },
@@ -144,7 +146,7 @@ export function docsBatch(collection) {
                             href: import.meta.env.PB_DART_SDK_URL,
                             target: "_blank",
                             rel: "noopener noreferrer",
-                            textContent: "Dart SDK docs",
+                            textContent: i18n.t("api_preview.dart_sdk_docs"),
                         }),
                     ),
                 },
@@ -162,7 +164,7 @@ export function docsBatch(collection) {
             ],
         }),
         // api
-        t.div({ className: "block m-t-sm" }, t.strong(null, "API details")),
+        t.div({ className: "block m-t-sm" }, t.strong(null, i18n.t("api_preview.api_details"))),
         t.div(
             { className: "alert success api-preview-alert" },
             t.span({ className: "label method" }, "POST"),
@@ -170,15 +172,15 @@ export function docsBatch(collection) {
         ),
         t.p(
             null,
-            "The request accepts only 1 required ",
+            i18n.t("api_preview.batch_request_accepts") + " ",
             t.code(null, "requests: Array<Request>"),
-            " parameter that defines the list of the batch requests to process.",
+            " " + i18n.t("api_preview.batch_request_param_desc"),
         ),
         t.p(
             null,
-            "When using the official SDKs the batch requests are transparently constructed by their service handler.",
+            i18n.t("api_preview.batch_sdk_transparent"),
         ),
-        t.p(null, "For the cases when you don't use the SDKs, the she supported batch request actions are:"),
+        t.p(null, i18n.t("api_preview.batch_supported_actions_intro")),
         t.ul(
             null,
             t.li(null, "record create - ", t.code(null, "POST /api/collections/{collection}/records")),
@@ -255,7 +257,7 @@ export function docsBatch(collection) {
             ),
         ),
         // responses
-        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, "Example responses")),
+        t.div({ className: "block m-t-base m-b-sm" }, t.strong(null, i18n.t("api_preview.example_responses"))),
         app.components.codeBlockTabs({
             tabs: responses,
         }),

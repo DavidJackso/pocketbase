@@ -1,4 +1,5 @@
 import { collectionsDiffTable } from "./collectionsDiffTable";
+import { i18n } from "../../i18n.js";
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
@@ -90,7 +91,7 @@ function importCollectionsModal(oldCollections, newCollections, settingsArg) {
                 [
                     t.h6(
                         null,
-                        "Do you really want to delete the following collection fields and their related records data:",
+                        i18n.t("sync.confirm_delete_fields"),
                     ),
                     t.ul(null, () => {
                         return deletedFieldNames.map((name) => {
@@ -116,7 +117,7 @@ function importCollectionsModal(oldCollections, newCollections, settingsArg) {
             await app.pb.collections.import(newCollections, settings.deleteMissing);
             await app.store.loadCollections();
             settings.onsubmit?.(JSON.parse(JSON.stringify(app.store.collections)));
-            app.toasts.success("Successfully imported collections configuration.");
+            app.toasts.success(i18n.t("sync.imported_success"));
         } catch (err) {
             app.checkApiError(err);
         }
@@ -143,7 +144,7 @@ function importCollectionsModal(oldCollections, newCollections, settingsArg) {
                 watchers.forEach((w) => w?.unwatch());
             },
         },
-        t.header({ className: "modal-header" }, t.h5(null, "Side-by-side diff")),
+        t.header({ className: "modal-header" }, t.h5(null, i18n.t("sync.side_by_side_diff"))),
         t.div({ className: "modal-content" }, () => {
             return data.pairs.map((pair) => {
                 return collectionsDiffTable({
@@ -162,7 +163,7 @@ function importCollectionsModal(oldCollections, newCollections, settingsArg) {
                     disabled: () => data.isImporting,
                     onclick: () => app.modals.close(modal),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             t.button(
                 {
@@ -171,7 +172,7 @@ function importCollectionsModal(oldCollections, newCollections, settingsArg) {
                     disabled: () => data.isImporting,
                     onclick: () => submitConfirm(),
                 },
-                t.span({ className: "txt" }, "Confirm and import"),
+                t.span({ className: "txt" }, i18n.t("sync.confirm_and_import")),
             ),
         ),
     );

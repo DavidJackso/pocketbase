@@ -1,4 +1,5 @@
 import { toDeleteProp } from "@/base/fieldSettings";
+import { i18n } from "../i18n.js";
 
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
@@ -163,7 +164,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
     app.modals.confirm(
         t.div(
             { className: "dangerous-collection-changes-list" },
-            t.h5({ className: "block txt-center m-b-base" }, "Do you really want to save the collection changes?"),
+            t.h5({ className: "block txt-center m-b-base" }, i18n.t("collection_changes.confirm_save")),
             // general collection warning
             () => {
                 if (!data.isCollectionRenamed && !data.deletedFields.length && !data.renamedFields.length) {
@@ -174,13 +175,13 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                     { className: "alert warning m-b-base" },
                     t.p(
                         null,
-                        "If the collection participate in another collection rule, filter or view query, you'll have to update it manually!",
+                        i18n.t("collection_changes.manual_update_warning"),
                     ),
                     () => {
                         if (data.deletedFields.length) {
                             return t.p(
                                 null,
-                                "All data associated with the removed fields will be permanently deleted!",
+                                i18n.t("collection_changes.deleted_data_warning"),
                             );
                         }
                     },
@@ -196,7 +197,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                     { className: "collection-changes-list changes-renamed-collection" },
                     t.li(
                         { className: "list-item" },
-                        "Renamed collection ",
+                        () => i18n.t("collection_changes.renamed_collection") + " ",
                         t.strong({ className: "label warning" }, oldCollection?.name),
                         t.i({ className: "ri-arrow-right-line txt-sm", ariaHidden: true }),
                         t.strong({ className: "label success" }, newCollection?.name || "N/A"),
@@ -216,7 +217,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                             const oldField = oldCollection?.fields?.find?.((f) => f.id == newField.id);
                             return t.li(
                                 { className: "list-item" },
-                                "Renamed field ",
+                                () => i18n.t("collection_changes.renamed_field") + " ",
                                 t.strong({ className: "label warning" }, oldField?.name),
                                 t.i({ className: "ri-arrow-right-line txt-sm", ariaHidden: true }),
                                 t.strong({ className: "label success" }, newField.name || "N/A"),
@@ -237,7 +238,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                         return data.deletedFields.map((field) => {
                             return t.li(
                                 { className: "list-item" },
-                                "Deleted field ",
+                                () => i18n.t("collection_changes.deleted_field") + " ",
                                 t.strong({ className: "label danger" }, field.name || "N/A"),
                             );
                         });
@@ -256,9 +257,9 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                         return data.multipleToSingleFields.map((field) => {
                             return t.li(
                                 { className: "list-item" },
-                                "Multiple to single value conversion of field ",
+                                () => i18n.t("collection_changes.multiple_to_single") + " ",
                                 t.strong({ className: "label warning" }, field.name || field.id),
-                                t.em({ className: "txt-sm" }, " (will keep only the last array item)"),
+                                t.em({ className: "txt-sm" }, () => " (" + i18n.t("collection_changes.keeps_last_item") + ")"),
                             );
                         });
                     },
@@ -278,21 +279,21 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                                 { className: "list-item" },
                                 t.div(
                                     { className: "content" },
-                                    t.span({ className: "txt" }, "Changed API rule for "),
+                                    t.span({ className: "txt" }, () => i18n.t("collection_changes.changed_api_rule_for") + " "),
                                     t.code(null, ruleChange.prop),
                                 ),
-                                t.small({ className: "txt-bold" }, "Old:"),
+                                t.small({ className: "txt-bold" }, i18n.t("collection_changes.old")),
                                 t.div(
                                     { className: "rule-content old-rule" },
                                     ruleChange.oldRule === null
-                                        ? "null (superusers only)"
+                                        ? i18n.t("collection_changes.null_superusers_only")
                                         : (ruleChange.oldRule || "\"\""),
                                 ),
-                                t.small({ className: "txt-bold" }, "New:"),
+                                t.small({ className: "txt-bold" }, i18n.t("collection_changes.new")),
                                 t.div(
                                     { className: "rule-content new-rule" },
                                     ruleChange.newRule === null
-                                        ? "null (superusers only)"
+                                        ? i18n.t("collection_changes.null_superusers_only")
                                         : (ruleChange.newRule || "\"\""),
                                 ),
                             );
@@ -312,18 +313,16 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                         return data.conflictingOIDCProviders.map((oidc) => {
                             return t.li(
                                 { className: "list-item" },
-                                "Changed OIDC ",
+                                () => i18n.t("collection_changes.changed_oidc") + " ",
                                 oidc.name,
-                                " host ",
+                                () => " " + i18n.t("collection_changes.host") + " ",
                                 t.strong({ className: "label warning" }, oidc.oldHost),
                                 t.i({ className: "ri-arrow-right-line txt-sm", ariaHidden: true }),
                                 t.strong({ className: "label success" }, oidc.newHost),
                                 t.br(),
                                 t.span(
                                     { className: "txt-hint" },
-                                    "If the old and new OIDC configuration is not for the same provider consider deleting",
-                                    " all old _externalAuths records associated to the current collection and provider,",
-                                    " otherwise it may result in account linking errors.",
+                                    i18n.t("collection_changes.oidc_host_warning"),
                                 ),
                                 " ",
                                 t.a({
@@ -332,7 +331,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
                                     href: () => {
                                         return `#/collections?collection=_externalAuths&filter=collectionRef%3D%22${newCollection?.id}%22+%26%26+provider%3D%22${oidc.name}%22`;
                                     },
-                                    textContent: "Review existing _externalAuths records",
+                                    textContent: i18n.t("collection_changes.review_external_auths"),
                                 }),
                             );
                         });
@@ -344,7 +343,7 @@ window.app.modals.openCollectionChangesConfirmation = async function(
         noCallback,
         {
             className: "collection-changes-confirm-modal",
-            yesButton: "Yes, save changes",
+            yesButton: i18n.t("collection_changes.yes_save_changes"),
         },
     );
 };

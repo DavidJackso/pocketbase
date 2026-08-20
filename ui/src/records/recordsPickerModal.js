@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.modals = window.app.modals || {};
 
@@ -10,7 +12,9 @@ const defaultSettings = {
     collection: "", // model, id or name
     selectedIds: [],
     maxSelect: 1,
-    btnText: "Set selection",
+    get btnText() {
+        return i18n.t("records_picker.set_selection");
+    },
     onselect: function(records) {},
 };
 
@@ -297,7 +301,7 @@ function recordsPickerModal(settings = defaultSettings) {
                 {
                     type: "button",
                     className: "btn circle transparent",
-                    ariaLabel: app.attrs.tooltip("Add new record"),
+                    ariaLabel: app.attrs.tooltip(i18n.t("common.add_new_record")),
                     onclick: () => {
                         app.modals.openRecordUpsert(data.collection);
                     },
@@ -343,7 +347,7 @@ function recordsPickerModal(settings = defaultSettings) {
                                 t.button(
                                     {
                                         className: "btn sm secondary transparent circle",
-                                        ariaLabel: app.attrs.tooltip("Edit"),
+                                        ariaLabel: app.attrs.tooltip(i18n.t("common.edit")),
                                         onclick: (e) => {
                                             e.stopPropagation();
                                             app.modals.openRecordUpsert(data.collection, record);
@@ -371,11 +375,11 @@ function recordsPickerModal(settings = defaultSettings) {
                     },
                     t.div(
                         { className: "content txt-hint" },
-                        t.span({ className: "txt" }, "No records found."),
+                        t.span({ className: "txt" }, i18n.t("common.no_records_found")),
                         t.button({
                             type: "button",
                             className: "btn sm secondary",
-                            textContent: "Clear search",
+                            textContent: i18n.t("common.clear_search"),
                             hidden: () => !data.searchTerm.trim().length,
                             onclick: () => {
                                 data.searchTerm = "";
@@ -388,9 +392,16 @@ function recordsPickerModal(settings = defaultSettings) {
                 { className: "block m-t-base" },
                 t.p(
                     { className: "txt-bold" },
-                    () => `Selected (${data.selected.length} of max ${settings.maxSelect || 1})`,
+                    () =>
+                        i18n.t("records_picker.selected_count", {
+                            count: data.selected.length,
+                            max: settings.maxSelect || 1,
+                        }),
                 ),
-                t.span({ className: "txt-hint", hidden: () => data.selected }, "No selected records."),
+                t.span(
+                    { className: "txt-hint", hidden: () => data.selected },
+                    i18n.t("records_picker.no_selected_records"),
+                ),
                 app.components.sortable({
                     className: "records-picker-selected-list",
                     data: () => data.selected,
@@ -401,7 +412,7 @@ function recordsPickerModal(settings = defaultSettings) {
                             t.span(
                                 {
                                     className: "link-hint",
-                                    title: "Remove",
+                                    title: i18n.t("common.remove"),
                                     role: "button",
                                     onclick: () => toggleSelected(record),
                                 },
@@ -423,7 +434,7 @@ function recordsPickerModal(settings = defaultSettings) {
                     className: "btn transparent m-r-auto",
                     onclick: () => close(),
                 },
-                t.span({ className: "txt" }, "Close"),
+                t.span({ className: "txt" }, i18n.t("common.close")),
             ),
             // image thumb selector
             () => {
@@ -432,8 +443,8 @@ function recordsPickerModal(settings = defaultSettings) {
                 }
 
                 const options = [
-                    { value: "", label: "Original size" },
-                    { value: "100x100", label: "100x100 thumb" },
+                    { value: "", label: i18n.t("record_file_picker.original_size") },
+                    { value: "100x100", label: i18n.t("record_file_picker.thumb_size", { size: "100x100" }) },
                 ];
 
                 // find the related field and its thumbs
@@ -444,7 +455,7 @@ function recordsPickerModal(settings = defaultSettings) {
                 for (let thumb of thumbs) {
                     options.push({
                         value: thumb,
-                        label: `${thumb} thumb`,
+                        label: i18n.t("record_file_picker.thumb_size", { size: thumb }),
                     });
                 }
 

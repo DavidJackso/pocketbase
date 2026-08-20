@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function backupUploadButton(onSuccess = null) {
     const uniqueId = "backup_upload_" + app.utils.randomString();
 
@@ -11,8 +13,7 @@ export function backupUploadButton(onSuccess = null) {
         }
 
         app.modals.confirm(
-            `Note that we don't perform validations for the uploaded backup files. Proceed with extreme caution and only if you trust the source.\n\n`
-                + `Do you really want to upload "${file.name}"?`,
+            i18n.t("backups.upload_warning") + "\n\n" + i18n.t("backups.confirm_upload", { name: file.name }),
             () => {
                 uploadBackup(file);
             },
@@ -39,7 +40,7 @@ export function backupUploadButton(onSuccess = null) {
 
             onSuccess(file);
 
-            app.toasts.success("Successfully uploaded a new backup.");
+            app.toasts.success(i18n.t("backups.uploaded_success"));
         } catch (err) {
             if (!err.isAbort) {
                 data.isUploading = false;
@@ -74,7 +75,7 @@ export function backupUploadButton(onSuccess = null) {
         t.button(
             {
                 type: "button",
-                ariaLabel: app.attrs.tooltip("Upload backup"),
+                ariaLabel: app.attrs.tooltip(i18n.t("backups.upload_backup")),
                 className: () => `btn sm transparent secondary circle ${data.isUploading ? "loading" : ""}`,
                 disabled: () => data.isUploading,
                 onclick: () => fileInput?.click(),

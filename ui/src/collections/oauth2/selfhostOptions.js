@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -7,7 +9,9 @@ window.app.components.oauth2EndpointFields = function(providerInfo, namePrefix, 
 
     const settings = store({
         required: true,
-        title: "Provider endpoints",
+        get title() {
+            return i18n.t("oauth2.provider_endpoints");
+        },
     });
 
     const watchers = app.utils.extendStore(settings, settingsArg);
@@ -35,7 +39,7 @@ window.app.components.oauth2EndpointFields = function(providerInfo, namePrefix, 
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".authURL" }, "Auth URL"),
+                    t.label({ htmlFor: uniqueId + ".authURL" }, i18n.t("oauth2.auth_url")),
                     t.input({
                         id: uniqueId + ".authURL",
                         name: namePrefix + ".authURL",
@@ -50,7 +54,7 @@ window.app.components.oauth2EndpointFields = function(providerInfo, namePrefix, 
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".tokenURL" }, "Token URL"),
+                    t.label({ htmlFor: uniqueId + ".tokenURL" }, i18n.t("oauth2.token_url")),
                     t.input({
                         id: uniqueId + ".tokenURL",
                         name: namePrefix + ".tokenURL",
@@ -65,7 +69,7 @@ window.app.components.oauth2EndpointFields = function(providerInfo, namePrefix, 
                 { className: "col-12" },
                 t.div(
                     { className: "field" },
-                    t.label({ htmlFor: uniqueId + ".userInfoURL" }, "User info URL"),
+                    t.label({ htmlFor: uniqueId + ".userInfoURL" }, i18n.t("oauth2.user_info_url")),
                     t.input({
                         id: uniqueId + ".userInfoURL",
                         name: namePrefix + ".userInfoURL",
@@ -89,7 +93,7 @@ window.app.oauth2.gitlab = function(providerInfo, namePrefix, data) {
         data,
         {
             required: false,
-            title: "Self-hosted endpoints (optional)",
+            title: i18n.t("oauth2.self_hosted_endpoints"),
         },
     );
 };
@@ -101,7 +105,7 @@ window.app.oauth2.gitea = function(providerInfo, namePrefix, data) {
         data,
         {
             required: false,
-            title: "Self-hosted endpoints (optional)",
+            title: i18n.t("oauth2.self_hosted_endpoints"),
         },
     );
 };

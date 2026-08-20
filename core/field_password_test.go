@@ -288,6 +288,7 @@ func TestPasswordFieldValidateSettings(t *testing.T) {
 	testDefaultFieldIdValidation(t, core.FieldTypePassword)
 	testDefaultFieldNameValidation(t, core.FieldTypePassword)
 	testDefaultFieldHelpValidation[core.PasswordField](t)
+	testDefaultFieldLabelValidation[core.PasswordField](t)
 
 	app, _ := tests.NewTestApp()
 	defer app.Cleanup()

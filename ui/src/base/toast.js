@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 const toasts = new Map();
 
 const toastsContainer = t.div({ className: "toasts-container" });
@@ -135,7 +137,7 @@ function addToast(textOrElem, options = {}) {
                     {
                         type: "button",
                         className: "m-l-auto btn circle sm transparent secondary toast-remove",
-                        title: "Clear",
+                        title: i18n.t("common.clear"),
                         onclick: () => removeToast(toastRef),
                     },
                     t.i({ className: "ri-close-line", ariaHidden: true }),

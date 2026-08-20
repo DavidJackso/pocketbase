@@ -6,6 +6,8 @@ import markerIconRetinaUrl from "leaflet/dist/images/marker-icon-2x.png";
 import markerIconUrl from "leaflet/dist/images/marker-icon.png";
 import markerShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
+import { i18n } from "../i18n.js";
+
 const defaultZoomLevel = 8;
 
 window.app = window.app || {};
@@ -90,7 +92,7 @@ window.app.components.leaflet = function(propsArg = {}) {
             autoPan: true,
         }).addTo(map);
 
-        marker.bindTooltip("drag or right click anywhere on the map to move");
+        marker.bindTooltip(i18n.t("leaflet.marker_tooltip"));
 
         marker.on("moveend", (e) => {
             if (e.sourceTarget?._latlng) {
@@ -205,7 +207,7 @@ function initSearch(selectFunc = null) {
                     { signal: searchAbortController.signal },
                 );
                 if (response.status != 200) {
-                    throw new Error("OpenStreetMap API error " + response.status);
+                    throw new Error(i18n.t("leaflet.api_error", { status: response.status }));
                 }
 
                 const results = [];
@@ -234,7 +236,7 @@ function initSearch(selectFunc = null) {
             { className: "field" },
             t.input({
                 type: "text",
-                placeholder: "Search address...",
+                placeholder: i18n.t("leaflet.search_placeholder"),
                 value: () => data.searchTerm,
                 oninput: (e) => (data.searchTerm = e.target.value),
             }),
@@ -249,7 +251,7 @@ function initSearch(selectFunc = null) {
                     {
                         type: "button",
                         className: "link-hint",
-                        title: "Clear search",
+                        title: i18n.t("common.clear_search"),
                         onclick: () => reset(),
                     },
                     t.i({ className: "ri-close-line", ariaHidden: true }),
@@ -264,7 +266,7 @@ function initSearch(selectFunc = null) {
                 {
                     type: "button",
                     className: "dropdown-item",
-                    title: "Select address coordinates",
+                    title: i18n.t("leaflet.select_coordinates"),
                     onclick: () => selectFunc?.(item.lat, item.lon),
                 },
                 item.name,

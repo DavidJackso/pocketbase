@@ -1,3 +1,5 @@
+import { i18n } from "../../i18n.js";
+
 export function cronsList(propsArg = {}) {
     const props = store({
         reset: null,
@@ -34,7 +36,7 @@ export function cronsList(propsArg = {}) {
 
         try {
             await app.pb.crons.run(jobId);
-            app.toasts.success(`Successfully triggered "${jobId}".`);
+            app.toasts.success(i18n.t("crons.triggered_success", { jobId }));
             data.isRunning[jobId] = false;
         } catch (err) {
             if (!err.isAbort) {
@@ -77,7 +79,7 @@ export function cronsList(propsArg = {}) {
                 hidden: () => data.isLoading || data.crons.length,
                 className: "list-item",
             },
-            t.div({ className: "content block txt-hint" }, "No registered crons found."),
+            t.div({ className: "content block txt-hint" }, i18n.t("crons.no_crons_found")),
         ),
         () => {
             return data.crons.map((cron) => {
@@ -97,7 +99,7 @@ export function cronsList(propsArg = {}) {
                         t.button(
                             {
                                 type: "button",
-                                ariaLabel: app.attrs.tooltip("Run"),
+                                ariaLabel: app.attrs.tooltip(i18n.t("crons.run")),
                                 className: () =>
                                     `btn sm circle secondary transparent ${data.isRunning[cron.id] ? "loading" : ""}`,
                                 disabled: () => data.isRunning[cron.id],

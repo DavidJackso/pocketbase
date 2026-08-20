@@ -1,3 +1,5 @@
+import { i18n } from "../i18n.js";
+
 window.app = window.app || {};
 window.app.components = window.app.components || {};
 
@@ -59,7 +61,7 @@ window.app.components.addCollectionFieldButton = function(collection) {
                 "html-popovertarget": uniqueId + "_dropdown",
             },
             t.i({ className: "ri-add-line", ariaHidden: true }),
-            t.span({ className: "txt" }, "New field"),
+            t.span({ className: "txt" }, i18n.t("collection_fields.new_field")),
         ),
         t.div(
             {
