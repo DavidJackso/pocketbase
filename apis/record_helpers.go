@@ -21,14 +21,6 @@ import (
 const (
 	expandQueryParam = "expand"
 	fieldsQueryParam = "fields"
-	localeQueryParam = "locale"
-
-	// localeAllSentinel is a special "?locale=" value that skips display-locale
-	// resolution entirely, returning every Localized field's full
-	// {"locale":"value", ...} JSON object unresolved. Used by the admin
-	// dashboard record editor, which needs to read/write every configured
-	// locale at once rather than a single resolved display value.
-	localeAllSentinel = "@all"
 )
 
 var ErrMFA = errors.New("mfa required")
@@ -261,76 +253,6 @@ func checkMFA(e *core.RequestEvent, authRecord *core.Record, currentAuthMethod s
 	deleteMFA()
 
 	return "", nil
-}
-
-// hasLocalizedFields reports whether the collection has at least one
-// Localized TextField/EditorField, used to skip the display-locale
-// resolution overhead for the (common) collections that don't use it.
-func hasLocalizedFields(collection *core.Collection) bool {
-	if collection == nil {
-		return false
-	}
-
-	for _, f := range collection.Fields {
-		if lf, ok := f.(interface{ IsLocalized() bool }); ok && lf.IsLocalized() {
-			return true
-		}
-	}
-
-	return false
-}
-
-// recordResponseData returns the value that should be passed to e.JSON()
-// for a single record response.
-//
-// If the record's collection has at least one Localized field, it resolves
-// those fields' JSON locale map down to a single string based on the
-// "?locale=" query parameter (falling back to the app-wide base locale),
-// unless "?locale=@all" is set (see localeAllSentinel) in which case the
-// record is returned unchanged so that every locale value is preserved -
-// this is what the admin dashboard record editor requests so it can
-// read/write every configured locale at once.
-func recordResponseData(e *core.RequestEvent, record *core.Record) any {
-	if record == nil || !hasLocalizedFields(record.Collection()) {
-		return record
-	}
-
-	locale := e.Request.URL.Query().Get(localeQueryParam)
-	if locale == localeAllSentinel {
-		return record
-	}
-
-	base := core.BaseLocale(e.App)
-	if locale == "" {
-		locale = base
-	}
-
-	return core.ResolveLocalizedExport(record.Collection(), record.PublicExport(), base, locale)
-}
-
-// recordsResponseData is the []*core.Record equivalent of recordResponseData,
-// used for the records list response.
-func recordsResponseData(e *core.RequestEvent, collection *core.Collection, records []*core.Record) any {
-	if !hasLocalizedFields(collection) {
-		return records
-	}
-
-	locale := e.Request.URL.Query().Get(localeQueryParam)
-	if locale == localeAllSentinel {
-		return records
-	}
-
-	base := core.BaseLocale(e.App)
-	if locale == "" {
-		locale = base
-	}
-
-	result := make([]map[string]any, len(records))
-	for i, record := range records {
-		result[i] = core.ResolveLocalizedExport(collection, record.PublicExport(), base, locale)
-	}
-
-	return result
 }
 
 // EnrichRecord parses the request context and enrich the provided record:

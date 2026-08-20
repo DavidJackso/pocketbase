@@ -132,7 +132,6 @@ type settings struct {
 	TrustedProxy TrustedProxyConfig `form:"trustedProxy" json:"trustedProxy"`
 	Batch        BatchConfig        `form:"batch" json:"batch"`
 	Logs         LogsConfig         `form:"logs" json:"logs"`
-	Localization LocalizationConfig `form:"localization" json:"localization"`
 }
 
 // Settings defines the PocketBase app settings.
@@ -158,10 +157,6 @@ func newDefaultSettings() *Settings {
 			Logs: LogsConfig{
 				MaxDays: 5,
 				LogIP:   true,
-			},
-			Localization: LocalizationConfig{
-				BaseLocale:       defaultBaseLocale,
-				SupportedLocales: []string{defaultBaseLocale},
 			},
 			SMTP: SMTPConfig{
 				Enabled:  false,
@@ -305,7 +300,6 @@ func (s *Settings) PostValidate(ctx context.Context, app App) error {
 		validation.Field(&s.Batch),
 		validation.Field(&s.RateLimits),
 		validation.Field(&s.TrustedProxy),
-		validation.Field(&s.Localization),
 	)
 }
 
@@ -575,39 +569,6 @@ type LogsConfig struct {
 func (c LogsConfig) Validate() error {
 	return validation.ValidateStruct(&c,
 		validation.Field(&c.MaxDays, validation.Min(0)),
-	)
-}
-
-// -------------------------------------------------------------------
-
-// LocalizationConfig defines the app-wide base and supported locales used
-// for resolving Localized TextField/EditorField values (see BaseLocale).
-//
-// BaseLocale is the single locale that is always used for filtering,
-// sorting and search, and that is authoritative for Required/Min/Max/Pattern
-// validation, regardless of the requested display locale.
-type LocalizationConfig struct {
-	BaseLocale       string   `form:"baseLocale" json:"baseLocale"`
-	SupportedLocales []string `form:"supportedLocales" json:"supportedLocales"`
-}
-
-// MarshalJSON implements the [json.Marshaler] interface.
-func (c LocalizationConfig) MarshalJSON() ([]byte, error) {
-	type alias LocalizationConfig
-
-	// serialize as empty array
-	if c.SupportedLocales == nil {
-		c.SupportedLocales = []string{}
-	}
-
-	return json.Marshal(alias(c))
-}
-
-// Validate makes LocalizationConfig validatable by implementing [validation.Validatable] interface.
-func (c LocalizationConfig) Validate() error {
-	return validation.ValidateStruct(&c,
-		validation.Field(&c.BaseLocale, validation.Required, validation.Length(1, 20)),
-		validation.Field(&c.SupportedLocales, validation.Each(validation.Required, validation.Length(1, 20))),
 	)
 }
 

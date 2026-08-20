@@ -43,16 +43,6 @@ type Record struct {
 	data             *store.Store[string, any]
 	expand           *store.Store[string, any]
 
-	// app is an optional reference to the App instance that loaded or
-	// last touched this record. It is used internally (eg. by Localized
-	// TextField/EditorField) to resolve the app-wide base locale without
-	// having to change the public Field.PrepareValue/Record.Set signatures.
-	//
-	// It is nil for records constructed via NewRecord() directly without
-	// a follow-up SetApp() call (eg. from a hook script) - fields relying
-	// on it must treat a nil app as "use the default base locale".
-	app App
-
 	BaseModel
 
 	exportCustomData      bool
@@ -489,9 +479,8 @@ func (app *BaseApp) registerRecordHooks() {
 // with data loaded from the provided NullStringMap.
 //
 // Note that this method is intended to load and Scan data from a database row result.
-func newRecordFromNullStringMap(app App, collection *Collection, data dbx.NullStringMap) (*Record, error) {
+func newRecordFromNullStringMap(collection *Collection, data dbx.NullStringMap) (*Record, error) {
 	record := NewRecord(collection)
-	record.app = app
 
 	var fieldName string
 	for _, field := range collection.Fields {
@@ -530,12 +519,12 @@ func newRecordFromNullStringMap(app App, collection *Collection, data dbx.NullSt
 // each row in the provided NullStringMap slice.
 //
 // Note that this method is intended to load and Scan data from a database rows result.
-func newRecordsFromNullStringMaps(app App, collection *Collection, rows []dbx.NullStringMap) ([]*Record, error) {
+func newRecordsFromNullStringMaps(collection *Collection, rows []dbx.NullStringMap) ([]*Record, error) {
 	result := make([]*Record, len(rows))
 
 	var err error
 	for i, row := range rows {
-		result[i], err = newRecordFromNullStringMap(app, collection, row)
+		result[i], err = newRecordFromNullStringMap(collection, row)
 		if err != nil {
 			return nil, err
 		}
@@ -628,7 +617,6 @@ func (m *Record) BaseFilesPath() string {
 // a blank record (until PostScan() is invoked).
 func (m *Record) Original() *Record {
 	newRecord := NewRecord(m.collection)
-	newRecord.app = m.app
 
 	newRecord.originalData = maps.Clone(m.originalData)
 
@@ -854,19 +842,6 @@ func (m *Record) IgnoreEmailVisibility(state bool) *Record {
 func (m *Record) IgnoreUnchangedFields(state bool) *Record {
 	m.ignoreUnchangedFields = state
 	return m
-}
-
-// SetApp attaches an App reference to the record.
-//
-// It is used internally (eg. by Localized TextField/EditorField) to
-// resolve the app-wide base locale without changing the public
-// Field.PrepareValue/Record.Set signatures. Records loaded via app
-// queries (FindRecordById, FindRecordsByFilter, etc.) already have this
-// set automatically - call it explicitly only for records constructed
-// directly via NewRecord() when the app is known (eg. in a new record
-// creation handler).
-func (m *Record) SetApp(app App) {
-	m.app = app
 }
 
 // Set sets the provided key-value data pair into the current Record

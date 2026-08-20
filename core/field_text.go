@@ -3,7 +3,6 @@ package core
 import (
 	"context"
 	"database/sql"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"regexp"
@@ -13,7 +12,6 @@ import (
 	validation "github.com/pocketbase/ozzo-validation/v4"
 	"github.com/pocketbase/pocketbase/core/validators"
 	"github.com/pocketbase/pocketbase/tools/security"
-	"github.com/pocketbase/pocketbase/tools/types"
 	"github.com/spf13/cast"
 )
 
@@ -113,15 +111,6 @@ type TextField struct {
 	//
 	// A single collection can have only 1 field marked as primary key.
 	PrimaryKey bool `form:"primaryKey" json:"primaryKey"`
-
-	// Localized marks the field as storing one value per language as a
-	// JSON object (eg. {"en": "Hello", "ru": "Привет"}) instead of a
-	// single plain string.
-	//
-	// The app-wide base locale (see [BaseLocale]) key is authoritative for
-	// Required/Min/Max/Pattern validation and for all filtering, sorting
-	// and search - those always operate on the base locale value only.
-	Localized bool `form:"localized" json:"localized"`
 }
 
 // Type implements [Field.Type] interface method.
@@ -178,72 +167,16 @@ func (f *TextField) ColumnType(app App) string {
 		return "TEXT PRIMARY KEY DEFAULT ('r'||lower(hex(randomblob(7)))) NOT NULL"
 	}
 
-	if f.Localized {
-		return "JSON DEFAULT NULL"
-	}
-
 	return "TEXT DEFAULT '' NOT NULL"
 }
 
 // PrepareValue implements [Field.PrepareValue] interface method.
 func (f *TextField) PrepareValue(record *Record, raw any) (any, error) {
-	if !f.Localized {
-		return cast.ToString(raw), nil
-	}
-
-	return f.prepareLocalizedValue(record, raw)
-}
-
-// prepareLocalizedValue normalizes a raw value for a Localized field into
-// a types.JSONRaw map of locale->string.
-//
-// A raw string is sniffed the same way JSONField does for
-// multipart/form-data compatibility: if it looks like a serialized JSON
-// object (eg. `{"en":"hi","ru":"привет"}`, as submitted by a client that
-// can only send string values) it is parsed and stored as the full
-// locale map. Any other string is treated as a plain write to the
-// app-wide base locale, preserving any other locale values already
-// stored on the record.
-//
-// A non-string raw value (eg. a map[string]any decoded from a JSON
-// request body) is stored as-is.
-func (f *TextField) prepareLocalizedValue(record *Record, raw any) (any, error) {
-	str, ok := raw.(string)
-	if !ok {
-		return types.ParseJSONRaw(raw)
-	}
-
-	trimmed := strings.TrimSpace(str)
-	if strings.HasPrefix(trimmed, "{") {
-		values := map[string]string{}
-		if err := json.Unmarshal([]byte(trimmed), &values); err == nil {
-			return types.ParseJSONRaw(trimmed)
-		}
-		// not a valid locale object - fall through and treat it as plain text
-	}
-
-	base := BaseLocale(record.app)
-
-	values := map[string]string{}
-	if existing, ok := record.GetRaw(f.Name).(types.JSONRaw); ok && len(existing) > 0 {
-		_ = json.Unmarshal(existing, &values)
-	}
-	values[base] = str
-
-	encoded, err := json.Marshal(values)
-	if err != nil {
-		return nil, err
-	}
-
-	return types.ParseJSONRaw(encoded)
+	return cast.ToString(raw), nil
 }
 
 // ValidateValue implements [Field.ValidateValue] interface method.
 func (f *TextField) ValidateValue(ctx context.Context, app App, record *Record) error {
-	if f.Localized {
-		return f.validateLocalizedValue(app, record)
-	}
-
 	newVal, ok := record.GetRaw(f.Name).(string)
 	if !ok {
 		return validators.ErrUnsupportedValueType
@@ -284,25 +217,6 @@ func (f *TextField) ValidateValue(ctx context.Context, app App, record *Record) 
 	}
 
 	return f.ValidatePlainValue(newVal)
-}
-
-// validateLocalizedValue validates a Localized field value by checking
-// the app-wide base locale entry against the same rules ValidatePlainValue
-// applies to a regular (non-Localized) TextField value.
-func (f *TextField) validateLocalizedValue(app App, record *Record) error {
-	raw, ok := record.GetRaw(f.Name).(types.JSONRaw)
-	if !ok {
-		return validators.ErrUnsupportedValueType
-	}
-
-	values := map[string]string{}
-	if len(raw) > 0 {
-		if err := json.Unmarshal(raw, &values); err != nil {
-			return validation.NewError("validation_invalid_json", "Must be a valid json value")
-		}
-	}
-
-	return f.ValidatePlainValue(values[BaseLocale(app)])
 }
 
 // ValidatePlainValue validates the provided string against the field options.
@@ -381,16 +295,7 @@ func (f *TextField) ValidateSettings(ctx context.Context, app App, collection *C
 		validation.Field(&f.Hidden, validation.When(f.PrimaryKey, validation.Empty)),
 		validation.Field(&f.Required, validation.When(f.PrimaryKey, validation.Required)),
 		validation.Field(&f.AutogeneratePattern, validation.By(validators.IsRegex), validation.By(f.checkAutogeneratePattern)),
-		validation.Field(&f.Localized,
-			validation.When(f.PrimaryKey, validation.Empty.Error("A primary key field cannot be localized.")),
-			validation.When(f.AutogeneratePattern != "", validation.Empty.Error("A field with an autogenerate pattern cannot be localized.")),
-		),
 	)
-}
-
-// IsLocalized implements the localizedField interface.
-func (f *TextField) IsLocalized() bool {
-	return f.Localized
 }
 
 func (f *TextField) checkOtherFieldsForPK(collection *Collection) validation.RuleFunc {
@@ -464,20 +369,6 @@ func (f *TextField) Intercept(
 }
 
 func (f *TextField) hasZeroValue(record *Record) bool {
-	if f.Localized {
-		raw, ok := record.GetRaw(f.Name).(types.JSONRaw)
-		if !ok || len(raw) == 0 {
-			return true
-		}
-
-		values := map[string]string{}
-		if err := json.Unmarshal(raw, &values); err != nil {
-			return true
-		}
-
-		return values[BaseLocale(record.app)] == ""
-	}
-
 	v, _ := record.GetRaw(f.Name).(string)
 	return v == ""
 }
@@ -487,14 +378,6 @@ func (f *TextField) FindSetter(key string) SetterFunc {
 	switch key {
 	case f.Name:
 		return func(record *Record, raw any) {
-			if f.Localized {
-				v, err := f.prepareLocalizedValue(record, raw)
-				if err == nil {
-					record.SetRaw(f.Name, v)
-				}
-				return
-			}
-
 			record.SetRaw(f.Name, cast.ToString(raw))
 		}
 	case f.Name + autogenerateModifier:

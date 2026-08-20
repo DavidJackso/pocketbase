@@ -2,14 +2,12 @@ package core_test
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
 
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
-	"github.com/pocketbase/pocketbase/tools/types"
 )
 
 func TestEditorFieldBaseMethods(t *testing.T) {
@@ -63,135 +61,6 @@ func TestEditorFieldPrepareValue(t *testing.T) {
 				t.Fatalf("Expected %q, got %q", s.expected, v)
 			}
 		})
-	}
-}
-
-func TestEditorFieldLocalizedColumnType(t *testing.T) {
-	t.Parallel()
-
-	f := &core.EditorField{Localized: true}
-	if got := f.ColumnType(nil); got != "JSON DEFAULT NULL" {
-		t.Fatalf("expected JSON DEFAULT NULL, got %q", got)
-	}
-
-	plain := &core.EditorField{}
-	if got := plain.ColumnType(nil); got != "TEXT DEFAULT '' NOT NULL" {
-		t.Fatalf("plain EditorField ColumnType regressed, got %q", got)
-	}
-}
-
-func TestEditorFieldLocalizedPrepareAndValidate(t *testing.T) {
-	t.Parallel()
-
-	app, _ := tests.NewTestApp()
-	defer app.Cleanup()
-
-	collection := core.NewBaseCollection("test_localized_editor")
-
-	scenarios := []struct {
-		name      string
-		field     *core.EditorField
-		raw       any
-		expectErr bool
-	}{
-		{
-			name:      "plain string gets wrapped in base locale",
-			field:     &core.EditorField{Name: "content", Localized: true, Required: true},
-			raw:       "<p>hello</p>",
-			expectErr: false,
-		},
-		{
-			name:      "object with base locale key",
-			field:     &core.EditorField{Name: "content", Localized: true, Required: true},
-			raw:       `{"en":"<p>hello</p>","ru":"<p>привет</p>"}`,
-			expectErr: false,
-		},
-		{
-			name:      "required but missing base locale key",
-			field:     &core.EditorField{Name: "content", Localized: true, Required: true},
-			raw:       `{"ru":"<p>привет</p>"}`,
-			expectErr: true,
-		},
-	}
-
-	for _, s := range scenarios {
-		t.Run(s.name, func(t *testing.T) {
-			record := core.NewRecord(collection)
-			record.SetApp(app)
-
-			prepared, err := s.field.PrepareValue(record, s.raw)
-			if err != nil {
-				t.Fatalf("PrepareValue error: %v", err)
-			}
-			record.SetRaw(s.field.Name, prepared)
-
-			err = s.field.ValidateValue(context.Background(), app, record)
-			hasErr := err != nil
-			if hasErr != s.expectErr {
-				t.Fatalf("expected error=%v, got %v (%v)", s.expectErr, hasErr, err)
-			}
-		})
-	}
-}
-
-func TestEditorFieldLocalizedRespectsConfiguredBaseLocale(t *testing.T) {
-	t.Parallel()
-
-	app, _ := tests.NewTestApp()
-	defer app.Cleanup()
-
-	app.Settings().Localization.BaseLocale = "ru"
-
-	collection := core.NewBaseCollection("test_localized_editor_base")
-	f := &core.EditorField{Name: "content", Localized: true, Required: true}
-
-	record := core.NewRecord(collection)
-	record.SetApp(app)
-
-	prepared, err := f.PrepareValue(record, "<p>привет</p>")
-	if err != nil {
-		t.Fatal(err)
-	}
-	record.SetRaw(f.Name, prepared)
-
-	if err := f.ValidateValue(context.Background(), app, record); err != nil {
-		t.Fatalf("expected valid record with ru base locale populated, got %v", err)
-	}
-
-	raw, ok := record.GetRaw(f.Name).(types.JSONRaw)
-	if !ok {
-		t.Fatalf("expected types.JSONRaw stored value, got %T", record.GetRaw(f.Name))
-	}
-
-	values := map[string]string{}
-	if err := json.Unmarshal(raw, &values); err != nil {
-		t.Fatal(err)
-	}
-	if values["ru"] != "<p>привет</p>" {
-		t.Fatalf(`expected the value to be keyed under "ru" as "<p>привет</p>", got %#v`, values)
-	}
-}
-
-func TestEditorFieldLocalizedMaxSize(t *testing.T) {
-	t.Parallel()
-
-	app, _ := tests.NewTestApp()
-	defer app.Cleanup()
-
-	collection := core.NewBaseCollection("test_localized_editor_maxsize")
-	f := &core.EditorField{Name: "content", Localized: true, MaxSize: 5}
-
-	record := core.NewRecord(collection)
-	record.SetApp(app)
-
-	prepared, err := f.PrepareValue(record, "too long value")
-	if err != nil {
-		t.Fatal(err)
-	}
-	record.SetRaw(f.Name, prepared)
-
-	if err := f.ValidateValue(context.Background(), app, record); err == nil {
-		t.Fatal("expected max content size validation error")
 	}
 }
 

@@ -122,9 +122,7 @@ func recordsList(e *core.RequestEvent) error {
 		}
 
 		return execAfterSuccessTx(true, e.App, func() error {
-			resultCopy := *e.Result
-			resultCopy.Items = recordsResponseData(e.RequestEvent, collection, e.Records)
-			return e.JSON(http.StatusOK, &resultCopy)
+			return e.JSON(http.StatusOK, e.Result)
 		})
 	})
 }
@@ -203,7 +201,7 @@ func recordView(e *core.RequestEvent) error {
 		}
 
 		return execAfterSuccessTx(true, e.App, func() error {
-			return e.JSON(http.StatusOK, recordResponseData(e.RequestEvent, e.Record))
+			return e.JSON(http.StatusOK, e.Record)
 		})
 	})
 }
@@ -235,7 +233,6 @@ func recordCreate(responseWriteAfterTx bool, optFinalizer func(data any) error) 
 		}
 
 		record := core.NewRecord(collection)
-		record.SetApp(e.App)
 
 		data, err := recordDataFromRequest(e, record)
 		if err != nil {
@@ -361,7 +358,7 @@ func recordCreate(responseWriteAfterTx bool, optFinalizer func(data any) error) 
 			}
 
 			err = execAfterSuccessTx(responseWriteAfterTx, e.App, func() error {
-				return e.JSON(http.StatusOK, recordResponseData(e.RequestEvent, e.Record))
+				return e.JSON(http.StatusOK, e.Record)
 			})
 			if err != nil {
 				return err
@@ -500,7 +497,7 @@ func recordUpdate(responseWriteAfterTx bool, optFinalizer func(data any) error) 
 			}
 
 			err = execAfterSuccessTx(responseWriteAfterTx, e.App, func() error {
-				return e.JSON(http.StatusOK, recordResponseData(e.RequestEvent, e.Record))
+				return e.JSON(http.StatusOK, e.Record)
 			})
 			if err != nil {
 				return err

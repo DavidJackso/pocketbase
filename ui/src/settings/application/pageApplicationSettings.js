@@ -1,6 +1,5 @@
 import { settingsSidebar } from "../settingsSidebar";
 import { batchAccordion } from "./batchAccordion";
-import { localizationAccordion } from "./localizationAccordion";
 import { rateLimitAccordion, sortRules } from "./rateLimitAccordion";
 import { superuserAccordion } from "./superuserAccordion";
 import { trustedProxyAccordion } from "./trustedProxyAccordion";
@@ -145,7 +144,6 @@ export function pageApplicationSettings() {
             superuserIPs: settings.superuserIPs || [],
             meta: settings.meta || {},
             batch: settings.batch || {},
-            localization: settings.localization || { baseLocale: "en", supportedLocales: [] },
             trustedProxy: settings.trustedProxy || { headers: [] },
             rateLimits: settings.rateLimits || { excludedIPs: [], rules: [] },
         };
@@ -234,7 +232,6 @@ export function pageApplicationSettings() {
                         t.div(
                             { className: "col-lg-12" },
                             () => batchAccordion(data),
-                            () => localizationAccordion(data),
                             () => trustedProxyAccordion(data),
                             () => rateLimitAccordion(data),
                             () => superuserAccordion(data),

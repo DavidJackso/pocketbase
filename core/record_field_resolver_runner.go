@@ -841,24 +841,6 @@ func (r *runner) finalizeActivePropsProcessing(collection *Collection, prop stri
 		}
 	}
 
-	// a Localized field (TextField/EditorField) always resolves against
-	// the app-wide base locale for filtering, sorting and search,
-	// regardless of the requested display locale (see BaseLocale)
-	//
-	// ponytail: no auto-index on Localized fields yet (unlike a plain
-	// column, filtering/sorting here always goes through json_extract),
-	// add a CREATE INDEX ... (json_extract(col, '$.baseLocale')) on
-	// collection save if p95 filter/sort latency on localized
-	// collections regresses at scale
-	if lf, ok := field.(localizedField); ok && lf.IsLocalized() {
-		base := BaseLocale(r.resolver.app)
-		result.NullFallback = search.NullFallbackDisabled
-		result.Identifier = dbutils.JSONExtract(r.activeTableAlias+"."+cleanFieldName, base)
-		if r.withMultiMatch {
-			r.multiMatch.ValueIdentifier = dbutils.JSONExtract(r.multiMatchActiveTableAlias+"."+cleanFieldName, base)
-		}
-	}
-
 	// account for the ":lower" modifier
 	if modifier == lowerModifier {
 		result.Identifier = "LOWER(" + result.Identifier + ")"

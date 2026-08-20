@@ -53,7 +53,7 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 
 				switch v := a.(type) {
 				case *Record:
-					record, err := resolveRecordOneHook(app, collection, op)
+					record, err := resolveRecordOneHook(collection, op)
 					if err != nil {
 						return err
 					}
@@ -62,7 +62,7 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 
 					return nil
 				case RecordProxy:
-					record, err := resolveRecordOneHook(app, collection, op)
+					record, err := resolveRecordOneHook(collection, op)
 					if err != nil {
 						return err
 					}
@@ -80,7 +80,7 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 
 				switch v := sliceA.(type) {
 				case *[]*Record:
-					records, err := resolveRecordAllHook(app, collection, op)
+					records, err := resolveRecordAllHook(collection, op)
 					if err != nil {
 						return err
 					}
@@ -89,7 +89,7 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 
 					return nil
 				case *[]Record:
-					records, err := resolveRecordAllHook(app, collection, op)
+					records, err := resolveRecordAllHook(collection, op)
 					if err != nil {
 						return err
 					}
@@ -126,7 +126,7 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 						return op(sliceA)
 					}
 
-					records, err := resolveRecordAllHook(app, collection, op)
+					records, err := resolveRecordAllHook(collection, op)
 					if err != nil {
 						return err
 					}
@@ -164,20 +164,20 @@ func (app *BaseApp) RecordQuery(collectionModelOrIdentifier any) *dbx.SelectQuer
 	})
 }
 
-func resolveRecordOneHook(app App, collection *Collection, op func(dst any) error) (*Record, error) {
+func resolveRecordOneHook(collection *Collection, op func(dst any) error) (*Record, error) {
 	data := dbx.NullStringMap{}
 	if err := op(&data); err != nil {
 		return nil, err
 	}
-	return newRecordFromNullStringMap(app, collection, data)
+	return newRecordFromNullStringMap(collection, data)
 }
 
-func resolveRecordAllHook(app App, collection *Collection, op func(dst any) error) ([]*Record, error) {
+func resolveRecordAllHook(collection *Collection, op func(dst any) error) ([]*Record, error) {
 	data := []dbx.NullStringMap{}
 	if err := op(&data); err != nil {
 		return nil, err
 	}
-	return newRecordsFromNullStringMaps(app, collection, data)
+	return newRecordsFromNullStringMaps(collection, data)
 }
 
 // dereference returns the underlying value v points to.

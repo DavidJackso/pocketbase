@@ -12,7 +12,6 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
         // options
         showHidden: true,
         showPresentable: true,
-        showLocalized: true,
         showDuplicate: true,
         showRemove: true, // for system fields this is ignored
         // slots
@@ -307,31 +306,6 @@ window.app.components.fieldSettings = function(data, settingsArg = {}) {
                                     return msg;
                                 },
                             ),
-                        }),
-                    ),
-                );
-            },
-            () => {
-                if (!settings.showLocalized || (data.field.type !== "text" && data.field.type !== "editor")) {
-                    return;
-                }
-
-                return t.div(
-                    { className: "field prop-localized" },
-                    t.input({
-                        type: "checkbox",
-                        id: uniqueId + ".localized",
-                        name: () => `fields.${data.fieldIndex}.localized`,
-                        className: "sm",
-                        checked: () => !!data.field.localized,
-                        onchange: (e) => (data.field.localized = e.target.checked),
-                    }),
-                    t.label(
-                        { htmlFor: uniqueId + ".localized" },
-                        t.span({ className: "txt" }, i18n.t("field_settings.localized")),
-                        t.i({
-                            className: "ri-information-line link-hint",
-                            ariaDescription: app.attrs.tooltip(i18n.t("field_settings.localized_help")),
                         }),
                     ),
                 );
