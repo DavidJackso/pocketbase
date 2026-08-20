@@ -1,14 +1,18 @@
 package core
 
 import (
+	"bytes"
 	"context"
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"image"
 	"log"
+	"path/filepath"
 	"regexp"
 	"strings"
 
+	"github.com/KarpelesLab/gowebp"
 	validation "github.com/pocketbase/ozzo-validation/v4"
 	"github.com/pocketbase/pocketbase/core/validators"
 	"github.com/pocketbase/pocketbase/tools/filesystem"
@@ -534,7 +538,13 @@ func (f *FileField) processFilesToUpload(ctx context.Context, app App, record *R
 	var failed []error     // list of upload errors
 	var succeeded []string // list of uploaded file names
 
+	filesConfig := app.Settings().Files
+
 	for _, upload := range uploads {
+		if filesConfig.WebpConversion {
+			convertToWebp(upload, filesConfig.WebpQuality)
+		}
+
 		path := record.BaseFilesPath() + "/" + upload.Name
 		if err := fsys.UploadFile(upload, path); err == nil {
 			succeeded = append(succeeded, upload.Name)
@@ -554,6 +564,37 @@ func (f *FileField) processFilesToUpload(ctx context.Context, app App, record *R
 	}
 
 	return nil
+}
+
+// webpConvertibleFormats are the raster formats eligible for automatic
+// webp conversion on upload (gif is skipped to avoid losing animation;
+// webp is already the target format).
+var webpConvertibleFormats = map[string]bool{"jpeg": true, "png": true, "bmp": true, "tiff": true}
+
+// convertToWebp reencodes eligible image uploads as webp in place (same
+// *filesystem.File pointer, so both local and S3 storage receive it
+// through the regular upload path). Non-image or already-webp files, and
+// any decode/encode failure, leave the original file untouched.
+func convertToWebp(upload *filesystem.File, quality int) {
+	r, err := upload.Reader.Open()
+	if err != nil {
+		return
+	}
+	defer r.Close()
+
+	img, format, err := image.Decode(r)
+	if err != nil || !webpConvertibleFormats[format] {
+		return
+	}
+
+	var buf bytes.Buffer
+	if err := gowebp.Encode(&buf, img, &gowebp.Options{Lossy: true, Quality: float32(quality)}); err != nil {
+		return
+	}
+
+	upload.Reader = &filesystem.BytesReader{Bytes: buf.Bytes()}
+	upload.Name = strings.TrimSuffix(upload.Name, filepath.Ext(upload.Name)) + ".webp"
+	upload.Size = int64(buf.Len())
 }
 
 func (f *FileField) deleteNewlyUploadedFiles(ctx context.Context, app App, record *Record) ([]string, error) {

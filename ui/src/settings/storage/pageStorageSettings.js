@@ -58,6 +58,7 @@ export function pageStorageSettings() {
 
         data.formSettings = {
             s3: settings?.s3 || {},
+            files: settings?.files || {},
         };
 
         data.initSerialized = JSON.stringify(data.formSettings);
@@ -162,6 +163,56 @@ export function pageStorageSettings() {
                                 },
                             }),
                         ),
+                        t.div({ className: "col-lg-12" }, t.hr()),
+                        t.div(
+                            { className: "col-lg-12" },
+                            t.div(
+                                { className: "field" },
+                                t.input({
+                                    id: "files.webpConversion",
+                                    name: "files.webpConversion",
+                                    type: "checkbox",
+                                    className: "switch",
+                                    checked: () => data.formSettings.files.webpConversion || false,
+                                    onchange: (e) => (data.formSettings.files.webpConversion = e.target.checked),
+                                }),
+                                t.label(
+                                    { htmlFor: "files.webpConversion" },
+                                    t.span({ className: "txt" }, i18n.t("storage_settings.webp_conversion")),
+                                    t.i({
+                                        className: "ri-information-line link-faded",
+                                        ariaDescription: app.attrs.tooltip(i18n.t("storage_settings.webp_conversion_help"), "right"),
+                                    }),
+                                ),
+                            ),
+                        ),
+                        () => {
+                            if (!data.formSettings.files.webpConversion) {
+                                return;
+                            }
+
+                            return t.div(
+                                { className: "col-lg-4" },
+                                t.div(
+                                    { className: "field" },
+                                    t.label(
+                                        { htmlFor: "files.webpQuality" },
+                                        t.span({ className: "txt" }, i18n.t("storage_settings.webp_quality")),
+                                    ),
+                                    t.input({
+                                        id: "files.webpQuality",
+                                        name: "files.webpQuality",
+                                        type: "number",
+                                        min: 1,
+                                        max: 100,
+                                        step: 1,
+                                        required: true,
+                                        value: () => data.formSettings.files.webpQuality || 82,
+                                        oninput: (e) => (data.formSettings.files.webpQuality = e.target.value << 0),
+                                    }),
+                                ),
+                            );
+                        },
                         t.div({ className: "col-lg-12" }, t.hr()),
                         t.div(
                             { className: "col-lg-12" },

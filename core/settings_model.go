@@ -132,6 +132,7 @@ type settings struct {
 	TrustedProxy TrustedProxyConfig `form:"trustedProxy" json:"trustedProxy"`
 	Batch        BatchConfig        `form:"batch" json:"batch"`
 	Logs         LogsConfig         `form:"logs" json:"logs"`
+	Files        FilesConfig        `form:"files" json:"files"`
 }
 
 // Settings defines the PocketBase app settings.
@@ -173,6 +174,10 @@ func newDefaultSettings() *Settings {
 				Enabled:     false,
 				MaxRequests: 50,
 				Timeout:     3,
+			},
+			Files: FilesConfig{
+				WebpConversion: false,
+				WebpQuality:    82,
 			},
 			RateLimits: RateLimitsConfig{
 				Enabled: false, // @todo once tested enough enable by default for new installations
@@ -300,6 +305,7 @@ func (s *Settings) PostValidate(ctx context.Context, app App) error {
 		validation.Field(&s.Batch),
 		validation.Field(&s.RateLimits),
 		validation.Field(&s.TrustedProxy),
+		validation.Field(&s.Files),
 	)
 }
 
@@ -481,6 +487,24 @@ func (c BatchConfig) Validate() error {
 		validation.Field(&c.MaxRequests, validation.When(c.Enabled, validation.Required), validation.Min(0)),
 		validation.Field(&c.Timeout, validation.When(c.Enabled, validation.Required), validation.Min(0)),
 		validation.Field(&c.MaxBodySize, validation.Min(0)),
+	)
+}
+
+// -------------------------------------------------------------------
+
+type FilesConfig struct {
+	// WebpConversion specifies whether uploaded raster images (jpeg, png,
+	// bmp, tiff) should be reencoded as webp before being stored (local or S3).
+	WebpConversion bool `form:"webpConversion" json:"webpConversion"`
+
+	// WebpQuality is the lossy webp encoding quality (1-100).
+	WebpQuality int `form:"webpQuality" json:"webpQuality"`
+}
+
+// Validate makes FilesConfig validatable by implementing [validation.Validatable] interface.
+func (c FilesConfig) Validate() error {
+	return validation.ValidateStruct(&c,
+		validation.Field(&c.WebpQuality, validation.When(c.WebpConversion, validation.Required), validation.Min(1), validation.Max(100)),
 	)
 }
 

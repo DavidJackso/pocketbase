@@ -6,10 +6,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"image"
+	"image/color"
+	"image/png"
 	"slices"
 	"strings"
 	"testing"
 
+	"github.com/KarpelesLab/gowebp"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tests"
 	"github.com/pocketbase/pocketbase/tools/filesystem"
@@ -965,6 +969,87 @@ func TestFileFieldIntercept(t *testing.T) {
 
 		checkRecordFiles(t, testApp, record, []string{f3.Name, f4.Name})
 	})
+}
+
+func TestFileFieldConvertToWebp(t *testing.T) {
+	scenarios := []struct {
+		name           string
+		webpConversion bool
+		expectWebp     bool
+	}{
+		{"disabled by default", false, false},
+		{"enabled via settings", true, true},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			testApp, _ := tests.NewTestApp()
+			defer testApp.Cleanup()
+
+			demo1, err := testApp.FindCollectionByNameOrId("demo1")
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			testApp.Settings().Files.WebpConversion = s.webpConversion
+			testApp.Settings().Files.WebpQuality = 82
+
+			img := image.NewRGBA(image.Rect(0, 0, 4, 4))
+			for y := range 4 {
+				for x := range 4 {
+					img.Set(x, y, color.RGBA{R: uint8(x * 60), G: uint8(y * 60), B: 100, A: 255})
+				}
+			}
+
+			var pngBuf bytes.Buffer
+			if err := png.Encode(&pngBuf, img); err != nil {
+				t.Fatal(err)
+			}
+
+			upload, err := filesystem.NewFileFromBytes(pngBuf.Bytes(), "photo.png")
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			record := core.NewRecord(demo1)
+			record.Set("text", "abc")
+			record.Set("file_many", []any{upload})
+
+			if err := testApp.Save(record); err != nil {
+				t.Fatalf("Expected save to succeed, got %v", err)
+			}
+
+			stored := list.ToUniqueStringSlice(record.GetRaw("file_many"))
+			if len(stored) != 1 {
+				t.Fatalf("Expected 1 stored file, got %v", stored)
+			}
+
+			name := stored[0]
+			if strings.HasSuffix(name, ".webp") != s.expectWebp {
+				t.Fatalf("Expected .webp extension = %v, got name %q", s.expectWebp, name)
+			}
+
+			fsys, err := testApp.NewFilesystem()
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer fsys.Close()
+
+			r, err := fsys.GetReader(record.BaseFilesPath() + "/" + name)
+			if err != nil {
+				t.Fatal(err)
+			}
+			defer r.Close()
+
+			_, decodeErr := gowebp.Decode(r)
+			if s.expectWebp && decodeErr != nil {
+				t.Fatalf("Expected the stored file to be a valid webp, got decode error: %v", decodeErr)
+			}
+			if !s.expectWebp && decodeErr == nil {
+				t.Fatal("Expected the stored file to NOT be a valid webp")
+			}
+		})
+	}
 }
 
 func TestFileFieldInterceptTx(t *testing.T) {
