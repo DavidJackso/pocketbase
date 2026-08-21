@@ -7,6 +7,7 @@ import (
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/forms"
 	"github.com/pocketbase/pocketbase/tools/router"
+	"github.com/pocketbase/pocketbase/tools/routine"
 )
 
 // bindSettingsApi registers the settings api endpoints.
@@ -59,9 +60,21 @@ func settingsSet(e *core.RequestEvent) error {
 	}
 
 	return e.App.OnSettingsUpdateRequest().Trigger(event, func(e *core.SettingsUpdateRequestEvent) error {
+		webpJustEnabled := e.NewSettings.Files.WebpConversion && !e.OldSettings.Files.WebpConversion
+
 		err := e.App.Save(e.NewSettings)
 		if err != nil {
 			return e.BadRequestError("An error occurred while saving the new settings.", err)
+		}
+
+		if webpJustEnabled {
+			app := e.App
+			quality := e.NewSettings.Files.WebpQuality
+			routine.FireAndForget(func() {
+				if err := core.ConvertExistingFilesToWebp(app, quality); err != nil {
+					app.Logger().Warn("Failed to convert existing files to webp", "error", err)
+				}
+			})
 		}
 
 		return execAfterSuccessTx(true, e.App, func() error {

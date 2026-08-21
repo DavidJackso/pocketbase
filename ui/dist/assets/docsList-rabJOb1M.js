@@ -1,4 +1,4 @@
-import{i as e}from"./index-N8C3j6FQ.js";import{t as n}from"./expandInfo-CuGz608J.js";import{t as r}from"./fieldsInfo-CkTfl2P9.js";import{t as i}from"./filterSyntax-CUI1tXr3.js";function a(a){let o=app.utils.getApiExampleURL(),s=a.listRule===null,c={collectionId:a.id,collectionName:a.name},l=[{title:200,value:JSON.stringify({page:1,perPage:30,totalPages:1,totalItems:2,items:[Object.assign(c,app.utils.getDummyFieldsData(a)),Object.assign(c,app.utils.getDummyFieldsData(a))]},null,2)},{title:400,value:`
+import{i as e}from"./index-D7rXdP5G.js";import{t as n}from"./expandInfo-Cj268jQJ.js";import{t as r}from"./fieldsInfo-B0cvYWwC.js";import{t as i}from"./filterSyntax-CLbEm5YG.js";function a(a){let o=app.utils.getApiExampleURL(),s=a.listRule===null,c={collectionId:a.id,collectionName:a.name},l=[{title:200,value:JSON.stringify({page:1,perPage:30,totalPages:1,totalItems:2,items:[Object.assign(c,app.utils.getDummyFieldsData(a)),Object.assign(c,app.utils.getDummyFieldsData(a))]},null,2)},{title:400,value:`
                 {
                   "status": 400,
                   "message": "Something went wrong while processing your request.",

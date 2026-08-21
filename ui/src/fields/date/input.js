@@ -16,7 +16,7 @@ export function input(props) {
             t.label(
                 { htmlFor: uniqueId },
                 t.i({ className: app.fieldTypes.date.icon, ariaHidden: true }),
-                t.span({ className: "txt" }, () => props.field.name, " (", tzName, ")"),
+                t.span({ className: "txt" }, () => app.utils.fieldLabel(props.field), " (", tzName, ")"),
             ),
             t.input({
                 id: uniqueId,

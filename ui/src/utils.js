@@ -57,6 +57,16 @@ const utils = {
     },
 
     /**
+     * Returns the field's display label, falling back to its technical name.
+     *
+     * @param  {Object} field
+     * @return {String}
+     */
+    fieldLabel(field) {
+        return field?.label || field?.name || "";
+    },
+
+    /**
      * Checks if an object doesn't have any properties.
      *
      * @param  {object obj

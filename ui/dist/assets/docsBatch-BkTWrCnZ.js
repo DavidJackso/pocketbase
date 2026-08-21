@@ -1,4 +1,4 @@
-import{i as e}from"./index-N8C3j6FQ.js";function n(n){let r=app.utils.getApiExampleURL(),i={collectionId:n.id,collectionName:n.name},a=[{title:200,value:JSON.stringify([{status:200,body:Object.assign(i,app.utils.getDummyFieldsData(n))},{status:200,body:Object.assign(i,app.utils.getDummyFieldsData(n))}],null,2)},{title:400,value:`
+import{i as e}from"./index-D7rXdP5G.js";function n(n){let r=app.utils.getApiExampleURL(),i={collectionId:n.id,collectionName:n.name},a=[{title:200,value:JSON.stringify([{status:200,body:Object.assign(i,app.utils.getDummyFieldsData(n))},{status:200,body:Object.assign(i,app.utils.getDummyFieldsData(n))}],null,2)},{title:400,value:`
                 {
                   "status": 400,
                   "message": "Batch transaction failed.",

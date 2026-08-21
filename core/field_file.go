@@ -597,6 +597,142 @@ func convertToWebp(upload *filesystem.File, quality int) {
 	upload.Size = int64(buf.Len())
 }
 
+// ConvertExistingFilesToWebp walks all non-view collections with file fields
+// and reencodes their already stored eligible raster files (jpeg/png/bmp/tiff)
+// to webp in place, replacing the original.
+//
+// It is meant to run as a one-off best-effort maintenance job (e.g. via
+// routine.FireAndForget) right after the Files.WebpConversion setting is
+// turned on, since that setting only affects new uploads going forward.
+// Per-file errors are logged and skipped so they don't abort the whole run.
+func ConvertExistingFilesToWebp(app App, quality int) error {
+	collections, err := app.FindAllCollections(CollectionTypeBase, CollectionTypeAuth)
+	if err != nil {
+		return err
+	}
+
+	for _, collection := range collections {
+		var fileFields []*FileField
+		for _, field := range collection.Fields {
+			if ff, ok := field.(*FileField); ok {
+				fileFields = append(fileFields, ff)
+			}
+		}
+		if len(fileFields) == 0 {
+			continue
+		}
+
+		if err := convertCollectionFilesToWebp(app, collection, fileFields, quality); err != nil {
+			return fmt.Errorf("collection %q: %w", collection.Name, err)
+		}
+	}
+
+	return nil
+}
+
+const webpConversionPageSize = 200
+
+func convertCollectionFilesToWebp(app App, collection *Collection, fileFields []*FileField, quality int) error {
+	fsys, err := app.NewFilesystem()
+	if err != nil {
+		return err
+	}
+	defer fsys.Close()
+
+	for page := int64(0); ; page++ {
+		var records []*Record
+		err := app.RecordQuery(collection).
+			OrderBy("id ASC").
+			Limit(webpConversionPageSize).
+			Offset(page * webpConversionPageSize).
+			All(&records)
+		if err != nil {
+			return err
+		}
+		if len(records) == 0 {
+			return nil
+		}
+
+		for _, record := range records {
+			if convertRecordFilesToWebp(app, fsys, record, fileFields, quality) {
+				if err := app.SaveNoValidate(record); err != nil {
+					app.Logger().Warn(
+						"Failed to save webp-converted record",
+						"collection", collection.Name,
+						"record", record.Id,
+						"error", err,
+					)
+				}
+			}
+		}
+	}
+}
+
+// convertRecordFilesToWebp converts the eligible files of a single record
+// and updates its in-memory field values in place. It returns true if at
+// least one file was converted and the record needs to be persisted.
+func convertRecordFilesToWebp(app App, fsys *filesystem.System, record *Record, fileFields []*FileField, quality int) bool {
+	changed := false
+
+	for _, field := range fileFields {
+		oldNames := record.GetStringSlice(field.Name)
+		if len(oldNames) == 0 {
+			continue
+		}
+
+		newNames := make([]string, len(oldNames))
+		copy(newNames, oldNames)
+		fieldChanged := false
+
+		for i, name := range oldNames {
+			if strings.EqualFold(filepath.Ext(name), ".webp") {
+				continue
+			}
+
+			path := record.BaseFilesPath() + "/" + name
+
+			file, err := fsys.GetReuploadableFile(path, true)
+			if err != nil {
+				app.Logger().Warn(
+					"Skipping webp conversion, failed to load file",
+					"record", record.Id, "file", name, "error", err,
+				)
+				continue
+			}
+
+			convertToWebp(file, quality)
+			if file.Name == name {
+				continue // not an eligible format or the reencode failed
+			}
+
+			if err := fsys.UploadFile(file, record.BaseFilesPath()+"/"+file.Name); err != nil {
+				app.Logger().Warn(
+					"Skipping webp conversion, failed to upload converted file",
+					"record", record.Id, "file", name, "error", err,
+				)
+				continue
+			}
+
+			newNames[i] = file.Name
+			fieldChanged = true
+		}
+
+		if !fieldChanged {
+			continue
+		}
+
+		if field.IsMultiple() {
+			record.Set(field.Name, newNames)
+		} else {
+			record.Set(field.Name, newNames[0])
+		}
+
+		changed = true
+	}
+
+	return changed
+}
+
 func (f *FileField) deleteNewlyUploadedFiles(ctx context.Context, app App, record *Record) ([]string, error) {
 	uploaded, _ := record.GetRaw(uploadedFilesPrefix + f.Name).([]*filesystem.File)
 	if len(uploaded) == 0 {

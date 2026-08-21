@@ -1,4 +1,4 @@
-import{i as e}from"./index-N8C3j6FQ.js";import{t as n}from"./fieldsInfo-CkTfl2P9.js";function r(r){let i=app.utils.getApiExampleURL(),a=store({isLoading:!1,authMethods:[],get responses(){return[{title:200,value:a.isLoading?`...`:JSON.stringify(a.authMethods,null,2)},{title:404,value:`
+import{i as e}from"./index-D7rXdP5G.js";import{t as n}from"./fieldsInfo-B0cvYWwC.js";function r(r){let i=app.utils.getApiExampleURL(),a=store({isLoading:!1,authMethods:[],get responses(){return[{title:200,value:a.isLoading?`...`:JSON.stringify(a.authMethods,null,2)},{title:404,value:`
                         {
                           "status": 404,
                           "message": "Missing collection context.",

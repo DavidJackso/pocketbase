@@ -1,4 +1,4 @@
-import{i as e}from"./index-N8C3j6FQ.js";function n(n){let a=app.utils.getApiExampleURL(),o=[{title:()=>e.t(`api_preview.request_verification`),content:r},{title:()=>e.t(`api_preview.confirm_verification_title`),content:i}],s=store({activeActionIndex:0});return t.div({pbEvent:`apiPreviewVerification`,className:`content`},t.p(null,e.t(`api_preview.verification_desc`,{name:n.name})),app.components.codeBlockTabs({className:`sdk-examples m-t-sm`,historyKey:`pbLastSDK`,tabs:[{title:`JS SDK`,language:`js`,value:`
+import{i as e}from"./index-D7rXdP5G.js";function n(n){let a=app.utils.getApiExampleURL(),o=[{title:()=>e.t(`api_preview.request_verification`),content:r},{title:()=>e.t(`api_preview.confirm_verification_title`),content:i}],s=store({activeActionIndex:0});return t.div({pbEvent:`apiPreviewVerification`,className:`content`},t.p(null,e.t(`api_preview.verification_desc`,{name:n.name})),app.components.codeBlockTabs({className:`sdk-examples m-t-sm`,historyKey:`pbLastSDK`,tabs:[{title:`JS SDK`,language:`js`,value:`
                         import PocketBase from 'pocketbase';
 
                         const pb = new PocketBase('${a}');

@@ -33,7 +33,7 @@ export function input(props) {
                         ariaHidden: true,
                         className: () => (props.field.primaryKey ? "ri-key-line" : app.fieldTypes.text.icon),
                     }),
-                    t.span({ className: "txt" }, () => props.field.name),
+                    t.span({ className: "txt" }, () => app.utils.fieldLabel(props.field)),
                 ),
                 // @todo remove after Firefox add support for "field-sizing:content"
                 //

@@ -20,7 +20,7 @@ export function input(props) {
                 checked: () => props.record[props.field.name] || false,
                 onchange: (e) => (props.record[props.field.name] = e.target.checked || false),
             }),
-            t.label({ htmlFor: uniqueId }, () => props.field.name),
+            t.label({ htmlFor: uniqueId }, () => app.utils.fieldLabel(props.field)),
         ),
         () => {
             if (props.field.help) {

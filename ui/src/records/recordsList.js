@@ -495,7 +495,7 @@ window.app.components.recordsList = function(propsArg = {}) {
                                                 return app.fieldTypes[field.type]?.icon || app.utils.fallbackFieldIcon;
                                             },
                                         }),
-                                        t.span({ className: "txt", textContent: field.name }),
+                                        t.span({ className: "txt", textContent: app.utils.fieldLabel(field) }),
                                     ),
                                 ),
                             );
@@ -807,7 +807,7 @@ function columnsDropdown(props, data) {
                                     data.columnsPreferences[field.id] = e.target.checked;
                                 },
                             }),
-                            t.label({ htmlFor: () => uniqueId + field.name }, field.name),
+                            t.label({ htmlFor: () => uniqueId + field.name }, app.utils.fieldLabel(field)),
                         ),
                     ),
                 );
