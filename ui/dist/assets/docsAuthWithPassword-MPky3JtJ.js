@@ -1,4 +1,4 @@
-import{i as e}from"./index-D7rXdP5G.js";import{t as n}from"./expandInfo-Cj268jQJ.js";import{t as r}from"./fieldsInfo-B0cvYWwC.js";function i(i){let a=app.utils.getApiExampleURL(),o=i.passwordAuth?.identityFields||[],s=o.length==0?`NONE`:`YOUR_`+o.join(`_OR_`).toUpperCase(),c={collectionId:i.id,collectionName:i.name},l=[{title:200,value:JSON.stringify({token:`...JWT...`,record:Object.assign(c,app.utils.getDummyFieldsData(i))},null,2)},{title:400,value:`
+import{i as e}from"./index-C66B-mZu.js";import{t as n}from"./expandInfo-1Cvl3BQE.js";import{t as r}from"./fieldsInfo-Bb3XRIh7.js";function i(i){let a=app.utils.getApiExampleURL(),o=i.passwordAuth?.identityFields||[],s=o.length==0?`NONE`:`YOUR_`+o.join(`_OR_`).toUpperCase(),c={collectionId:i.id,collectionName:i.name},l=[{title:200,value:JSON.stringify({token:`...JWT...`,record:Object.assign(c,app.utils.getDummyFieldsData(i))},null,2)},{title:400,value:`
                 {
                   "status": 400,
                   "message": "Failed to authenticate.",

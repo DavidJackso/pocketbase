@@ -1,4 +1,4 @@
-import{i as e}from"./index-D7rXdP5G.js";function n(n){let r=app.utils.getApiExampleURL(),i=n.deleteRule===null,a=[{title:204,value:`null`},{title:400,value:`
+import{i as e}from"./index-C66B-mZu.js";function n(n){let r=app.utils.getApiExampleURL(),i=n.deleteRule===null,a=[{title:204,value:`null`},{title:400,value:`
                 {
                   "status": 400,
                   "message": "Failed to delete record. Make sure that the record is not part of a required relation reference.",
