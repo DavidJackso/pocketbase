@@ -61,6 +61,7 @@ func settingsSet(e *core.RequestEvent) error {
 
 	return e.App.OnSettingsUpdateRequest().Trigger(event, func(e *core.SettingsUpdateRequestEvent) error {
 		webpJustEnabled := e.NewSettings.Files.WebpConversion && !e.OldSettings.Files.WebpConversion
+		videoJustEnabled := e.NewSettings.Files.VideoConversion && !e.OldSettings.Files.VideoConversion
 
 		err := e.App.Save(e.NewSettings)
 		if err != nil {
@@ -73,6 +74,16 @@ func settingsSet(e *core.RequestEvent) error {
 			routine.FireAndForget(func() {
 				if err := core.ConvertExistingFilesToWebp(app, quality); err != nil {
 					app.Logger().Warn("Failed to convert existing files to webp", "error", err)
+				}
+			})
+		}
+
+		if videoJustEnabled {
+			app := e.App
+			quality := e.NewSettings.Files.VideoQuality
+			routine.FireAndForget(func() {
+				if err := core.ConvertExistingFilesToVideo(app, quality); err != nil {
+					app.Logger().Warn("Failed to convert existing files to optimized video", "error", err)
 				}
 			})
 		}

@@ -7,10 +7,16 @@ import (
 	"errors"
 	"fmt"
 	"image"
+	"io"
 	"log"
+	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/KarpelesLab/gowebp"
 	validation "github.com/pocketbase/ozzo-validation/v4"
@@ -544,6 +550,9 @@ func (f *FileField) processFilesToUpload(ctx context.Context, app App, record *R
 		if filesConfig.WebpConversion {
 			convertToWebp(upload, filesConfig.WebpQuality)
 		}
+		if filesConfig.VideoConversion {
+			convertToVideo(upload, filesConfig.VideoQuality)
+		}
 
 		path := record.BaseFilesPath() + "/" + upload.Name
 		if err := fsys.UploadFile(upload, path); err == nil {
@@ -708,6 +717,220 @@ func convertRecordFilesToWebp(app App, fsys *filesystem.System, record *Record, 
 			if err := fsys.UploadFile(file, record.BaseFilesPath()+"/"+file.Name); err != nil {
 				app.Logger().Warn(
 					"Skipping webp conversion, failed to upload converted file",
+					"record", record.Id, "file", name, "error", err,
+				)
+				continue
+			}
+
+			newNames[i] = file.Name
+			fieldChanged = true
+		}
+
+		if !fieldChanged {
+			continue
+		}
+
+		if field.IsMultiple() {
+			record.Set(field.Name, newNames)
+		} else {
+			record.Set(field.Name, newNames[0])
+		}
+
+		changed = true
+	}
+
+	return changed
+}
+
+// videoConvertibleExts are the container extensions eligible for automatic
+// video re-encoding on upload. Detection is extension-based (unlike images)
+// since probing the codec would require shelling out to ffprobe first for
+// no real benefit; mp4 is skipped since it's already the conversion target.
+var videoConvertibleExts = map[string]bool{
+	".mov": true, ".avi": true, ".mkv": true, ".wmv": true, ".flv": true, ".m4v": true,
+}
+
+// ffmpegPath resolves and caches the ffmpeg binary location. Empty means
+// ffmpeg isn't installed, in which case video conversion is a no-op.
+var ffmpegPath = sync.OnceValue(func() string {
+	path, _ := exec.LookPath("ffmpeg")
+	return path
+})
+
+// convertToVideo reencodes eligible video uploads to a smaller h264/aac mp4
+// in place (same *filesystem.File pointer, so both local and S3 storage
+// receive it through the regular upload path), shelling out to the ffmpeg
+// binary. Non-video files, missing ffmpeg, and any conversion failure or
+// size regression leave the original file untouched.
+func convertToVideo(upload *filesystem.File, quality int) {
+	ffmpeg := ffmpegPath()
+	if ffmpeg == "" || !videoConvertibleExts[strings.ToLower(filepath.Ext(upload.Name))] {
+		return
+	}
+
+	r, err := upload.Reader.Open()
+	if err != nil {
+		return
+	}
+	defer r.Close()
+
+	inFile, err := os.CreateTemp("", "pb_video_in_*"+filepath.Ext(upload.Name))
+	if err != nil {
+		return
+	}
+	defer os.Remove(inFile.Name())
+	defer inFile.Close()
+
+	if _, err := io.Copy(inFile, r); err != nil {
+		return
+	}
+	inFile.Close()
+
+	outPath := inFile.Name() + "_out.mp4"
+	defer os.Remove(outPath)
+
+	// quality 1-100 -> crf 51 (worst) .. 18 (near-lossless)
+	crf := 51 - (quality*33)/100
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+	defer cancel()
+
+	cmd := exec.CommandContext(
+		ctx, ffmpeg,
+		"-y",
+		"-i", inFile.Name(),
+		"-c:v", "libx264",
+		"-crf", strconv.Itoa(crf),
+		"-preset", "veryfast",
+		"-c:a", "aac",
+		"-movflags", "+faststart",
+		outPath,
+	)
+	if err := cmd.Run(); err != nil {
+		return
+	}
+
+	encoded, err := os.ReadFile(outPath)
+	if err != nil || len(encoded) == 0 || int64(len(encoded)) >= upload.Size {
+		return // failed, empty, or not actually smaller - keep the original
+	}
+
+	upload.Reader = &filesystem.BytesReader{Bytes: encoded}
+	upload.Name = strings.TrimSuffix(upload.Name, filepath.Ext(upload.Name)) + ".mp4"
+	upload.Size = int64(len(encoded))
+}
+
+// ConvertExistingFilesToVideo walks all non-view collections with file fields
+// and reencodes their already stored eligible videos (mov/avi/mkv/wmv/flv/m4v)
+// to a smaller h264/aac mp4 in place, replacing the original.
+//
+// It is meant to run as a one-off best-effort maintenance job (e.g. via
+// routine.FireAndForget) right after the Files.VideoConversion setting is
+// turned on, since that setting only affects new uploads going forward.
+// Per-file errors are logged and skipped so they don't abort the whole run.
+func ConvertExistingFilesToVideo(app App, quality int) error {
+	collections, err := app.FindAllCollections(CollectionTypeBase, CollectionTypeAuth)
+	if err != nil {
+		return err
+	}
+
+	for _, collection := range collections {
+		var fileFields []*FileField
+		for _, field := range collection.Fields {
+			if ff, ok := field.(*FileField); ok {
+				fileFields = append(fileFields, ff)
+			}
+		}
+		if len(fileFields) == 0 {
+			continue
+		}
+
+		if err := convertCollectionFilesToVideo(app, collection, fileFields, quality); err != nil {
+			return fmt.Errorf("collection %q: %w", collection.Name, err)
+		}
+	}
+
+	return nil
+}
+
+const videoConversionPageSize = 200
+
+func convertCollectionFilesToVideo(app App, collection *Collection, fileFields []*FileField, quality int) error {
+	fsys, err := app.NewFilesystem()
+	if err != nil {
+		return err
+	}
+	defer fsys.Close()
+
+	for page := int64(0); ; page++ {
+		var records []*Record
+		err := app.RecordQuery(collection).
+			OrderBy("id ASC").
+			Limit(videoConversionPageSize).
+			Offset(page * videoConversionPageSize).
+			All(&records)
+		if err != nil {
+			return err
+		}
+		if len(records) == 0 {
+			return nil
+		}
+
+		for _, record := range records {
+			if convertRecordFilesToVideo(app, fsys, record, fileFields, quality) {
+				if err := app.SaveNoValidate(record); err != nil {
+					app.Logger().Warn(
+						"Failed to save video-converted record",
+						"collection", collection.Name,
+						"record", record.Id,
+						"error", err,
+					)
+				}
+			}
+		}
+	}
+}
+
+// convertRecordFilesToVideo converts the eligible files of a single record
+// and updates its in-memory field values in place. It returns true if at
+// least one file was converted and the record needs to be persisted.
+func convertRecordFilesToVideo(app App, fsys *filesystem.System, record *Record, fileFields []*FileField, quality int) bool {
+	changed := false
+
+	for _, field := range fileFields {
+		oldNames := record.GetStringSlice(field.Name)
+		if len(oldNames) == 0 {
+			continue
+		}
+
+		newNames := make([]string, len(oldNames))
+		copy(newNames, oldNames)
+		fieldChanged := false
+
+		for i, name := range oldNames {
+			if !videoConvertibleExts[strings.ToLower(filepath.Ext(name))] {
+				continue
+			}
+
+			path := record.BaseFilesPath() + "/" + name
+
+			file, err := fsys.GetReuploadableFile(path, true)
+			if err != nil {
+				app.Logger().Warn(
+					"Skipping video conversion, failed to load file",
+					"record", record.Id, "file", name, "error", err,
+				)
+				continue
+			}
+
+			convertToVideo(file, quality)
+			if file.Name == name {
+				continue // conversion failed or wasn't smaller
+			}
+
+			if err := fsys.UploadFile(file, record.BaseFilesPath()+"/"+file.Name); err != nil {
+				app.Logger().Warn(
+					"Skipping video conversion, failed to upload converted file",
 					"record", record.Id, "file", name, "error", err,
 				)
 				continue

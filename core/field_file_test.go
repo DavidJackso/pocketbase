@@ -9,6 +9,7 @@ import (
 	"image"
 	"image/color"
 	"image/png"
+	"os/exec"
 	"slices"
 	"strings"
 	"testing"
@@ -1047,6 +1048,73 @@ func TestFileFieldConvertToWebp(t *testing.T) {
 			}
 			if !s.expectWebp && decodeErr == nil {
 				t.Fatal("Expected the stored file to NOT be a valid webp")
+			}
+		})
+	}
+}
+
+func TestFileFieldConvertToVideo(t *testing.T) {
+	ffmpeg, err := exec.LookPath("ffmpeg")
+	if err != nil {
+		t.Skip("ffmpeg not found on PATH, skipping video conversion test")
+	}
+
+	scenarios := []struct {
+		name            string
+		videoConversion bool
+		expectMp4       bool
+	}{
+		{"disabled by default", false, false},
+		{"enabled via settings", true, true},
+	}
+
+	for _, s := range scenarios {
+		t.Run(s.name, func(t *testing.T) {
+			testApp, _ := tests.NewTestApp()
+			defer testApp.Cleanup()
+
+			demo1, err := testApp.FindCollectionByNameOrId("demo1")
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			testApp.Settings().Files.VideoConversion = s.videoConversion
+			testApp.Settings().Files.VideoQuality = 75
+
+			// generate a tiny synthetic .avi clip via ffmpeg's lavfi source
+			var aviBuf bytes.Buffer
+			cmd := exec.Command(
+				ffmpeg, "-y",
+				"-f", "lavfi", "-i", "testsrc=duration=1:size=32x32:rate=5",
+				"-c:v", "mpeg4",
+				"-f", "avi", "pipe:1",
+			)
+			cmd.Stdout = &aviBuf
+			if err := cmd.Run(); err != nil {
+				t.Fatalf("Failed to generate test avi fixture: %v", err)
+			}
+
+			upload, err := filesystem.NewFileFromBytes(aviBuf.Bytes(), "clip.avi")
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			record := core.NewRecord(demo1)
+			record.Set("text", "abc")
+			record.Set("file_many", []any{upload})
+
+			if err := testApp.Save(record); err != nil {
+				t.Fatalf("Expected save to succeed, got %v", err)
+			}
+
+			stored := list.ToUniqueStringSlice(record.GetRaw("file_many"))
+			if len(stored) != 1 {
+				t.Fatalf("Expected 1 stored file, got %v", stored)
+			}
+
+			name := stored[0]
+			if strings.HasSuffix(name, ".mp4") != s.expectMp4 {
+				t.Fatalf("Expected .mp4 extension = %v, got name %q", s.expectMp4, name)
 			}
 		})
 	}

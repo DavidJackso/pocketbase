@@ -176,8 +176,10 @@ func newDefaultSettings() *Settings {
 				Timeout:     3,
 			},
 			Files: FilesConfig{
-				WebpConversion: false,
-				WebpQuality:    82,
+				WebpConversion:  false,
+				WebpQuality:     82,
+				VideoConversion: false,
+				VideoQuality:    75,
 			},
 			RateLimits: RateLimitsConfig{
 				Enabled: false, // @todo once tested enough enable by default for new installations
@@ -499,12 +501,22 @@ type FilesConfig struct {
 
 	// WebpQuality is the lossy webp encoding quality (1-100).
 	WebpQuality int `form:"webpQuality" json:"webpQuality"`
+
+	// VideoConversion specifies whether uploaded videos (mp4, mov, avi, mkv,
+	// wmv, flv, m4v) should be reencoded to a smaller h264/aac mp4 before
+	// being stored (local or S3). Requires the ffmpeg binary to be
+	// available on the server PATH; uploads are left untouched otherwise.
+	VideoConversion bool `form:"videoConversion" json:"videoConversion"`
+
+	// VideoQuality controls the h264 encoding quality (1-100, higher is better/larger).
+	VideoQuality int `form:"videoQuality" json:"videoQuality"`
 }
 
 // Validate makes FilesConfig validatable by implementing [validation.Validatable] interface.
 func (c FilesConfig) Validate() error {
 	return validation.ValidateStruct(&c,
 		validation.Field(&c.WebpQuality, validation.When(c.WebpConversion, validation.Required), validation.Min(1), validation.Max(100)),
+		validation.Field(&c.VideoQuality, validation.When(c.VideoConversion, validation.Required), validation.Min(1), validation.Max(100)),
 	)
 }
 

@@ -220,6 +220,59 @@ export function pageStorageSettings() {
                         t.div(
                             { className: "col-lg-12" },
                             t.div(
+                                { className: "field" },
+                                t.input({
+                                    id: "files.videoConversion",
+                                    name: "files.videoConversion",
+                                    type: "checkbox",
+                                    className: "switch",
+                                    checked: () => data.formSettings.files.videoConversion || false,
+                                    onchange: (e) => (data.formSettings.files.videoConversion = e.target.checked),
+                                }),
+                                t.label(
+                                    { htmlFor: "files.videoConversion" },
+                                    t.span({ className: "txt" }, i18n.t("storage_settings.video_conversion")),
+                                    t.i({
+                                        className: "ri-information-line link-faded",
+                                        ariaDescription: app.attrs.tooltip(
+                                            i18n.t("storage_settings.video_conversion_help"),
+                                            "right",
+                                        ),
+                                    }),
+                                ),
+                            ),
+                        ),
+                        () => {
+                            if (!data.formSettings.files.videoConversion) {
+                                return;
+                            }
+
+                            return t.div(
+                                { className: "col-lg-4" },
+                                t.div(
+                                    { className: "field" },
+                                    t.label(
+                                        { htmlFor: "files.videoQuality" },
+                                        t.span({ className: "txt" }, i18n.t("storage_settings.video_quality")),
+                                    ),
+                                    t.input({
+                                        id: "files.videoQuality",
+                                        name: "files.videoQuality",
+                                        type: "number",
+                                        min: 1,
+                                        max: 100,
+                                        step: 1,
+                                        required: true,
+                                        value: () => data.formSettings.files.videoQuality || 75,
+                                        oninput: (e) => (data.formSettings.files.videoQuality = e.target.value << 0),
+                                    }),
+                                ),
+                            );
+                        },
+                        t.div({ className: "col-lg-12" }, t.hr()),
+                        t.div(
+                            { className: "col-lg-12" },
+                            t.div(
                                 { className: "flex" },
                                 t.div({ className: "m-r-auto" }),
                                 t.button(
