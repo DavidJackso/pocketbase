@@ -3,7 +3,9 @@ package core
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
 	"database/sql/driver"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"image"
@@ -781,13 +783,23 @@ func extractEmbeddedFFmpeg() string {
 	}
 
 	path := filepath.Join(dir, "ffmpeg_embedded")
+	sumPath := path + ".sha256"
 
-	// already extracted by a previous run
-	if fi, err := os.Stat(path); err == nil && fi.Size() == int64(len(embeddedFFmpeg)) {
-		return path
+	sum := sha256.Sum256(embeddedFFmpeg)
+	sumHex := hex.EncodeToString(sum[:])
+
+	// already extracted by a previous run (sidecar checksum avoids rehashing
+	// the potentially large binary itself on every startup)
+	if existing, err := os.ReadFile(sumPath); err == nil && string(existing) == sumHex {
+		if _, err := os.Stat(path); err == nil {
+			return path
+		}
 	}
 
 	if err := os.WriteFile(path, embeddedFFmpeg, 0755); err != nil {
+		return ""
+	}
+	if err := os.WriteFile(sumPath, []byte(sumHex), 0644); err != nil {
 		return ""
 	}
 
