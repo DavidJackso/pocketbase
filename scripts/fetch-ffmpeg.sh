@@ -20,6 +20,10 @@ fetch() {
 	tar -xJf "$tmp/ffmpeg.tar.xz" -C "$tmp"
 	cp "$tmp/ffmpeg-master-latest-${asset_arch}-gpl/bin/ffmpeg" "$dir/$out_name"
 	rm -rf "${tmp:?}"/*
+	# $dir/$out_name is committed empty (go:embed needs the path to exist);
+	# skip-worktree hides this real-binary overwrite from `git status`, which
+	# goreleaser otherwise refuses to release against (dirty tree).
+	git -C "$dir" update-index --skip-worktree "$out_name"
 }
 
 fetch linux64 ffmpeg_linux_amd64
