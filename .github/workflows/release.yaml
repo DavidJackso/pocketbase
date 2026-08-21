@@ -48,6 +48,9 @@ jobs:
       - name: Run tests
         run: go test ./...
 
+      - name: Fetch bundled ffmpeg (GPL, see LICENSE-ffmpeg.md)
+        run: ./scripts/fetch-ffmpeg.sh
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:

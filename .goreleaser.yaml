@@ -54,6 +54,7 @@ archives:
     format: zip
     files:
       - LICENSE.md
+      - LICENSE-ffmpeg.md
       - CHANGELOG.md
 
 checksum:

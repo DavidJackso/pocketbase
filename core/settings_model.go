@@ -504,8 +504,10 @@ type FilesConfig struct {
 
 	// VideoConversion specifies whether uploaded videos (mp4, mov, avi, mkv,
 	// wmv, flv, m4v) should be reencoded to a smaller h264/aac mp4 before
-	// being stored (local or S3). Requires the ffmpeg binary to be
-	// available on the server PATH; uploads are left untouched otherwise.
+	// being stored (local or S3). Uses ffmpeg from the server PATH, falling
+	// back to the build's embedded ffmpeg where available (linux/amd64,
+	// linux/arm64, see LICENSE-ffmpeg.md); uploads are left untouched if
+	// neither is available.
 	VideoConversion bool `form:"videoConversion" json:"videoConversion"`
 
 	// VideoQuality controls the h264 encoding quality (1-100, higher is better/larger).

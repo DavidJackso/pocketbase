@@ -750,12 +750,49 @@ var videoConvertibleExts = map[string]bool{
 	".mov": true, ".avi": true, ".mkv": true, ".wmv": true, ".flv": true, ".m4v": true,
 }
 
-// ffmpegPath resolves and caches the ffmpeg binary location. Empty means
-// ffmpeg isn't installed, in which case video conversion is a no-op.
+// ffmpegPath resolves and caches the ffmpeg binary location: a
+// system-installed ffmpeg on PATH takes priority, falling back to the
+// bundled static build embedded for this platform (if any, see
+// ffmpeg_bin_*.go). Empty means neither is available, in which case video
+// conversion is a no-op.
 var ffmpegPath = sync.OnceValue(func() string {
-	path, _ := exec.LookPath("ffmpeg")
-	return path
+	if path, _ := exec.LookPath("ffmpeg"); path != "" {
+		return path
+	}
+	return extractEmbeddedFFmpeg()
 })
+
+// extractEmbeddedFFmpeg writes the embedded ffmpeg build (a GPL-licensed
+// binary bundled at release time from https://github.com/BtbN/FFmpeg-Builds,
+// see LICENSE-ffmpeg.md) to a per-user cache file and returns its path, or ""
+// if nothing was embedded for this platform/arch or extraction fails.
+func extractEmbeddedFFmpeg() string {
+	if len(embeddedFFmpeg) == 0 {
+		return ""
+	}
+
+	dir, err := os.UserCacheDir()
+	if err != nil {
+		dir = os.TempDir()
+	}
+	dir = filepath.Join(dir, "pocketbase")
+	if err := os.MkdirAll(dir, 0744); err != nil {
+		return ""
+	}
+
+	path := filepath.Join(dir, "ffmpeg_embedded")
+
+	// already extracted by a previous run
+	if fi, err := os.Stat(path); err == nil && fi.Size() == int64(len(embeddedFFmpeg)) {
+		return path
+	}
+
+	if err := os.WriteFile(path, embeddedFFmpeg, 0755); err != nil {
+		return ""
+	}
+
+	return path
+}
 
 // convertToVideo reencodes eligible video uploads to a smaller h264/aac mp4
 // in place (same *filesystem.File pointer, so both local and S3 storage
